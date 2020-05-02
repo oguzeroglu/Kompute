@@ -1,5 +1,3 @@
-import { Box } from "./Box";
-
 var Entity = function(id, center, size){
   this.id = id;
   this.center = center;
