@@ -1,41 +1,3 @@
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(factory((global.Kompute = global.Kompute || {})));
-}(this, (function (exports) { 'use strict';
-
-var Vector3D = function Vector3D(x, y, z) {
-  this.x = x || 0;
-  this.y = y || 0;
-  this.z = z || 0;
-};
-
-Vector3D.prototype.set = function (x, y, z) {
-  this.x = x;
-  this.y = y;
-  this.z = z;
-  return this;
-};
-
-Vector3D.prototype.multiplyScalar = function (scalar) {
-  this.set(this.x * scalar, this.y * scalar, this.z * scalar);
-  return this;
-};
-
-var Box = function Box(centerPosition, size) {
-  this.min = new Vector3D();
-  this.max = new Vector3D();
-
-  this.setFromCenterAndSize(centerPosition, size);
-};
-
-Box.prototype.setFromCenterAndSize = function (center, size) {
-  size.multiplyScalar(0.5);
-  this.min.set(center.x - size.x, center.y - size.y, center.z - size.z);
-  this.max.set(center.x + size.x, center.y + size.y, center.z + size.z);
-  return this;
-};
-
 var Nearby = function Nearby(width, height, depth, binSize) {
   this.limitBox = this.createBox(0, 0, 0, width, height, depth);
   this.binSize = binSize;
@@ -385,15 +347,4 @@ Nearby.prototype.update = function (obj, x, y, z, width, height, depth) {
   this.insert(obj);
 };
 
-var World = function World(width, height, depth, binSize) {
-  this.nearby = new Nearby(width, height, depth, binSize);
-};
-
-exports.Vector3D = Vector3D;
-exports.Box = Box;
-exports.World = World;
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
-})));
-//# sourceMappingURL=Kompute.js.map
+export default Nearby;
