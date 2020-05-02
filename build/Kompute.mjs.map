@@ -1,0 +1,1 @@
+{"version":3,"file":"Kompute.mjs","sources":["../js/Kompute.js"],"sourcesContent":["var Kompute = function(){\n\n}\n\nexport default Kompute;\n"],"names":["Kompute"],"mappings":";;;;;;AAAA,IAAIA,UAAU,SAAVA,OAAU,GAAU,EAAxB;;;;;;;;"}

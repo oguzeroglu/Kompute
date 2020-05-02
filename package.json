@@ -1,0 +1,46 @@
+{
+  "name": "kompute",
+  "version": "1.0.0",
+  "description": "A pluggable steering library for game AI.",
+  "main": "build/Kompute.js",
+  "module": "build/Kompute.mjs",
+  "scripts": {
+    "build": "rollup --config rollup.config.js --environment BUILD:production && minify ./build/Kompute.js -o ./build/Kompute.min.js",
+    "test": "npm run build && mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oguzeroglu/kompute.git"
+  },
+  "keywords": [
+    "game-ai",
+    "steering",
+    "game-development",
+    "roygbiv"
+  ],
+  "author": "Oguz Eroglu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/oguzeroglu/kompute/issues"
+  },
+  "homepage": "https://github.com/oguzeroglu/kompute#readme",
+  "dependencies": {
+    "nearby-js": "^1.0.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^7.1.1",
+    "babel-minify": "^0.5.1",
+    "babel-plugin-external-helpers": "^6.18.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-register": "^6.18.0",
+    "babelrc-rollup": "^3.0.0",
+    "eslint": "^4.1.1",
+    "expect.js": "^0.3.1",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.2.0",
+    "rollup": "^0.43.0",
+    "rollup-plugin-babel": "^2.7.1",
+    "rollup-plugin-istanbul": "^1.1.0",
+    "rollup-watch": "^4.3.1"
+  }
+}
