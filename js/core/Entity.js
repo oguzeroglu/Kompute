@@ -5,7 +5,13 @@ var Entity = function(id, center, size){
   this.center = center;
   this.size = size;
 
-  this.box = new Box(center, size);
+  this.nearbyObject = null;
+
+  this.position = this.center.clone();
+}
+
+Entity.prototype.assignNearbyObject = function(nearbyObj){
+  this.nearbyObject = nearbyObj;
 }
 
 export { Entity };

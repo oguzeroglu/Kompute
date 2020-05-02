@@ -41,4 +41,11 @@ describe("Vector3D", function(){
 
     expect(vect).to.be.eql(vect2);
   });
+
+  it("should clone", function(){
+
+    var vect = new Kompute.Vector3D(100, 200, 300);
+
+    expect(vect.clone()).to.be.eql(vect);
+  });
 });

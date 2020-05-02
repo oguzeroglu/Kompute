@@ -15,6 +15,10 @@ Vector3D.prototype.copy = function(vect){
   return this.set(vect.x, vect.y, vect.z);
 }
 
+Vector3D.prototype.clone = function(){
+  return (new Vector3D()).copy(this);
+}
+
 Vector3D.prototype.multiplyScalar = function(scalar){
   this.set(this.x * scalar, this.y * scalar, this.z * scalar);
   return this;

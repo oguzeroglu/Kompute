@@ -21,6 +21,10 @@ Vector3D.prototype.copy = function (vect) {
   return this.set(vect.x, vect.y, vect.z);
 };
 
+Vector3D.prototype.clone = function () {
+  return new Vector3D().copy(this);
+};
+
 Vector3D.prototype.multiplyScalar = function (scalar) {
   this.set(this.x * scalar, this.y * scalar, this.z * scalar);
   return this;
@@ -410,6 +414,22 @@ Nearby.prototype.update = function (obj, x, y, z, width, height, depth) {
 
 var World = function World(width, height, depth, binSize) {
   this.nearby = new Nearby(width, height, depth, binSize);
+
+  this.entititesByID = {};
+};
+
+World.prototype.insertEntity = function (entity) {
+
+  this.entititesByID[entity.id] = entity;
+
+  var center = entity.center;
+  var size = entity.size;
+
+  var nearbyBox = this.nearby.createBox(center.x, center.y, center.z, size.x, size.y, size.z);
+  var nearbyObj = this.nearby.createObject(entity.id, nearbyBox);
+  this.nearby.insert(nearbyObj);
+
+  entity.assignNearbyObject(nearbyObj);
 };
 
 var Entity = function Entity(id, center, size) {
@@ -417,7 +437,13 @@ var Entity = function Entity(id, center, size) {
   this.center = center;
   this.size = size;
 
-  this.box = new Box(center, size);
+  this.nearbyObject = null;
+
+  this.position = this.center.clone();
+};
+
+Entity.prototype.assignNearbyObject = function (nearbyObj) {
+  this.nearbyObject = nearbyObj;
 };
 
 exports.Vector3D = Vector3D;
