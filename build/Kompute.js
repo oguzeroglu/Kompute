@@ -17,10 +17,33 @@ Vector3D.prototype.set = function (x, y, z) {
   return this;
 };
 
+Vector3D.prototype.copy = function (vect) {
+  return this.set(vect.x, vect.y, vect.z);
+};
+
 Vector3D.prototype.multiplyScalar = function (scalar) {
   this.set(this.x * scalar, this.y * scalar, this.z * scalar);
   return this;
 };
+
+var VectorPool = function VectorPool(size) {
+  this.index = 0;
+
+  this.vectors = [];
+  for (var i = 0; i < size; i++) {
+    this.vectors.push(new Vector3D());
+  }
+};
+
+VectorPool.prototype.get = function () {
+  var vect = this.vectors[this.index++];
+  if (this.index == this.vectors.length) {
+    this.index = 0;
+  }
+  return vect;
+};
+
+var vectorPool = new VectorPool(10);
 
 var Box = function Box(centerPosition, size) {
   this.min = new Vector3D();
@@ -30,9 +53,9 @@ var Box = function Box(centerPosition, size) {
 };
 
 Box.prototype.setFromCenterAndSize = function (center, size) {
-  size.multiplyScalar(0.5);
-  this.min.set(center.x - size.x, center.y - size.y, center.z - size.z);
-  this.max.set(center.x + size.x, center.y + size.y, center.z + size.z);
+  var half = vectorPool.get().copy(size).multiplyScalar(0.5);
+  this.min.set(center.x - half.x, center.y - half.y, center.z - half.z);
+  this.max.set(center.x + half.x, center.y + half.y, center.z + half.z);
   return this;
 };
 
@@ -389,9 +412,19 @@ var World = function World(width, height, depth, binSize) {
   this.nearby = new Nearby(width, height, depth, binSize);
 };
 
+var Entity = function Entity(id, center, size) {
+  this.id = id;
+  this.center = center;
+  this.size = size;
+
+  this.box = new Box(center, size);
+};
+
 exports.Vector3D = Vector3D;
+exports.VectorPool = VectorPool;
 exports.Box = Box;
 exports.World = World;
+exports.Entity = Entity;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

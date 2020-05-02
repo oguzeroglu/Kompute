@@ -31,4 +31,14 @@ describe("Vector3D", function(){
     expect(vect.y).to.be.eql(200);
     expect(vect.z).to.be.eql(300);
   });
+
+  it("should copy", function(){
+
+    var vect = new Kompute.Vector3D();
+    var vect2 = new Kompute.Vector3D(100, 200, 300);
+
+    vect.copy(vect2);
+
+    expect(vect).to.be.eql(vect2);
+  });
 });
