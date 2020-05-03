@@ -568,11 +568,32 @@ Entity.prototype.executeForEachCloseEntity = function (func) {
   }
 };
 
+var Steerable = function Steerable(id, center, size) {
+  Entity.call(this, id, center, size);
+
+  this.linearAcceleration = new Vector3D();
+  this.maxAcceleration = Infinity;
+};
+
+Steerable.prototype = Object.create(Entity.prototype);
+Object.defineProperty(Steerable.prototype, 'constructor', { value: Steerable, enumerable: false, writable: true });
+
+Steerable.prototype.update = function () {
+  var len = this.linearAcceleration.getLength();
+  if (len > this.maxAcceleration) {
+    this.linearAcceleration.copy(this.linearAcceleration.normalize().multiplyScalar(this.maxAcceleration));
+  }
+
+  this.velocity.add(this.linearAcceleration);
+  Entity.prototype.update.call(this);
+};
+
 exports.Vector3D = Vector3D;
 exports.VectorPool = VectorPool;
 exports.Box = Box;
 exports.World = World;
 exports.Entity = Entity;
+exports.Steerable = Steerable;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
