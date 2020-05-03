@@ -16,7 +16,7 @@ describe("Entity", function(){
     expect(entity.size).to.be.eql(size);
     expect(entity.position).to.be.eql(center);
     expect(entity.box).to.be.eql(box);
-    expect(entity.nearbyObject).to.be.null;
+    expect(entity.nearbyObject).to.be.eql(null);
     expect(entity.velocity).to.be.eql(new Kompute.Vector3D());
     expect(entity.maxSpeed).to.be.eql(Infinity);
   });
@@ -29,9 +29,9 @@ describe("Entity", function(){
     var world = new Kompute.World(100, 200, 300, 10);
     var entity = new Kompute.Entity("entity1", center, entitySize);
 
-    expect(entity.nearbyObject).to.be.null;
+    expect(entity.nearbyObject).to.be.eql(null);
     world.insertEntity(entity);
-    expect(entity.nearbyObject).not.to.be.null;
+    expect(entity.nearbyObject).not.to.be.eql(null);
 
     var nearbyBox = world.nearby.createBox(center.x, center.y, center.z, entitySize.x, entitySize.y, entitySize.z);
     var nearbyObj = world.nearby.createObject("entity1", nearbyBox);
@@ -59,7 +59,7 @@ describe("Entity", function(){
     var world = new Kompute.World(100, 200, 300, 10);
     var entity = new Kompute.Entity("entity1", center, entitySize);
 
-    expect(entity.world).to.be.null;
+    expect(entity.world).to.be.eql(null);
     world.insertEntity(entity);
     expect(entity.world).to.be.eql(world);
   });
@@ -129,17 +129,17 @@ describe("Entity", function(){
     entity.update();
     expect(entity.position).to.be.eql(new Kompute.Vector3D());
 
-    entity.velocity.set(100, 0, 0);
+    entity.velocity.set(60, 0, 0);
     entity.update();
-    expect(entity.position).to.be.eql(new Kompute.Vector3D(100, 0, 0));
+    expect(entity.position).to.be.eql(new Kompute.Vector3D(1, 0, 0));
     entity.update();
-    expect(entity.position).to.be.eql(new Kompute.Vector3D(200, 0, 0));
-    entity.velocity.set(100, 0, 400);
+    expect(entity.position).to.be.eql(new Kompute.Vector3D(2, 0, 0));
+    entity.velocity.set(60, 0, 120);
     entity.update();
-    expect(entity.position).to.be.eql(new Kompute.Vector3D(300, 0, 400));
-    entity.velocity.set(0, -10, 0);
+    expect(entity.position).to.be.eql(new Kompute.Vector3D(3, 0, 2));
+    entity.velocity.set(0, -60, 0);
     entity.update();
-    expect(entity.position).to.be.eql(new Kompute.Vector3D(300, -10, 400));
+    expect(entity.position).to.be.eql(new Kompute.Vector3D(3, -1, 2));
   });
 
   it("should clamp velocity based on maxSpeed", function(){

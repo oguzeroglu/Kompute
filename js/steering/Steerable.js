@@ -1,8 +1,15 @@
 import { Entity } from "../core/Entity";
 import { Vector3D } from "../core/Vector3D";
+import { VectorPool } from "../core/VectorPool";
+
+var delta = 1/60;
+var vectorPool = new VectorPool(10);
 
 var Steerable = function(id, center, size){
   Entity.call(this, id, center, size);
+
+  this.hasTargetPosition = false;
+  this.targetPosition = new Vector3D();
 
   this.linearAcceleration = new Vector3D();
   this.maxAcceleration = Infinity;
@@ -21,19 +28,25 @@ Steerable.prototype.update = function(){
   }
 
   this.linearAcceleration.copy(steerResult.linear);
-  
+
   var len = this.linearAcceleration.getLength();
   if (len > this.maxAcceleration){
     this.linearAcceleration.copy(this.linearAcceleration.normalize().multiplyScalar(this.maxAcceleration));
   }
 
-  this.velocity.add(this.linearAcceleration);
+  var vect = vectorPool.get().copy(this.linearAcceleration).multiplyScalar(delta);
+  this.velocity.add(vect);
   Entity.prototype.update.call(this);
 }
 
 Steerable.prototype.setBehavior = function(behaviorConstructor){
   var behavior = new behaviorConstructor(this);
   this.behavior = behavior;
+}
+
+Steerable.prototype.setTargetPosition = function(x, y, z){
+  this.targetPosition.set(x, y, z);
+  this.hasTargetPosition = true;
 }
 
 Object.defineProperty(Steerable.prototype, 'constructor', { value: Steerable,  enumerable: false, writable: true });

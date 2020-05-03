@@ -69,7 +69,7 @@ describe("World", function(){
 
     expect(world.getEntityByID("entity1")).to.be.equal(entity1);
     expect(world.getEntityByID("entity2")).to.be.equal(entity2);
-    expect(world.getEntityByID("entity3")).to.be.null;
+    expect(world.getEntityByID("entity3")).to.be.eql(null);
   });
 
   it("should remove entity", function(){
@@ -81,10 +81,10 @@ describe("World", function(){
     var entity = new Kompute.Entity("entity", center, entitySize);
 
     world.insertEntity(entity);
-    expect(world.getEntityByID("entity")).not.to.be.null;
+    expect(world.getEntityByID("entity")).not.to.be.eql(null);
     expect(world.nearby.bin.size).not.to.be.eql(0);
     world.removeEntity(entity);
-    expect(world.getEntityByID("entity")).to.be.null;
+    expect(world.getEntityByID("entity")).to.be.eql(null);
     expect(world.nearby.bin.size).to.be.eql(0);
   });
 

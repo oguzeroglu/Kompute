@@ -87,6 +87,13 @@ describe("Vector3D", function(){
     expect(vect.add(new Kompute.Vector3D(500, 600, 700))).to.be.eql(new Kompute.Vector3D(600, 800, 1000));
   });
 
+  it("should sub", function(){
+
+    var vect = new Kompute.Vector3D(100, 200, 300);
+
+    expect(vect.sub(new Kompute.Vector3D(500, 700, 10))).to.be.eql(new Kompute.Vector3D(-400, -500, 290));
+  });
+
   it("should normalize", function(){
 
     var vect = new Kompute.Vector3D(100, 200, 300);

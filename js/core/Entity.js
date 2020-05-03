@@ -1,10 +1,16 @@
 import { Box } from "./Box";
 import { Vector3D } from "./Vector3D";
+import { VectorPool } from "./VectorPool";
+
+var delta = 1/60;
+var vectorPool = new VectorPool(10);
 
 var Entity = function(id, center, size){
   this.id = id;
   this.size = size;
   this.position = center.clone();
+
+  this.world = null;
 
   this.box = new Box(center, size);
 
@@ -20,7 +26,8 @@ Entity.prototype.update = function(){
     this.velocity.copy(this.velocity.normalize().multiplyScalar(this.maxSpeed));
   }
 
-  this.setPosition(this.position.add(this.velocity));
+  var vect = vectorPool.get().copy(this.velocity).multiplyScalar(delta);
+  this.setPosition(this.position.add(vect));
 }
 
 Entity.prototype.setPosition = function(position){

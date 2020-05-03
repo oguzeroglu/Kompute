@@ -58,6 +58,14 @@ Vector3D.prototype.add = function (vect) {
   return this;
 };
 
+Vector3D.prototype.sub = function (vect) {
+  this.x -= vect.x;
+  this.y -= vect.y;
+  this.z -= vect.z;
+
+  return this;
+};
+
 Vector3D.prototype.normalize = function () {
   var len = this.getLength();
   this.x = this.x / len;
@@ -504,10 +512,15 @@ World.prototype.getNearbyObjects = function (position) {
   return this.nearby.query(position.x, position.y, position.z).keys();
 };
 
+var delta = 1 / 60;
+var vectorPool$1 = new VectorPool(10);
+
 var Entity = function Entity(id, center, size) {
   this.id = id;
   this.size = size;
   this.position = center.clone();
+
+  this.world = null;
 
   this.box = new Box(center, size);
 
@@ -523,7 +536,8 @@ Entity.prototype.update = function () {
     this.velocity.copy(this.velocity.normalize().multiplyScalar(this.maxSpeed));
   }
 
-  this.setPosition(this.position.add(this.velocity));
+  var vect = vectorPool$1.get().copy(this.velocity).multiplyScalar(delta);
+  this.setPosition(this.position.add(vect));
 };
 
 Entity.prototype.setPosition = function (position) {
@@ -568,8 +582,14 @@ Entity.prototype.executeForEachCloseEntity = function (func) {
   }
 };
 
+var delta$1 = 1 / 60;
+var vectorPool$2 = new VectorPool(10);
+
 var Steerable = function Steerable(id, center, size) {
   Entity.call(this, id, center, size);
+
+  this.hasTargetPosition = false;
+  this.targetPosition = new Vector3D();
 
   this.linearAcceleration = new Vector3D();
   this.maxAcceleration = Infinity;
@@ -594,13 +614,19 @@ Steerable.prototype.update = function () {
     this.linearAcceleration.copy(this.linearAcceleration.normalize().multiplyScalar(this.maxAcceleration));
   }
 
-  this.velocity.add(this.linearAcceleration);
+  var vect = vectorPool$2.get().copy(this.linearAcceleration).multiplyScalar(delta$1);
+  this.velocity.add(vect);
   Entity.prototype.update.call(this);
 };
 
 Steerable.prototype.setBehavior = function (behaviorConstructor) {
   var behavior = new behaviorConstructor(this);
   this.behavior = behavior;
+};
+
+Steerable.prototype.setTargetPosition = function (x, y, z) {
+  this.targetPosition.set(x, y, z);
+  this.hasTargetPosition = true;
 };
 
 Object.defineProperty(Steerable.prototype, 'constructor', { value: Steerable, enumerable: false, writable: true });
@@ -618,6 +644,25 @@ SteeringBehavior.prototype.compute = function () {
   return null;
 };
 
+var SeekBehavior = function SeekBehavior(steerable) {
+  SteeringBehavior.call(this, steerable);
+};
+
+SeekBehavior.prototype = Object.create(SteeringBehavior.prototype);
+
+SeekBehavior.prototype.compute = function () {
+
+  var steerable = this.steerable;
+  if (!steerable.hasTargetPosition) {
+    return null;
+  }
+
+  this.result.linear.copy(steerable.targetPosition).sub(steerable.position).normalize().multiplyScalar(steerable.maxAcceleration);
+  return this.result;
+};
+
+Object.defineProperty(SeekBehavior.prototype, 'constructor', { value: SeekBehavior, enumerable: false, writable: true });
+
 exports.Vector3D = Vector3D;
 exports.VectorPool = VectorPool;
 exports.Box = Box;
@@ -626,6 +671,7 @@ exports.Entity = Entity;
 exports.Steerable = Steerable;
 exports.SteerResult = SteerResult;
 exports.SteeringBehavior = SteeringBehavior;
+exports.SeekBehavior = SeekBehavior;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

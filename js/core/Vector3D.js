@@ -52,12 +52,20 @@ Vector3D.prototype.add = function(vect){
   return this;
 }
 
+Vector3D.prototype.sub = function(vect){
+  this.x -= vect.x;
+  this.y -= vect.y;
+  this.z -= vect.z;
+
+  return this;
+}
+
 Vector3D.prototype.normalize = function(){
   var len = this.getLength();
   this.x = this.x / len;
   this.y = this.y / len;
   this.z = this.z / len;
-  
+
   return this;
 }
 

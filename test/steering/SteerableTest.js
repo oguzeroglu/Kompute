@@ -16,11 +16,13 @@ describe("Steerable", function(){
     expect(entity.size).to.be.eql(size);
     expect(entity.position).to.be.eql(center);
     expect(entity.box).to.be.eql(box);
-    expect(entity.nearbyObject).to.be.null;
+    expect(entity.nearbyObject).to.be.eql(null);
     expect(entity.velocity).to.be.eql(new Kompute.Vector3D());
     expect(entity.maxSpeed).to.be.eql(Infinity);
     expect(entity.linearAcceleration).to.be.eql(new Kompute.Vector3D());
     expect(entity.maxAcceleration).to.be.eql(Infinity);
+    expect(entity.hasTargetPosition).to.be.false;
+    expect(entity.targetPosition).to.be.eql(new Kompute.Vector3D());
   });
 
   it("should update", function(){
@@ -37,13 +39,13 @@ describe("Steerable", function(){
 
     entity.update();
     expect(entity.position).to.be.eql(center);
-    entity.linearAcceleration.set(10, 0, 0);
+    entity.linearAcceleration.set(60, 0, 0);
     entity.update();
-    expect(entity.position).to.be.eql(new Kompute.Vector3D(10, 0, 0));
+    expect(entity.position).to.be.eql(new Kompute.Vector3D(1 / 60, 0, 0));
     entity.update();
-    expect(entity.position).to.be.eql(new Kompute.Vector3D(30, 0, 0));
+    expect(entity.position).to.be.eql(new Kompute.Vector3D(3 / 60, 0, 0));
     entity.update();
-    expect(entity.position).to.be.eql(new Kompute.Vector3D(60, 0, 0));
+    expect(entity.position).to.be.eql(new Kompute.Vector3D(6 / 60, 0, 0));
   });
 
   it("should clamp acceleartion based on maxAcceleration", function(){
@@ -126,6 +128,18 @@ describe("Steerable", function(){
     expect(entity.position).to.be.eql(new Kompute.Vector3D(0, 0, 0));
     entity.update();
     expect(entity.position).to.be.eql(new Kompute.Vector3D(0, 0, 0));
+  });
+
+  it("should set target position", function(){
+
+    var center = new Kompute.Vector3D(0, 0, 0);
+    var size = new Kompute.Vector3D(50, 60, 70);
+    var entity = new Kompute.Steerable("steerable1", center, size);
+
+    entity.setTargetPosition(100, 200, 300);
+
+    expect(entity.hasTarget).to.be.true;
+    expect(entity.targetPosition).to.be.eql(new Kompute.Vector3D(100, 200, 300));
   });
 });
 
