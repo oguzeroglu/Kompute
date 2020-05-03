@@ -6,6 +6,10 @@ var World = function(width, height, depth, binSize){
   this.entititesByID = {};
 }
 
+World.prototype.getEntityByID = function(entityID){
+  return this.entititesByID[entityID] || null;
+}
+
 World.prototype.insertEntity = function(entity){
 
   this.entititesByID[entity.id] = entity;
