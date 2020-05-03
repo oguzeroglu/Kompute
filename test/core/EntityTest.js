@@ -11,7 +11,6 @@ describe("Entity", function(){
     var entity = new Kompute.Entity("entity1", center, size);
 
     expect(entity.id).to.be.eql("entity1");
-    expect(entity.center).to.be.eql(center);
     expect(entity.size).to.be.eql(size);
     expect(entity.position).to.be.eql(center);
     expect(entity.nearbyObject).to.be.null;
@@ -29,7 +28,7 @@ describe("Entity", function(){
     world.insertEntity(entity);
     expect(entity.nearbyObject).not.to.be.null;
 
-    var nearbyBox = world.nearby.createBox(center.x, entity.center.y, center.z, entitySize.x, entitySize.y, entitySize.z);
+    var nearbyBox = world.nearby.createBox(center.x, center.y, center.z, entitySize.x, entitySize.y, entitySize.z);
     var nearbyObj = world.nearby.createObject("entity1", nearbyBox);
 
     world.nearby.insert(nearbyObj);
@@ -45,5 +44,40 @@ describe("Entity", function(){
     expect(entityNearbyObjBox.maxX).to.be.eql(nearbyObj.box.maxX);
     expect(entityNearbyObjBox.maxY).to.be.eql(nearbyObj.box.maxY);
     expect(entityNearbyObjBox.maxZ).to.be.eql(nearbyObj.box.maxZ);
+  });
+
+  it("should have world after being inserted to world", function(){
+
+    var center = new Kompute.Vector3D(10, 10, 10);
+    var entitySize = new Kompute.Vector3D(5, 5, 5);
+
+    var world = new Kompute.World(100, 200, 300, 10);
+    var entity = new Kompute.Entity("entity1", center, entitySize);
+
+    expect(entity.world).to.be.null;
+    world.insertEntity(entity);
+    expect(entity.world).to.be.eql(world);
+  });
+
+  it("should set position", function(){
+
+    var center = new Kompute.Vector3D(10, 10, 10);
+    var entitySize = new Kompute.Vector3D(5, 5, 5);
+
+    var world = new Kompute.World(300, 300, 300, 10);
+    var entity = new Kompute.Entity("entity1", center, entitySize);
+
+    world.insertEntity(entity);
+
+    expect(entity.position).to.be.eql(center);
+    expect(world.nearby.query(0, 0, 0).size).to.be.eql(1);
+    expect(world.nearby.query(40, 40, 40).size).to.be.eql(0);
+
+    var newPos = new Kompute.Vector3D(50, 50, 50);
+    entity.setPosition(newPos);
+    expect(entity.position).to.be.eql(newPos);
+
+    expect(world.nearby.query(0, 0, 0).size).to.be.eql(0);
+    expect(world.nearby.query(40, 40, 40).size).to.be.eql(1);
   });
 });

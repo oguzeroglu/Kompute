@@ -422,28 +422,35 @@ World.prototype.insertEntity = function (entity) {
 
   this.entititesByID[entity.id] = entity;
 
-  var center = entity.center;
+  var center = entity.position;
   var size = entity.size;
 
   var nearbyBox = this.nearby.createBox(center.x, center.y, center.z, size.x, size.y, size.z);
   var nearbyObj = this.nearby.createObject(entity.id, nearbyBox);
   this.nearby.insert(nearbyObj);
 
-  entity.assignNearbyObject(nearbyObj);
+  entity.world = this;
+  entity.nearbyObject = nearbyObj;
+};
+
+World.prototype.updateEntity = function (entity, position, size) {
+  this.nearby.update(entity.nearbyObject, position.x, position.y, position.z, size.x, size.y, size.z);
 };
 
 var Entity = function Entity(id, center, size) {
   this.id = id;
-  this.center = center;
   this.size = size;
+  this.position = center.clone();
 
   this.nearbyObject = null;
-
-  this.position = this.center.clone();
 };
 
-Entity.prototype.assignNearbyObject = function (nearbyObj) {
-  this.nearbyObject = nearbyObj;
+Entity.prototype.setPosition = function (position) {
+  this.position.copy(position);
+
+  if (this.world) {
+    this.world.updateEntity(this, this.position, this.size);
+  }
 };
 
 exports.Vector3D = Vector3D;

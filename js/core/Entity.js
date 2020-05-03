@@ -1,15 +1,17 @@
 var Entity = function(id, center, size){
   this.id = id;
-  this.center = center;
   this.size = size;
+  this.position = center.clone();
 
   this.nearbyObject = null;
-
-  this.position = this.center.clone();
 }
 
-Entity.prototype.assignNearbyObject = function(nearbyObj){
-  this.nearbyObject = nearbyObj;
+Entity.prototype.setPosition = function(position){
+  this.position.copy(position);
+
+  if (this.world){
+    this.world.updateEntity(this, this.position, this.size);
+  }
 }
 
 export { Entity };
