@@ -6,7 +6,7 @@
   "module": "build/Kompute.mjs",
   "scripts": {
     "build": "rollup --config rollup.config.js --environment BUILD:production && minify ./build/Kompute.js -o ./build/Kompute.min.js",
-    "test": "npm run build && mocha test/**"
+    "test": "npm run build && mocha test/**/*"
   },
   "repository": {
     "type": "git",

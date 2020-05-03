@@ -588,12 +588,27 @@ Steerable.prototype.update = function () {
   Entity.prototype.update.call(this);
 };
 
+var SteerResult = function SteerResult() {
+  this.linear = new Vector3D();
+};
+
+var SteeringBehavior = function SteeringBehavior(steerable) {
+  this.steerable = steerable;
+  this.result = new SteerResult();
+};
+
+SteeringBehavior.prototype.compute = function () {
+  return this.result;
+};
+
 exports.Vector3D = Vector3D;
 exports.VectorPool = VectorPool;
 exports.Box = Box;
 exports.World = World;
 exports.Entity = Entity;
 exports.Steerable = Steerable;
+exports.SteerResult = SteerResult;
+exports.SteeringBehavior = SteeringBehavior;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
