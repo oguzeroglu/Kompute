@@ -80,4 +80,36 @@ describe("Entity", function(){
     expect(world.nearby.query(0, 0, 0).size).to.be.eql(0);
     expect(world.nearby.query(40, 40, 40).size).to.be.eql(1);
   });
+
+  it("should execute for each close entity", function(){
+    var entitySize = new Kompute.Vector3D(5, 5, 5);
+
+    var center1 = new Kompute.Vector3D(10, 10, 10);
+    var center2 = new Kompute.Vector3D(-10, -10, -10);
+    var center3 = new Kompute.Vector3D(0, 0, 0);
+    var center4 = new Kompute.Vector3D(500, 500, 500);
+
+    var world = new Kompute.World(5000, 5000, 5000, 50);
+
+    var entity1 = new Kompute.Entity("entity1", center1, entitySize);
+    var entity2 = new Kompute.Entity("entity2", center2, entitySize);
+    var entity3 = new Kompute.Entity("entity3", center3, entitySize);
+    var entity4 = new Kompute.Entity("entity4", center4, entitySize);
+
+    world.insertEntity(entity1);
+    world.insertEntity(entity2);
+    world.insertEntity(entity3);
+    world.insertEntity(entity4);
+
+    var expected = {entity1: entity1, entity2: entity2};
+
+    var obj = {};
+    var callback = function(entity){
+      obj[entity.id] = entity
+    };
+
+    entity3.executeForEachCloseEntity(callback);
+
+    expect(obj).to.be.eql(expected);
+  });
 });

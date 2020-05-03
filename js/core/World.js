@@ -34,5 +34,7 @@ World.prototype.removeEntity = function(entity){
   this.nearby.delete(entity.nearbyObject);
 }
 
-
+World.prototype.getNearbyObjects = function(position){
+  return this.nearby.query(position.x, position.y, position.z).keys();
+}
 export { World };

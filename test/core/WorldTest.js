@@ -87,4 +87,34 @@ describe("World", function(){
     expect(world.getEntityByID("entity")).to.be.null;
     expect(world.nearby.bin.size).to.be.eql(0);
   });
+
+  it("should get nearby objects", function(){
+
+    var entitySize = new Kompute.Vector3D(5, 5, 5);
+
+    var center1 = new Kompute.Vector3D(10, 10, 10);
+    var center2 = new Kompute.Vector3D(-10, -10, -10);
+    var center3 = new Kompute.Vector3D(0, 0, 0);
+    var center4 = new Kompute.Vector3D(500, 500, 500);
+
+    var world = new Kompute.World(5000, 5000, 5000, 50);
+
+    var entity1 = new Kompute.Entity("entity1", center1, entitySize);
+    var entity2 = new Kompute.Entity("entity2", center2, entitySize);
+    var entity3 = new Kompute.Entity("entity3", center3, entitySize);
+    var entity4 = new Kompute.Entity("entity4", center4, entitySize);
+
+    world.insertEntity(entity1);
+    world.insertEntity(entity2);
+    world.insertEntity(entity3);
+    world.insertEntity(entity4);
+
+    var res = world.getNearbyObjects(new Kompute.Vector3D(0, 0, 0));
+    var array = Array.from(res);
+
+    expect(array).to.have.length(3);
+    expect(array[0].id).to.be.eql(entity2.id);
+    expect(array[1].id).to.be.eql(entity3.id);
+    expect(array[2].id).to.be.eql(entity1.id);
+  });
 });

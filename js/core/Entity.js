@@ -14,4 +14,16 @@ Entity.prototype.setPosition = function(position){
   }
 }
 
+Entity.prototype.executeForEachCloseEntity = function(func){
+  if (!this.world){
+    return;
+  }
+  var res = this.world.getNearbyObjects(this.position);
+  for (var obj of res){
+    if (obj.id != this.id){
+      func(this.world.getEntityByID(obj.id));
+    }
+  }
+}
+
 export { Entity };

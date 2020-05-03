@@ -446,6 +446,10 @@ World.prototype.removeEntity = function (entity) {
   this.nearby.delete(entity.nearbyObject);
 };
 
+World.prototype.getNearbyObjects = function (position) {
+  return this.nearby.query(position.x, position.y, position.z).keys();
+};
+
 var Entity = function Entity(id, center, size) {
   this.id = id;
   this.size = size;
@@ -459,6 +463,39 @@ Entity.prototype.setPosition = function (position) {
 
   if (this.world) {
     this.world.updateEntity(this, this.position, this.size);
+  }
+};
+
+Entity.prototype.executeForEachCloseEntity = function (func) {
+  if (!this.world) {
+    return;
+  }
+  var res = this.world.getNearbyObjects(this.position);
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
+
+  try {
+    for (var _iterator = res[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var obj = _step.value;
+
+      if (obj.id != this.id) {
+        func(this.world.getEntityByID(obj.id));
+      }
+    }
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator.return) {
+        _iterator.return();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
+    }
   }
 };
 
