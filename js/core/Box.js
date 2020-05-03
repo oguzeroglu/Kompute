@@ -31,4 +31,10 @@ Box.prototype.expandByPoint = function(point){
   return this;
 }
 
+Box.prototype.intersectsBox = function(box){
+  return !(box.max.x < this.min.x || box.min.x > this.max.x ||
+            box.max.y < this.min.y || box.min.y > this.max.y ||
+              box.max.z < this.min.z || box.min.z > this.max.z);
+}
+
 export { Box };

@@ -51,4 +51,16 @@ describe("Box", function(){
     expect(box.min.z).to.be.eql(-50);
     expect(box.max.z).to.be.eql(300);
   });
+
+  it("should check intersection", function(){
+
+    var size = new Kompute.Vector3D(100, 100, 100);
+
+    var box1 = new Kompute.Box(new Kompute.Vector3D(), size);
+    var box2 = new Kompute.Box(new Kompute.Vector3D(10, 10, 10), size);
+    var box3 = new Kompute.Box(new Kompute.Vector3D(300, 300, 300), size);
+
+    expect(box1.intersectsBox(box2)).to.be.true;
+    expect(box1.intersectsBox(box3)).to.be.false;
+  });
 });
