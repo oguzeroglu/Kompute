@@ -441,6 +441,11 @@ World.prototype.updateEntity = function (entity, position, size) {
   this.nearby.update(entity.nearbyObject, position.x, position.y, position.z, size.x, size.y, size.z);
 };
 
+World.prototype.removeEntity = function (entity) {
+  delete this.entititesByID[entity.id];
+  this.nearby.delete(entity.nearbyObject);
+};
+
 var Entity = function Entity(id, center, size) {
   this.id = id;
   this.size = size;

@@ -71,4 +71,20 @@ describe("World", function(){
     expect(world.getEntityByID("entity2")).to.be.equal(entity2);
     expect(world.getEntityByID("entity3")).to.be.null;
   });
+
+  it("should remove entity", function(){
+
+    var center = new Kompute.Vector3D(10, 10, 10);
+    var entitySize = new Kompute.Vector3D(5, 5, 5);
+
+    var world = new Kompute.World(400, 400, 400, 20);
+    var entity = new Kompute.Entity("entity", center, entitySize);
+
+    world.insertEntity(entity);
+    expect(world.getEntityByID("entity")).not.to.be.null;
+    expect(world.nearby.bin.size).not.to.be.eql(0);
+    world.removeEntity(entity);
+    expect(world.getEntityByID("entity")).to.be.null;
+    expect(world.nearby.bin.size).to.be.eql(0);
+  });
 });
