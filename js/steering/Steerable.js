@@ -9,9 +9,19 @@ var Steerable = function(id, center, size){
 }
 
 Steerable.prototype = Object.create(Entity.prototype);
-Object.defineProperty(Steerable.prototype, 'constructor', { value: Steerable,  enumerable: false, writable: true });
 
 Steerable.prototype.update = function(){
+  if (!this.world || !this.behavior){
+    return;
+  }
+
+  var steerResult = this.behavior.compute();
+  if (!steerResult){
+    return;
+  }
+
+  this.linearAcceleration.copy(steerResult.linear);
+  
   var len = this.linearAcceleration.getLength();
   if (len > this.maxAcceleration){
     this.linearAcceleration.copy(this.linearAcceleration.normalize().multiplyScalar(this.maxAcceleration));
@@ -21,4 +31,10 @@ Steerable.prototype.update = function(){
   Entity.prototype.update.call(this);
 }
 
+Steerable.prototype.setBehavior = function(behaviorConstructor){
+  var behavior = new behaviorConstructor(this);
+  this.behavior = behavior;
+}
+
+Object.defineProperty(Steerable.prototype, 'constructor', { value: Steerable,  enumerable: false, writable: true });
 export { Steerable };

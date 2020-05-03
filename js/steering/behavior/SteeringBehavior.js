@@ -6,7 +6,7 @@ var SteeringBehavior = function(steerable){
 }
 
 SteeringBehavior.prototype.compute = function(){
-  return this.result;
+  return null;
 }
 
 export { SteeringBehavior }
