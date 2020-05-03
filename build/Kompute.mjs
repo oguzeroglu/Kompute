@@ -46,6 +46,27 @@ Vector3D.prototype.max = function (vect) {
   return this;
 };
 
+Vector3D.prototype.getLength = function () {
+  return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+};
+
+Vector3D.prototype.add = function (vect) {
+  this.x += vect.x;
+  this.y += vect.y;
+  this.z += vect.z;
+
+  return this;
+};
+
+Vector3D.prototype.normalize = function () {
+  var len = this.getLength();
+  this.x = this.x / len;
+  this.y = this.y / len;
+  this.z = this.z / len;
+
+  return this;
+};
+
 var VectorPool = function VectorPool(size) {
   this.index = 0;
 
@@ -491,6 +512,18 @@ var Entity = function Entity(id, center, size) {
   this.box = new Box(center, size);
 
   this.nearbyObject = null;
+
+  this.maxSpeed = Infinity;
+  this.velocity = new Vector3D();
+};
+
+Entity.prototype.update = function () {
+  var speed = this.velocity.getLength();
+  if (speed > this.maxSpeed) {
+    this.velocity.copy(this.velocity.normalize().multiplyScalar(this.maxSpeed));
+  }
+
+  this.setPosition(this.position.add(this.velocity));
 };
 
 Entity.prototype.setPosition = function (position) {

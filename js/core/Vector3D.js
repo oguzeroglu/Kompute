@@ -40,4 +40,25 @@ Vector3D.prototype.max = function(vect){
   return this;
 }
 
+Vector3D.prototype.getLength = function(){
+  return Math.sqrt((this.x * this.x) + (this.y * this.y) + (this.z * this.z));
+}
+
+Vector3D.prototype.add = function(vect){
+  this.x += vect.x;
+  this.y += vect.y;
+  this.z += vect.z;
+
+  return this;
+}
+
+Vector3D.prototype.normalize = function(){
+  var len = this.getLength();
+  this.x = this.x / len;
+  this.y = this.y / len;
+  this.z = this.z / len;
+  
+  return this;
+}
+
 export { Vector3D };

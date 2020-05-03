@@ -1,4 +1,5 @@
 import { Box } from "./Box";
+import { Vector3D } from "./Vector3D";
 
 var Entity = function(id, center, size){
   this.id = id;
@@ -8,6 +9,18 @@ var Entity = function(id, center, size){
   this.box = new Box(center, size);
 
   this.nearbyObject = null;
+
+  this.maxSpeed = Infinity;
+  this.velocity = new Vector3D();
+}
+
+Entity.prototype.update = function(){
+  var speed = this.velocity.getLength();
+  if (speed > this.maxSpeed){
+    this.velocity.copy(this.velocity.normalize().multiplyScalar(this.maxSpeed));
+  }
+
+  this.setPosition(this.position.add(this.velocity));
 }
 
 Entity.prototype.setPosition = function(position){

@@ -72,4 +72,25 @@ describe("Vector3D", function(){
     expect(vect.y).to.be.eql(300);
     expect(vect.z).to.be.eql(300);
   });
+
+  it("should get length", function(){
+
+    var vect = new Kompute.Vector3D(100, 200, 300);
+
+    expect(vect.getLength()).to.be.eql(Math.sqrt(140000));
+  });
+
+  it("should add", function(){
+
+    var vect = new Kompute.Vector3D(100, 200, 300);
+
+    expect(vect.add(new Kompute.Vector3D(500, 600, 700))).to.be.eql(new Kompute.Vector3D(600, 800, 1000));
+  });
+
+  it("should normalize", function(){
+
+    var vect = new Kompute.Vector3D(100, 200, 300);
+
+    expect(vect.normalize().getLength()).to.be.eql(1);
+  });
 });
