@@ -10,9 +10,12 @@ describe("Entity", function(){
 
     var entity = new Kompute.Entity("entity1", center, size);
 
+    var box = new Kompute.Box(center, size);
+
     expect(entity.id).to.be.eql("entity1");
     expect(entity.size).to.be.eql(size);
     expect(entity.position).to.be.eql(center);
+    expect(entity.box).to.be.eql(box);
     expect(entity.nearbyObject).to.be.null;
   });
 
@@ -76,6 +79,7 @@ describe("Entity", function(){
     var newPos = new Kompute.Vector3D(50, 50, 50);
     entity.setPosition(newPos);
     expect(entity.position).to.be.eql(newPos);
+    expect(entity.box).to.be.eql(new Kompute.Box(newPos, entitySize));
 
     expect(world.nearby.query(0, 0, 0).size).to.be.eql(0);
     expect(world.nearby.query(40, 40, 40).size).to.be.eql(1);
