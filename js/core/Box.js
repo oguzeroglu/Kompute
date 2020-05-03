@@ -18,4 +18,17 @@ Box.prototype.setFromCenterAndSize = function(center, size){
   return this;
 }
 
+Box.prototype.makeEmpty = function(){
+  this.min.set(Infinity, Infinity, Infinity);
+  this.max.set(Infinity, Infinity, Infinity);
+  return this;
+}
+
+Box.prototype.expandByPoint = function(point){
+  this.min.min(point);
+  this.max.max(point);
+
+  return this;
+}
+
 export { Box };

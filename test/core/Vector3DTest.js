@@ -48,4 +48,28 @@ describe("Vector3D", function(){
 
     expect(vect.clone()).to.be.eql(vect);
   });
+
+  it("should min", function(){
+
+    var vect = new Kompute.Vector3D(100, 200, 300);
+    var vect2 = new Kompute.Vector3D(-100, 300, 50);
+
+    vect.min(vect2);
+
+    expect(vect.x).to.be.eql(-100);
+    expect(vect.y).to.be.eql(200);
+    expect(vect.z).to.be.eql(50);
+  });
+
+  it("should max", function(){
+
+    var vect = new Kompute.Vector3D(100, 200, 300);
+    var vect2 = new Kompute.Vector3D(500, 300, -350);
+
+    vect.max(vect2);
+
+    expect(vect.x).to.be.eql(500);
+    expect(vect.y).to.be.eql(300);
+    expect(vect.z).to.be.eql(300);
+  });
 });

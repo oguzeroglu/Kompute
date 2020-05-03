@@ -24,4 +24,20 @@ Vector3D.prototype.multiplyScalar = function(scalar){
   return this;
 }
 
+Vector3D.prototype.min = function(vect){
+  this.x = Math.min(this.x, vect.x);
+  this.y = Math.min(this.y, vect.y);
+  this.z = Math.min(this.z, vect.z);
+
+  return this;
+}
+
+Vector3D.prototype.max = function(vect){
+  this.x = Math.max(this.x, vect.x);
+  this.y = Math.max(this.y, vect.y);
+  this.z = Math.max(this.z, vect.z);
+
+  return this;
+}
+
 export { Vector3D };

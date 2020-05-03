@@ -30,6 +30,22 @@ Vector3D.prototype.multiplyScalar = function (scalar) {
   return this;
 };
 
+Vector3D.prototype.min = function (vect) {
+  this.x = Math.min(this.x, vect.x);
+  this.y = Math.min(this.y, vect.y);
+  this.z = Math.min(this.z, vect.z);
+
+  return this;
+};
+
+Vector3D.prototype.max = function (vect) {
+  this.x = Math.max(this.x, vect.x);
+  this.y = Math.max(this.y, vect.y);
+  this.z = Math.max(this.z, vect.z);
+
+  return this;
+};
+
 var VectorPool = function VectorPool(size) {
   this.index = 0;
 
@@ -60,6 +76,19 @@ Box.prototype.setFromCenterAndSize = function (center, size) {
   var half = vectorPool.get().copy(size).multiplyScalar(0.5);
   this.min.set(center.x - half.x, center.y - half.y, center.z - half.z);
   this.max.set(center.x + half.x, center.y + half.y, center.z + half.z);
+  return this;
+};
+
+Box.prototype.makeEmpty = function () {
+  this.min.set(Infinity, Infinity, Infinity);
+  this.max.set(Infinity, Infinity, Infinity);
+  return this;
+};
+
+Box.prototype.expandByPoint = function (point) {
+  this.min.min(point);
+  this.max.max(point);
+
   return this;
 };
 
