@@ -8,7 +8,7 @@ describe("SteeringBehavior", function(){
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
     var steeringBehavior = new Kompute.SteeringBehavior(steerable);
 
-    expect(steeringBehavior.result).to.be.eql(new Kompute.SteerResult());
+    expect(steeringBehavior.result).to.eql(new Kompute.SteerResult());
     expect(steeringBehavior.steerable).to.be.equal(steerable);
   });
 
@@ -18,6 +18,6 @@ describe("SteeringBehavior", function(){
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
     var steeringBehavior = new Kompute.SteeringBehavior(steerable);
 
-    expect(steeringBehavior.compute()).to.be.eql(null);
+    expect(steeringBehavior.compute()).to.eql(null);
   });
 });

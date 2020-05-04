@@ -12,17 +12,17 @@ describe("Steerable", function(){
 
     var box = new Kompute.Box(center, size);
 
-    expect(entity.id).to.be.eql("steerable1");
-    expect(entity.size).to.be.eql(size);
-    expect(entity.position).to.be.eql(center);
-    expect(entity.box).to.be.eql(box);
-    expect(entity.nearbyObject).to.be.eql(null);
-    expect(entity.velocity).to.be.eql(new Kompute.Vector3D());
-    expect(entity.maxSpeed).to.be.eql(Infinity);
-    expect(entity.linearAcceleration).to.be.eql(new Kompute.Vector3D());
-    expect(entity.maxAcceleration).to.be.eql(Infinity);
-    expect(entity.hasTargetPosition).to.be.false;
-    expect(entity.targetPosition).to.be.eql(new Kompute.Vector3D());
+    expect(entity.id).to.eql("steerable1");
+    expect(entity.size).to.eql(size);
+    expect(entity.position).to.eql(center);
+    expect(entity.box).to.eql(box);
+    expect(entity.nearbyObject).to.eql(null);
+    expect(entity.velocity).to.eql(new Kompute.Vector3D());
+    expect(entity.maxSpeed).to.eql(Infinity);
+    expect(entity.linearAcceleration).to.eql(new Kompute.Vector3D());
+    expect(entity.maxAcceleration).to.eql(Infinity);
+    expect(entity.hasTargetPosition).to.eql(false);
+    expect(entity.targetPosition).to.eql(new Kompute.Vector3D());
   });
 
   it("should update", function(){
@@ -38,14 +38,14 @@ describe("Steerable", function(){
     entity.setBehavior(MockSteeringBehavior);
 
     entity.update();
-    expect(entity.position).to.be.eql(center);
+    expect(entity.position).to.eql(center);
     entity.linearAcceleration.set(60, 0, 0);
     entity.update();
-    expect(entity.position).to.be.eql(new Kompute.Vector3D(1 / 60, 0, 0));
+    expect(entity.position).to.eql(new Kompute.Vector3D(1 / 60, 0, 0));
     entity.update();
-    expect(entity.position).to.be.eql(new Kompute.Vector3D(3 / 60, 0, 0));
+    expect(entity.position).to.eql(new Kompute.Vector3D(3 / 60, 0, 0));
     entity.update();
-    expect(entity.position).to.be.eql(new Kompute.Vector3D(6 / 60, 0, 0));
+    expect(entity.position).to.eql(new Kompute.Vector3D(6 / 60, 0, 0));
   });
 
   it("should clamp acceleartion based on maxAcceleration", function(){
@@ -65,7 +65,7 @@ describe("Steerable", function(){
 
     entity.update();
 
-    expect(entity.linearAcceleration.getLength()).to.be.eql(entity.maxAcceleration);
+    expect(entity.linearAcceleration.getLength()).to.eql(entity.maxAcceleration);
   });
 
   it("should not update if not inserted to world", function(){
@@ -76,14 +76,14 @@ describe("Steerable", function(){
     var entity = new Kompute.Steerable("steerable1", center, size);
 
     entity.update();
-    expect(entity.position).to.be.eql(center);
+    expect(entity.position).to.eql(center);
     entity.linearAcceleration.set(10, 0, 0);
     entity.update();
-    expect(entity.position).to.be.eql(new Kompute.Vector3D(0, 0, 0));
+    expect(entity.position).to.eql(new Kompute.Vector3D(0, 0, 0));
     entity.update();
-    expect(entity.position).to.be.eql(new Kompute.Vector3D(0, 0, 0));
+    expect(entity.position).to.eql(new Kompute.Vector3D(0, 0, 0));
     entity.update();
-    expect(entity.position).to.be.eql(new Kompute.Vector3D(0, 0, 0));
+    expect(entity.position).to.eql(new Kompute.Vector3D(0, 0, 0));
   });
 
   it("should not update if does not have any behavior", function(){
@@ -97,14 +97,14 @@ describe("Steerable", function(){
     world.insertEntity(entity);
 
     entity.update();
-    expect(entity.position).to.be.eql(center);
+    expect(entity.position).to.eql(center);
     entity.linearAcceleration.set(10, 0, 0);
     entity.update();
-    expect(entity.position).to.be.eql(new Kompute.Vector3D(0, 0, 0));
+    expect(entity.position).to.eql(new Kompute.Vector3D(0, 0, 0));
     entity.update();
-    expect(entity.position).to.be.eql(new Kompute.Vector3D(0, 0, 0));
+    expect(entity.position).to.eql(new Kompute.Vector3D(0, 0, 0));
     entity.update();
-    expect(entity.position).to.be.eql(new Kompute.Vector3D(0, 0, 0));
+    expect(entity.position).to.eql(new Kompute.Vector3D(0, 0, 0));
   });
 
   it("should not update if there is no movement request from behavior", function(){
@@ -120,14 +120,14 @@ describe("Steerable", function(){
     entity.setBehavior(Kompute.SteeringBehavior);
 
     entity.update();
-    expect(entity.position).to.be.eql(center);
+    expect(entity.position).to.eql(center);
     entity.linearAcceleration.set(10, 0, 0);
     entity.update();
-    expect(entity.position).to.be.eql(new Kompute.Vector3D(0, 0, 0));
+    expect(entity.position).to.eql(new Kompute.Vector3D(0, 0, 0));
     entity.update();
-    expect(entity.position).to.be.eql(new Kompute.Vector3D(0, 0, 0));
+    expect(entity.position).to.eql(new Kompute.Vector3D(0, 0, 0));
     entity.update();
-    expect(entity.position).to.be.eql(new Kompute.Vector3D(0, 0, 0));
+    expect(entity.position).to.eql(new Kompute.Vector3D(0, 0, 0));
   });
 
   it("should set target position", function(){
@@ -138,8 +138,8 @@ describe("Steerable", function(){
 
     entity.setTargetPosition(100, 200, 300);
 
-    expect(entity.hasTarget).to.be.true;
-    expect(entity.targetPosition).to.be.eql(new Kompute.Vector3D(100, 200, 300));
+    expect(entity.hasTargetPosition).to.eql(true);
+    expect(entity.targetPosition).to.eql(new Kompute.Vector3D(100, 200, 300));
   });
 });
 

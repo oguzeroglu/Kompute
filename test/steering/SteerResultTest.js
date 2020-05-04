@@ -7,6 +7,6 @@ describe("SteerResult", function(){
 
     var steerResult = new Kompute.SteerResult();
 
-    expect(steerResult.linear).to.be.eql(new Kompute.Vector3D());
+    expect(steerResult.linear).to.eql(new Kompute.Vector3D());
   });
 });

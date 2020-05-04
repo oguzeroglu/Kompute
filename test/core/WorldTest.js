@@ -7,7 +7,7 @@ describe("World", function(){
 
     var world = new Kompute.World(100, 200, 300, 10);
 
-    expect(world.entititesByID).to.be.eql({});
+    expect(world.entititesByID).to.eql({});
     expect(world.nearby).to.exist;
   });
 
@@ -21,13 +21,13 @@ describe("World", function(){
 
     world.insertEntity(entity);
 
-    expect(world.entititesByID).to.be.eql({entity1: entity});
+    expect(world.entititesByID).to.eql({entity1: entity});
 
     var res = world.nearby.query(0, 0, 0);
-    expect(res.size).to.be.eql(1);
+    expect(res.size).to.eql(1);
 
     for (var key of res.keys()){
-      expect(key).to.be.eql(entity.nearbyObject);
+      expect(key).to.eql(entity.nearbyObject);
     }
   });
 
@@ -41,17 +41,17 @@ describe("World", function(){
 
     world.insertEntity(entity);
     var res1 = world.nearby.query(0, 0, 0);
-    expect(res1.size).to.be.eql(1);
+    expect(res1.size).to.eql(1);
 
     world.updateEntity(entity, new Kompute.Vector3D(100, 100, 100), entitySize);
 
     var res2 = world.nearby.query(0, 0, 0);
-    expect(res2.size).to.be.eql(0);
+    expect(res2.size).to.eql(0);
 
     var res3 = world.nearby.query(90, 90, 90);
-    expect(res3.size).to.be.eql(1);
+    expect(res3.size).to.eql(1);
     for (var key of res3.keys()){
-      expect(key).to.be.eql(entity.nearbyObject);
+      expect(key).to.eql(entity.nearbyObject);
     }
   });
 
@@ -69,7 +69,7 @@ describe("World", function(){
 
     expect(world.getEntityByID("entity1")).to.be.equal(entity1);
     expect(world.getEntityByID("entity2")).to.be.equal(entity2);
-    expect(world.getEntityByID("entity3")).to.be.eql(null);
+    expect(world.getEntityByID("entity3")).to.eql(null);
   });
 
   it("should remove entity", function(){
@@ -81,11 +81,11 @@ describe("World", function(){
     var entity = new Kompute.Entity("entity", center, entitySize);
 
     world.insertEntity(entity);
-    expect(world.getEntityByID("entity")).not.to.be.eql(null);
-    expect(world.nearby.bin.size).not.to.be.eql(0);
+    expect(world.getEntityByID("entity")).not.to.eql(null);
+    expect(world.nearby.bin.size).not.to.eql(0);
     world.removeEntity(entity);
-    expect(world.getEntityByID("entity")).to.be.eql(null);
-    expect(world.nearby.bin.size).to.be.eql(0);
+    expect(world.getEntityByID("entity")).to.eql(null);
+    expect(world.nearby.bin.size).to.eql(0);
   });
 
   it("should get nearby objects", function(){
@@ -113,9 +113,9 @@ describe("World", function(){
     var array = Array.from(res);
 
     expect(array).to.have.length(3);
-    expect(array[0].id).to.be.eql(entity2.id);
-    expect(array[1].id).to.be.eql(entity3.id);
-    expect(array[2].id).to.be.eql(entity1.id);
+    expect(array[0].id).to.eql(entity2.id);
+    expect(array[1].id).to.eql(entity3.id);
+    expect(array[2].id).to.eql(entity1.id);
   });
 
   it("should invoke onEntityInserted", function(){
@@ -180,6 +180,6 @@ describe("World", function(){
       obj[entity.id] = true;
     });
 
-    expect(obj).to.be.eql({ entity1: true, entity2: true, entity3: false });
+    expect(obj).to.eql({ entity1: true, entity2: true, entity3: false });
   });
 });

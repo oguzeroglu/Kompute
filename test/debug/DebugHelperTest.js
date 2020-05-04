@@ -1,7 +1,7 @@
 var expect = require('expect.js');
 var Kompute = require("../../build/Kompute");
 
-describe.only("DebugHelper", function(){
+describe("DebugHelper", function(){
 
   it("should initiate", function(){
 
@@ -15,7 +15,7 @@ describe.only("DebugHelper", function(){
     expect(debugHelper.threeInstance).to.be.equal(threeInstance);
     expect(debugHelper.scene).to.be.equal(scene);
     expect(debugHelper.threeMaterial).to.be.an(MockMeshBasicMaterial);
-    expect(debugHelper.meshesByEntityID).to.be.eql({});
+    expect(debugHelper.meshesByEntityID).to.eql({});
     expect(world.onEntityInserted).to.exist;
     expect(world.onEntityRemoved).to.exist;
     expect(world.onEntityUpdated).to.exist;
@@ -30,8 +30,8 @@ describe.only("DebugHelper", function(){
 
     world.insertEntity(new Kompute.Entity("entity1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10)));
 
-    expect(debugHelper.meshesByEntityID).to.be.eql({});
-    expect(scene.children).to.be.eql([]);
+    expect(debugHelper.meshesByEntityID).to.eql({});
+    expect(scene.children).to.eql([]);
   });
 
   it("should not update entity if not active", function(){
@@ -45,8 +45,8 @@ describe.only("DebugHelper", function(){
     world.insertEntity(entity);
     entity.setPosition(new Kompute.Vector3D(10, 20, 30));
 
-    expect(debugHelper.meshesByEntityID).to.be.eql({});
-    expect(scene.children).to.be.eql([]);
+    expect(debugHelper.meshesByEntityID).to.eql({});
+    expect(scene.children).to.eql([]);
   });
 
   it("should not delete entity if not active", function(){
@@ -60,8 +60,8 @@ describe.only("DebugHelper", function(){
     world.insertEntity(entity);
     world.removeEntity(entity);
 
-    expect(debugHelper.meshesByEntityID).to.be.eql({});
-    expect(scene.children).to.be.eql([]);
+    expect(debugHelper.meshesByEntityID).to.eql({});
+    expect(scene.children).to.eql([]);
   });
 
   it("should add entity if active", function(){
@@ -76,10 +76,10 @@ describe.only("DebugHelper", function(){
     var entity = new Kompute.Entity("entity1", new Kompute.Vector3D(100, 300, 500), new Kompute.Vector3D(10, 20, 30));
     world.insertEntity(entity);
 
-    expect(debugHelper.meshesByEntityID).to.be.eql({entity1: scene.children[0]});
+    expect(debugHelper.meshesByEntityID).to.eql({entity1: scene.children[0]});
     expect(scene.children).to.have.length(1);
-    expect(scene.children[0].position).to.be.eql(new Kompute.Vector3D(100, 300, 500));
-    expect(scene.children[0].geometry.size).to.be.eql(new Kompute.Vector3D(10, 20, 30));
+    expect(scene.children[0].position).to.eql(new Kompute.Vector3D(100, 300, 500));
+    expect(scene.children[0].geometry.size).to.eql(new Kompute.Vector3D(10, 20, 30));
   });
 
   it("should update entity if active", function(){
@@ -96,9 +96,9 @@ describe.only("DebugHelper", function(){
 
     entity.setPosition(new Kompute.Vector3D(500, 700, 1000));
 
-    expect(debugHelper.meshesByEntityID).to.be.eql({entity1: scene.children[0]});
+    expect(debugHelper.meshesByEntityID).to.eql({entity1: scene.children[0]});
     expect(scene.children).to.have.length(1);
-    expect(scene.children[0].position).to.be.eql(new Kompute.Vector3D(500, 700, 1000));
+    expect(scene.children[0].position).to.eql(new Kompute.Vector3D(500, 700, 1000));
   });
 
   it("should delete entity if active", function(){
@@ -114,7 +114,7 @@ describe.only("DebugHelper", function(){
     world.insertEntity(entity);
     world.removeEntity(entity);
 
-    expect(debugHelper.meshesByEntityID).to.be.eql({});
+    expect(debugHelper.meshesByEntityID).to.eql({});
     expect(scene.children).to.have.length(0);
   });
 
@@ -134,10 +134,10 @@ describe.only("DebugHelper", function(){
     debugHelper.activate();
 
     expect(Object.keys(debugHelper.meshesByEntityID)).to.have.length(2);
-    expect(debugHelper.meshesByEntityID.entity1.position).to.be.eql(new Kompute.Vector3D(100, 300, 500));
-    expect(debugHelper.meshesByEntityID.entity2.position).to.be.eql(new Kompute.Vector3D(500, 300, 100));
-    expect(debugHelper.meshesByEntityID.entity1.geometry.size).to.be.eql(new Kompute.Vector3D(10, 10, 10));
-    expect(debugHelper.meshesByEntityID.entity2.geometry.size).to.be.eql(new Kompute.Vector3D(20, 20, 20));
+    expect(debugHelper.meshesByEntityID.entity1.position).to.eql(new Kompute.Vector3D(100, 300, 500));
+    expect(debugHelper.meshesByEntityID.entity2.position).to.eql(new Kompute.Vector3D(500, 300, 100));
+    expect(debugHelper.meshesByEntityID.entity1.geometry.size).to.eql(new Kompute.Vector3D(10, 10, 10));
+    expect(debugHelper.meshesByEntityID.entity2.geometry.size).to.eql(new Kompute.Vector3D(20, 20, 20));
     expect(scene.children).to.have.length(2);
   });
 

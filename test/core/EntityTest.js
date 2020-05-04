@@ -12,13 +12,13 @@ describe("Entity", function(){
 
     var box = new Kompute.Box(center, size);
 
-    expect(entity.id).to.be.eql("entity1");
-    expect(entity.size).to.be.eql(size);
-    expect(entity.position).to.be.eql(center);
-    expect(entity.box).to.be.eql(box);
-    expect(entity.nearbyObject).to.be.eql(null);
-    expect(entity.velocity).to.be.eql(new Kompute.Vector3D());
-    expect(entity.maxSpeed).to.be.eql(Infinity);
+    expect(entity.id).to.eql("entity1");
+    expect(entity.size).to.eql(size);
+    expect(entity.position).to.eql(center);
+    expect(entity.box).to.eql(box);
+    expect(entity.nearbyObject).to.eql(null);
+    expect(entity.velocity).to.eql(new Kompute.Vector3D());
+    expect(entity.maxSpeed).to.eql(Infinity);
   });
 
   it("should have a nearbyObject after being inserted to world", function(){
@@ -29,9 +29,9 @@ describe("Entity", function(){
     var world = new Kompute.World(100, 200, 300, 10);
     var entity = new Kompute.Entity("entity1", center, entitySize);
 
-    expect(entity.nearbyObject).to.be.eql(null);
+    expect(entity.nearbyObject).to.eql(null);
     world.insertEntity(entity);
-    expect(entity.nearbyObject).not.to.be.eql(null);
+    expect(entity.nearbyObject).not.to.eql(null);
 
     var nearbyBox = world.nearby.createBox(center.x, center.y, center.z, entitySize.x, entitySize.y, entitySize.z);
     var nearbyObj = world.nearby.createObject("entity1", nearbyBox);
@@ -41,14 +41,14 @@ describe("Entity", function(){
     var entityNearbyObj = entity.nearbyObject;
     var entityNearbyObjBox = entityNearbyObj.box;
 
-    expect(entityNearbyObj.id).to.be.eql(nearbyObj.id);
-    expect(entityNearbyObj.binInfo).to.be.eql(nearbyObj.binInfo);
-    expect(entityNearbyObjBox.minX).to.be.eql(nearbyObj.box.minX);
-    expect(entityNearbyObjBox.minY).to.be.eql(nearbyObj.box.minY);
-    expect(entityNearbyObjBox.minZ).to.be.eql(nearbyObj.box.minZ);
-    expect(entityNearbyObjBox.maxX).to.be.eql(nearbyObj.box.maxX);
-    expect(entityNearbyObjBox.maxY).to.be.eql(nearbyObj.box.maxY);
-    expect(entityNearbyObjBox.maxZ).to.be.eql(nearbyObj.box.maxZ);
+    expect(entityNearbyObj.id).to.eql(nearbyObj.id);
+    expect(entityNearbyObj.binInfo).to.eql(nearbyObj.binInfo);
+    expect(entityNearbyObjBox.minX).to.eql(nearbyObj.box.minX);
+    expect(entityNearbyObjBox.minY).to.eql(nearbyObj.box.minY);
+    expect(entityNearbyObjBox.minZ).to.eql(nearbyObj.box.minZ);
+    expect(entityNearbyObjBox.maxX).to.eql(nearbyObj.box.maxX);
+    expect(entityNearbyObjBox.maxY).to.eql(nearbyObj.box.maxY);
+    expect(entityNearbyObjBox.maxZ).to.eql(nearbyObj.box.maxZ);
   });
 
   it("should have world after being inserted to world", function(){
@@ -59,9 +59,9 @@ describe("Entity", function(){
     var world = new Kompute.World(100, 200, 300, 10);
     var entity = new Kompute.Entity("entity1", center, entitySize);
 
-    expect(entity.world).to.be.eql(null);
+    expect(entity.world).to.eql(null);
     world.insertEntity(entity);
-    expect(entity.world).to.be.eql(world);
+    expect(entity.world).to.eql(world);
   });
 
   it("should set position", function(){
@@ -74,17 +74,17 @@ describe("Entity", function(){
 
     world.insertEntity(entity);
 
-    expect(entity.position).to.be.eql(center);
-    expect(world.nearby.query(0, 0, 0).size).to.be.eql(1);
-    expect(world.nearby.query(40, 40, 40).size).to.be.eql(0);
+    expect(entity.position).to.eql(center);
+    expect(world.nearby.query(0, 0, 0).size).to.eql(1);
+    expect(world.nearby.query(40, 40, 40).size).to.eql(0);
 
     var newPos = new Kompute.Vector3D(50, 50, 50);
     entity.setPosition(newPos);
-    expect(entity.position).to.be.eql(newPos);
-    expect(entity.box).to.be.eql(new Kompute.Box(newPos, entitySize));
+    expect(entity.position).to.eql(newPos);
+    expect(entity.box).to.eql(new Kompute.Box(newPos, entitySize));
 
-    expect(world.nearby.query(0, 0, 0).size).to.be.eql(0);
-    expect(world.nearby.query(40, 40, 40).size).to.be.eql(1);
+    expect(world.nearby.query(0, 0, 0).size).to.eql(0);
+    expect(world.nearby.query(40, 40, 40).size).to.eql(1);
   });
 
   it("should execute for each close entity", function(){
@@ -116,7 +116,7 @@ describe("Entity", function(){
 
     entity3.executeForEachCloseEntity(callback);
 
-    expect(obj).to.be.eql(expected);
+    expect(obj).to.eql(expected);
   });
 
   it("should update position based on velocity", function(){
@@ -127,19 +127,19 @@ describe("Entity", function(){
     var entity = new Kompute.Entity("entity1", center, entitySize);
 
     entity.update();
-    expect(entity.position).to.be.eql(new Kompute.Vector3D());
+    expect(entity.position).to.eql(new Kompute.Vector3D());
 
     entity.velocity.set(60, 0, 0);
     entity.update();
-    expect(entity.position).to.be.eql(new Kompute.Vector3D(1, 0, 0));
+    expect(entity.position).to.eql(new Kompute.Vector3D(1, 0, 0));
     entity.update();
-    expect(entity.position).to.be.eql(new Kompute.Vector3D(2, 0, 0));
+    expect(entity.position).to.eql(new Kompute.Vector3D(2, 0, 0));
     entity.velocity.set(60, 0, 120);
     entity.update();
-    expect(entity.position).to.be.eql(new Kompute.Vector3D(3, 0, 2));
+    expect(entity.position).to.eql(new Kompute.Vector3D(3, 0, 2));
     entity.velocity.set(0, -60, 0);
     entity.update();
-    expect(entity.position).to.be.eql(new Kompute.Vector3D(3, -1, 2));
+    expect(entity.position).to.eql(new Kompute.Vector3D(3, -1, 2));
   });
 
   it("should clamp velocity based on maxSpeed", function(){
@@ -154,6 +154,6 @@ describe("Entity", function(){
 
     entity.update();
 
-    expect(entity.velocity.getLength()).to.be.eql(entity.maxSpeed);
+    expect(entity.velocity.getLength()).to.eql(entity.maxSpeed);
   });
 });

@@ -11,4 +11,5 @@ export { Steerable } from "./steering/Steerable";
 export { SteerResult } from "./steering/SteerResult";
 export { SteeringBehavior } from "./steering/behavior/SteeringBehavior";
 export { SeekBehavior } from "./steering/behavior/SeekBehavior";
+export { ArriveBehavior } from "./steering/behavior/ArriveBehavior";
 export { DebugHelper } from "./debug/DebugHelper";

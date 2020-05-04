@@ -24,6 +24,8 @@ Steerable.prototype.update = function(){
 
   var steerResult = this.behavior.compute();
   if (!steerResult){
+    this.velocity.set(0, 0, 0);
+    this.linearAcceleration.set(0, 0, 0);
     return;
   }
 
@@ -39,8 +41,8 @@ Steerable.prototype.update = function(){
   Entity.prototype.update.call(this);
 }
 
-Steerable.prototype.setBehavior = function(behaviorConstructor){
-  var behavior = new behaviorConstructor(this);
+Steerable.prototype.setBehavior = function(behaviorConstructor, options){
+  var behavior = new behaviorConstructor(this, options);
   this.behavior = behavior;
 }
 

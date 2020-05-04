@@ -7,7 +7,7 @@ describe("VectorPool", function(){
 
     var vectorPool = new Kompute.VectorPool(10);
 
-    expect(vectorPool.index).to.be.eql(0);
+    expect(vectorPool.index).to.eql(0);
     expect(vectorPool.vectors).to.have.length(10);
   });
 
@@ -15,7 +15,7 @@ describe("VectorPool", function(){
 
     var vectorPool = new Kompute.VectorPool(10);
 
-    expect(vectorPool.get()).to.be.eql(new Kompute.Vector3D());
+    expect(vectorPool.get()).to.eql(new Kompute.Vector3D());
   });
 
   it("should handle out of bounds", function(){
@@ -27,6 +27,6 @@ describe("VectorPool", function(){
       vect = vectorPool.get();
     }
 
-    expect(vect).to.be.eql(new Kompute.Vector3D());
+    expect(vect).to.eql(new Kompute.Vector3D());
   });
 });

@@ -8,7 +8,7 @@ describe("SeekBehavior", function(){
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
     var seekBehavior = new Kompute.SeekBehavior(steerable);
 
-    expect(seekBehavior.result).to.be.eql(new Kompute.SteerResult());
+    expect(seekBehavior.result).to.eql(new Kompute.SteerResult());
     expect(seekBehavior.steerable).to.be.equal(steerable);
   });
 
@@ -17,7 +17,7 @@ describe("SeekBehavior", function(){
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
     var seekBehavior = new Kompute.SeekBehavior(steerable);
 
-    expect(seekBehavior.compute()).to.be.eql(null);
+    expect(seekBehavior.compute()).to.eql(null);
   });
 
   it("should compute", function(){
@@ -28,6 +28,6 @@ describe("SeekBehavior", function(){
     steerable.setTargetPosition(100, 200, 300);
     steerable.maxAcceleration = 100;
 
-    expect(seekBehavior.compute().linear.getLength()).to.be.eql(steerable.maxAcceleration);
+    expect(seekBehavior.compute().linear.getLength()).to.eql(steerable.maxAcceleration);
   });
 });

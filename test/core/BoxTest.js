@@ -10,13 +10,13 @@ describe("Box", function(){
 
     var box = new Kompute.Box(center, size);
 
-    expect(box.min.x).to.be.eql(-150);
-    expect(box.min.y).to.be.eql(-100);
-    expect(box.min.z).to.be.eql(-50);
+    expect(box.min.x).to.eql(-150);
+    expect(box.min.y).to.eql(-100);
+    expect(box.min.z).to.eql(-50);
 
-    expect(box.max.x).to.be.eql(350);
-    expect(box.max.y).to.be.eql(500);
-    expect(box.max.z).to.be.eql(650);
+    expect(box.max.x).to.eql(350);
+    expect(box.max.y).to.eql(500);
+    expect(box.max.z).to.eql(650);
   });
 
   it("should make empty", function(){
@@ -28,12 +28,12 @@ describe("Box", function(){
 
     box.makeEmpty();
 
-    expect(box.min.x).to.be.eql(Infinity);
-    expect(box.min.y).to.be.eql(Infinity);
-    expect(box.min.z).to.be.eql(Infinity);
-    expect(box.max.x).to.be.eql(Infinity);
-    expect(box.max.y).to.be.eql(Infinity);
-    expect(box.max.z).to.be.eql(Infinity);
+    expect(box.min.x).to.eql(Infinity);
+    expect(box.min.y).to.eql(Infinity);
+    expect(box.min.z).to.eql(Infinity);
+    expect(box.max.x).to.eql(Infinity);
+    expect(box.max.y).to.eql(Infinity);
+    expect(box.max.z).to.eql(Infinity);
   });
 
   it("should expand by point", function(){
@@ -44,12 +44,12 @@ describe("Box", function(){
 
     box.expandByPoint(new Kompute.Vector3D(-100, 200, 300));
 
-    expect(box.min.x).to.be.eql(-100);
-    expect(box.max.x).to.be.eql(50);
-    expect(box.min.y).to.be.eql(-50);
-    expect(box.max.y).to.be.eql(200);
-    expect(box.min.z).to.be.eql(-50);
-    expect(box.max.z).to.be.eql(300);
+    expect(box.min.x).to.eql(-100);
+    expect(box.max.x).to.eql(50);
+    expect(box.min.y).to.eql(-50);
+    expect(box.max.y).to.eql(200);
+    expect(box.min.z).to.eql(-50);
+    expect(box.max.z).to.eql(300);
   });
 
   it("should check intersection", function(){
@@ -60,7 +60,7 @@ describe("Box", function(){
     var box2 = new Kompute.Box(new Kompute.Vector3D(10, 10, 10), size);
     var box3 = new Kompute.Box(new Kompute.Vector3D(300, 300, 300), size);
 
-    expect(box1.intersectsBox(box2)).to.be.true;
-    expect(box1.intersectsBox(box3)).to.be.false;
+    expect(box1.intersectsBox(box2)).to.eql(true);
+    expect(box1.intersectsBox(box3)).to.eql(false);
   });
 });
