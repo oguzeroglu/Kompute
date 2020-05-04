@@ -23,18 +23,38 @@ World.prototype.insertEntity = function(entity){
 
   entity.world = this;
   entity.nearbyObject = nearbyObj;
+
+  if (this.onEntityInserted){
+    this.onEntityInserted(entity);
+  }
 }
 
 World.prototype.updateEntity = function(entity, position, size){
   this.nearby.update(entity.nearbyObject, position.x, position.y, position.z, size.x, size.y, size.z);
+
+  if (this.onEntityUpdated){
+    this.onEntityUpdated(entity);
+  }
 }
 
 World.prototype.removeEntity = function(entity){
   delete this.entititesByID[entity.id];
   this.nearby.delete(entity.nearbyObject);
+
+  if (this.onEntityRemoved){
+    this.onEntityRemoved(entity);
+  }
 }
 
 World.prototype.getNearbyObjects = function(position){
   return this.nearby.query(position.x, position.y, position.z).keys();
 }
+
+World.prototype.forEachEntity = function(func){
+  for (var key in this.entititesByID){
+    var entity = this.entititesByID[key];
+    func(entity);
+  }
+}
+
 export { World };

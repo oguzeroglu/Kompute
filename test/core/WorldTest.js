@@ -117,4 +117,69 @@ describe("World", function(){
     expect(array[1].id).to.be.eql(entity3.id);
     expect(array[2].id).to.be.eql(entity1.id);
   });
+
+  it("should invoke onEntityInserted", function(){
+
+    var world = new Kompute.World(5000, 5000, 5000, 50);
+    var entity = new Kompute.Entity("entity1", new Kompute.Vector3D(), new Kompute.Vector3D(100, 100, 100));
+
+    var parameter = false;
+    world.onEntityInserted = function(param){
+      parameter = param;
+    };
+
+    world.insertEntity(entity);
+
+    expect(parameter).to.be.equal(entity);
+  });
+
+  it("should invoke onEntityUpdated", function(){
+    var world = new Kompute.World(5000, 5000, 5000, 50);
+    var entity = new Kompute.Entity("entity1", new Kompute.Vector3D(), new Kompute.Vector3D(100, 100, 100));
+
+    var parameter = false;
+    world.onEntityUpdated = function(param){
+      parameter = param;
+    };
+
+    world.insertEntity(entity);
+
+    entity.setPosition(100, 200, 300);
+
+    expect(parameter).to.be.equal(entity);
+  });
+
+  it("should invoke onEntityRemoved", function(){
+    var world = new Kompute.World(5000, 5000, 5000, 50);
+    var entity = new Kompute.Entity("entity1", new Kompute.Vector3D(), new Kompute.Vector3D(100, 100, 100));
+
+    var parameter = false;
+    world.onEntityRemoved = function(param){
+      parameter = param;
+    };
+
+    world.insertEntity(entity);
+    world.removeEntity(entity);
+
+    expect(parameter).to.be.equal(entity);
+  });
+
+  it("should execute for each entity", function(){
+
+    var world = new Kompute.World(5000, 5000, 5000, 50);
+    var entity1 = new Kompute.Entity("entity1", new Kompute.Vector3D(), new Kompute.Vector3D(100, 100, 100));
+    var entity2 = new Kompute.Entity("entity2", new Kompute.Vector3D(), new Kompute.Vector3D(100, 100, 100));
+    var entity3 = new Kompute.Entity("entity3", new Kompute.Vector3D(), new Kompute.Vector3D(100, 100, 100));
+
+    world.insertEntity(entity1);
+    world.insertEntity(entity2);
+
+    var obj = { entity1: false, entity2: false, entity3: false };
+
+    world.forEachEntity(function(entity){
+      obj[entity.id] = true;
+    });
+
+    expect(obj).to.be.eql({ entity1: true, entity2: true, entity3: false });
+  });
 });
