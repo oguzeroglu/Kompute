@@ -14,8 +14,10 @@ describe("DebugHelper", function(){
     expect(debugHelper.world).to.be.equal(world);
     expect(debugHelper.threeInstance).to.be.equal(threeInstance);
     expect(debugHelper.scene).to.be.equal(scene);
-    expect(debugHelper.threeMaterial).to.be.an(MockMeshBasicMaterial);
+    expect(debugHelper.limeMaterial).to.be.an(MockMeshBasicMaterial);
+    expect(debugHelper.magentaMaterial).to.be.an(MockMeshBasicMaterial);
     expect(debugHelper.meshesByEntityID).to.eql({});
+    expect(debugHelper.velocityMeshesByEntityID).to.be.eql({});
     expect(world.onEntityInserted).to.exist;
     expect(world.onEntityRemoved).to.exist;
     expect(world.onEntityUpdated).to.exist;
@@ -82,6 +84,22 @@ describe("DebugHelper", function(){
     expect(scene.children[0].geometry.size).to.eql(new Kompute.Vector3D(10, 20, 30));
   });
 
+  it("should add velocity mesh for steerable", function(){
+    var threeInstance = mockThreeInstance();
+    var scene = new MockScene();
+    var world = new Kompute.World(1000, 1000, 1000, 10);
+
+    var debugHelper = new Kompute.DebugHelper(world, threeInstance, scene);
+
+    debugHelper.activate();
+
+    var entity = new Kompute.Steerable("entity1", new Kompute.Vector3D(100, 300, 500), new Kompute.Vector3D(10, 20, 30));
+    world.insertEntity(entity);
+
+    expect(scene.children).to.have.length(2);
+    expect(debugHelper.velocityMeshesByEntityID).to.eql({entity1: scene.children[1]});
+  });
+
   it("should update entity if active", function(){
     var threeInstance = mockThreeInstance();
     var scene = new MockScene();
@@ -101,6 +119,32 @@ describe("DebugHelper", function(){
     expect(scene.children[0].position).to.eql(new Kompute.Vector3D(500, 700, 1000));
   });
 
+  it("should update velocity mesh of steerable", function(){
+    var threeInstance = mockThreeInstance();
+    var scene = new MockScene();
+    var world = new Kompute.World(1000, 1000, 1000, 10);
+
+    var debugHelper = new Kompute.DebugHelper(world, threeInstance, scene);
+
+    debugHelper.activate();
+
+    var entity = new Kompute.Steerable("entity1", new Kompute.Vector3D(100, 300, 500), new Kompute.Vector3D(10, 20, 30));
+    world.insertEntity(entity);
+
+    entity.velocity.set(100, 200, 300);
+    entity.setPosition(new Kompute.Vector3D());
+
+    var box = new Kompute.Box(new Kompute.Vector3D(), new Kompute.Vector3D()).setFromTwoVectors(new Kompute.Vector3D(100, 200, 300), new Kompute.Vector3D(), 5);
+    var boxWidth = (box.max.x - box.min.x);
+    var boxHeight = (box.max.y - box.min.y);
+    var boxDepth = (box.max.z - box.min.z);
+
+    var velocityMesh = scene.children[1];
+
+    expect(velocityMesh.scale).to.eql(new Kompute.Vector3D(boxWidth, boxHeight, boxDepth));
+    expect(velocityMesh.position).to.eql(new Kompute.Vector3D(50, 100, 150));
+  });
+
   it("should delete entity if active", function(){
     var threeInstance = mockThreeInstance();
     var scene = new MockScene();
@@ -114,6 +158,24 @@ describe("DebugHelper", function(){
     world.insertEntity(entity);
     world.removeEntity(entity);
 
+    expect(debugHelper.meshesByEntityID).to.eql({});
+    expect(scene.children).to.have.length(0);
+  });
+
+  it("should delete velocityMesh if steerable", function(){
+    var threeInstance = mockThreeInstance();
+    var scene = new MockScene();
+    var world = new Kompute.World(1000, 1000, 1000, 10);
+
+    var debugHelper = new Kompute.DebugHelper(world, threeInstance, scene);
+
+    debugHelper.activate();
+
+    var entity = new Kompute.Steerable("entity1", new Kompute.Vector3D(100, 300, 500), new Kompute.Vector3D(10, 10, 10));
+    world.insertEntity(entity);
+    world.removeEntity(entity);
+
+    expect(debugHelper.meshesByEntityID).to.eql({});
     expect(debugHelper.meshesByEntityID).to.eql({});
     expect(scene.children).to.have.length(0);
   });
@@ -184,6 +246,7 @@ class MockMesh {
   constructor(geometry){
     this.geometry = geometry;
     this.position = new Kompute.Vector3D();
+    this.scale = new Kompute.Vector3D();
   }
 };
 

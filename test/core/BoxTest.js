@@ -31,9 +31,9 @@ describe("Box", function(){
     expect(box.min.x).to.eql(Infinity);
     expect(box.min.y).to.eql(Infinity);
     expect(box.min.z).to.eql(Infinity);
-    expect(box.max.x).to.eql(Infinity);
-    expect(box.max.y).to.eql(Infinity);
-    expect(box.max.z).to.eql(Infinity);
+    expect(box.max.x).to.eql(-Infinity);
+    expect(box.max.y).to.eql(-Infinity);
+    expect(box.max.z).to.eql(-Infinity);
   });
 
   it("should expand by point", function(){
@@ -62,5 +62,23 @@ describe("Box", function(){
 
     expect(box1.intersectsBox(box2)).to.eql(true);
     expect(box1.intersectsBox(box3)).to.eql(false);
+  });
+
+  it("should set from two vectors", function(){
+
+    var box = new Kompute.Box(new Kompute.Vector3D(), new Kompute.Vector3D());
+
+    var v1 = new Kompute.Vector3D(100, 200, 300);
+    var v2 = new Kompute.Vector3D(-100, -200, -300);
+
+    box.setFromTwoVectors(v1, v2, 10);
+    var center = new Kompute.Vector3D((v1.x + v2.x) / 2, (v1.y + v2.y) / 2, (v1.z + v2.z) / 2);
+
+    expect(center.x < box.max.x).to.eql(true);
+    expect(center.y < box.max.y).to.eql(true);
+    expect(center.z < box.max.z).to.eql(true);
+    expect(center.x > box.min.x).to.eql(true);
+    expect(center.y > box.min.y).to.eql(true);
+    expect(center.z > box.min.z).to.eql(true);
   });
 });

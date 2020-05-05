@@ -20,7 +20,7 @@ Box.prototype.setFromCenterAndSize = function(center, size){
 
 Box.prototype.makeEmpty = function(){
   this.min.set(Infinity, Infinity, Infinity);
-  this.max.set(Infinity, Infinity, Infinity);
+  this.max.set(-Infinity, -Infinity, -Infinity);
   return this;
 }
 
@@ -35,6 +35,45 @@ Box.prototype.intersectsBox = function(box){
   return !(box.max.x < this.min.x || box.min.x > this.max.x ||
             box.max.y < this.min.y || box.min.y > this.max.y ||
               box.max.z < this.min.z || box.min.z > this.max.z);
+}
+
+Box.prototype.setFromTwoVectors = function(vec1, vec2, thickness){
+  this.makeEmpty();
+  this.expandByPoint(vec1);
+  this.expandByPoint(vec2);
+  var v = vectorPool.get().copy(vec1);
+  v.x = vec1.x + thickness;
+  this.expandByPoint(v);
+  v.x = vec1.x - thickness;
+  this.expandByPoint(v);
+  v.x = vec1.x;
+  v.y = vec1.y + thickness;
+  this.expandByPoint(v);
+  v.y = vec1.y - thickness;
+  this.expandByPoint(v);
+  v.y = vec1.y;
+  v.z = vec1.z + thickness;
+  this.expandByPoint(v);
+  v.z = vec1.z - thickness;
+  this.expandByPoint(v);
+
+  v.copy(vec2);
+  v.x = vec2.x + thickness;
+  this.expandByPoint(v);
+  v.x = vec2.x - thickness;
+  this.expandByPoint(v);
+  v.x = vec2.x;
+  v.y = vec2.y + thickness;
+  this.expandByPoint(v);
+  v.y = vec2.y - thickness;
+  this.expandByPoint(v);
+  v.y = vec2.y;
+  v.z = vec2.z + thickness;
+  this.expandByPoint(v);
+  v.z = vec2.z - thickness;
+  this.expandByPoint(v);
+
+  return this;
 }
 
 export { Box };

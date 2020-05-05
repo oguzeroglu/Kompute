@@ -1,3 +1,10 @@
+import { Steerable } from "../steering/Steerable";
+import { Box } from "../core/Box";
+import { Vector3D } from "../core/Vector3D";
+
+var box = new Box(new Vector3D(), new Vector3D());
+var vect = new Vector3D();
+
 var DebugHelper = function(world, threeInstance, scene){
   this.world = world;
   this.threeInstance = threeInstance;
@@ -5,9 +12,11 @@ var DebugHelper = function(world, threeInstance, scene){
 
   this.isActive = false;
 
-  this.threeMaterial = new threeInstance.MeshBasicMaterial({ color: "lime", wireframe: true });
+  this.limeMaterial = new threeInstance.MeshBasicMaterial({ color: "lime", wireframe: true });
+  this.magentaMaterial = new threeInstance.MeshBasicMaterial({ color: "magenta", wireframe: true });
 
   this.meshesByEntityID = {};
+  this.velocityMeshesByEntityID = {};
 
   this.world.onEntityInserted = function(entity){
     if (!this.isActive){
@@ -23,6 +32,12 @@ var DebugHelper = function(world, threeInstance, scene){
     var mesh = this.meshesByEntityID[entity.id];
     this.scene.remove(mesh);
     delete this.meshesByEntityID[entity.id];
+
+    if (entity instanceof Steerable){
+      var velocityMesh = this.velocityMeshesByEntityID[entity.id];
+      this.scene.remove(velocityMesh);
+      delete this.velocityMeshesByEntityID[entity.id];
+    }
   }.bind(this);
 
   this.world.onEntityUpdated = function(entity){
@@ -31,6 +46,17 @@ var DebugHelper = function(world, threeInstance, scene){
     }
     var mesh = this.meshesByEntityID[entity.id];
     mesh.position.set(entity.position.x, entity.position.y, entity.position.z);
+
+    if (entity instanceof Steerable){
+      var velocityMesh = this.velocityMeshesByEntityID[entity.id];
+      vect.copy(entity.position).add(entity.velocity);
+      box.setFromTwoVectors(entity.position, vect, 5);
+      vect.x = (vect.x + entity.position.x) / 2;
+      vect.y = (vect.y + entity.position.y) / 2;
+      vect.z = (vect.z + entity.position.z) / 2;
+      velocityMesh.position.set(vect.x, vect.y, vect.z);
+      velocityMesh.scale.set(box.max.x - box.min.x, box.max.y - box.min.y, box.max.z - box.min.z);
+    }
   }.bind(this);
 }
 
@@ -38,6 +64,13 @@ DebugHelper.prototype.addEntity = function(entity){
   var mesh = this.createMeshFromEntity(entity);
   this.meshesByEntityID[entity.id] = mesh;
   this.scene.add(mesh);
+
+  if (entity instanceof Steerable){
+    var velocityMesh = new this.threeInstance.Mesh(new this.threeInstance.BoxBufferGeometry(1, 1, 1), this.magentaMaterial);
+    velocityMesh.position.set(entity.position.x, entity.position.y, entity.position.z);
+    this.scene.add(velocityMesh);
+    this.velocityMeshesByEntityID[entity.id] = velocityMesh;
+  }
 }
 
 DebugHelper.prototype.activate = function(){
@@ -55,12 +88,17 @@ DebugHelper.prototype.deactivate = function(){
     this.scene.remove(this.meshesByEntityID[entityID]);
   }
 
+  for (var entityID in this.velocityMeshesByEntityID){
+    this.scene.remove(this.velocityMeshesByEntityID[entityID]);
+  }
+
   this.meshesByEntityID = {};
+  this.velocityMeshesByEntityID = {};
 }
 
 DebugHelper.prototype.createMeshFromEntity = function(entity){
   var boxGeometry = new this.threeInstance.BoxBufferGeometry(entity.size.x, entity.size.y, entity.size.z);
-  var mesh = new this.threeInstance.Mesh(boxGeometry, this.threeMaterial);
+  var mesh = new this.threeInstance.Mesh(boxGeometry, this.limeMaterial);
   mesh.position.set(entity.position.x, entity.position.y, entity.position.z);
 
   return mesh;
