@@ -13,11 +13,11 @@ describe("SteeringBehavior", function(){
   });
 
 
-  it("should not request movement", function(){
+  it("should not request acceleration", function(){
 
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
     var steeringBehavior = new Kompute.SteeringBehavior(steerable);
 
-    expect(steeringBehavior.compute()).to.eql(null);
+    expect(steeringBehavior.compute().linear).to.eql(new Kompute.Vector3D(0, 0, 0));
   });
 });

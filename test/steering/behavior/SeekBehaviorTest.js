@@ -12,12 +12,12 @@ describe("SeekBehavior", function(){
     expect(seekBehavior.steerable).to.equal(steerable);
   });
 
-  it("should not request movement if steerable has no target position", function(){
+  it("should not request acceleration if steerable has no target position", function(){
 
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
     var seekBehavior = new Kompute.SeekBehavior(steerable);
 
-    expect(seekBehavior.compute()).to.eql(null);
+    expect(seekBehavior.compute().linear).to.eql(new Kompute.Vector3D());
   });
 
   it("should compute", function(){

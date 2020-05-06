@@ -6,7 +6,8 @@ var SteeringBehavior = function(steerable){
 }
 
 SteeringBehavior.prototype.compute = function(){
-  return null;
+  this.result.linear.set(0, 0, 0);
+  return this.result;
 }
 
 export { SteeringBehavior }

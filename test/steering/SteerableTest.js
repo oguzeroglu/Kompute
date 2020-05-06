@@ -22,7 +22,9 @@ describe("Steerable", function(){
     expect(entity.linearAcceleration).to.eql(new Kompute.Vector3D());
     expect(entity.maxAcceleration).to.eql(Infinity);
     expect(entity.hasTargetPosition).to.eql(false);
+    expect(entity.hasTargetEntity).to.eql(false);
     expect(entity.targetPosition).to.eql(new Kompute.Vector3D());
+    expect(entity.targetEntity).to.eql(null);
   });
 
   it("should update", function(){
@@ -140,6 +142,43 @@ describe("Steerable", function(){
 
     expect(entity.hasTargetPosition).to.eql(true);
     expect(entity.targetPosition).to.eql(new Kompute.Vector3D(100, 200, 300));
+  });
+
+  it("should unset target position", function(){
+
+    var center = new Kompute.Vector3D(0, 0, 0);
+    var size = new Kompute.Vector3D(50, 60, 70);
+    var entity = new Kompute.Steerable("steerable1", center, size);
+
+    entity.setTargetPosition(100, 200, 300);
+    entity.unsetTargetPosition();
+
+    expect(entity.hasTargetPosition).to.eql(false);
+  });
+
+  it("should set target entity", function(){
+    var center = new Kompute.Vector3D(0, 0, 0);
+    var size = new Kompute.Vector3D(50, 60, 70);
+    var entity = new Kompute.Steerable("steerable1", center, size);
+    var target = new Kompute.Steerable("steerable2", center, size);
+
+    entity.setTargetEntity(target);
+
+    expect(entity.hasTargetEntity).to.eql(true);
+    expect(entity.targetEntity).to.equal(target);
+  });
+
+  it("should unset target entity", function(){
+    var center = new Kompute.Vector3D(0, 0, 0);
+    var size = new Kompute.Vector3D(50, 60, 70);
+    var entity = new Kompute.Steerable("steerable1", center, size);
+    var target = new Kompute.Steerable("steerable2", center, size);
+
+    entity.setTargetEntity(target);
+    entity.unsetTargetEntity();
+
+    expect(entity.hasTargetEntity).to.eql(false);
+    expect(entity.targetEntity).to.eql(null);
   });
 });
 

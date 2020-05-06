@@ -8,16 +8,17 @@ var ArriveBehavior = function(steerable, options){
 
   this.satisfactionRadius = options.satisfactionRadius;
   this.slowDownRadius = options.slowDownRadius;
-  this.stopImmediately = options.stopImmediately;
 }
 
 ArriveBehavior.prototype = Object.create(SteeringBehavior.prototype);
 
 ArriveBehavior.prototype.compute = function(){
 
+  this.result.linear.set(0, 0, 0);
+
   var steerable = this.steerable;
   if (!steerable.hasTargetPosition){
-    return null;
+    return this.result;
   }
 
   var toTarget = vectorPool.get().copy(steerable.targetPosition).sub(steerable.position);
@@ -26,9 +27,7 @@ ArriveBehavior.prototype.compute = function(){
   var targetVelocity = vectorPool.get().set(0, 0, 0);
 
   if (distance <= this.satisfactionRadius){
-    if (this.stopImmediately){
-      return null;
-    }
+    return this.result;
   }else{
     targetVelocity.copy(toTarget).normalize().multiplyScalar(steerable.maxSpeed);
   }

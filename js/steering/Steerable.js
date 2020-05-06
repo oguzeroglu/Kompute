@@ -9,7 +9,9 @@ var Steerable = function(id, center, size){
   Entity.call(this, id, center, size);
 
   this.hasTargetPosition = false;
+  this.hasTargetEntity = false;
   this.targetPosition = new Vector3D();
+  this.targetEntity = null;
 
   this.linearAcceleration = new Vector3D();
   this.maxAcceleration = Infinity;
@@ -23,11 +25,6 @@ Steerable.prototype.update = function(){
   }
 
   var steerResult = this.behavior.compute();
-  if (!steerResult){
-    this.velocity.set(0, 0, 0);
-    this.linearAcceleration.set(0, 0, 0);
-    return;
-  }
 
   this.linearAcceleration.copy(steerResult.linear);
 
@@ -46,9 +43,23 @@ Steerable.prototype.setBehavior = function(behaviorConstructor, options){
   this.behavior = behavior;
 }
 
+Steerable.prototype.unsetTargetPosition = function(){
+  this.hasTargetPosition = false;
+}
+
 Steerable.prototype.setTargetPosition = function(x, y, z){
   this.targetPosition.set(x, y, z);
   this.hasTargetPosition = true;
+}
+
+Steerable.prototype.setTargetEntity = function(entity){
+  this.targetEntity = entity;
+  this.hasTargetEntity = true;
+}
+
+Steerable.prototype.unsetTargetEntity = function(){
+  this.hasTargetEntity = false;
+  this.targetEntity = null;
 }
 
 Object.defineProperty(Steerable.prototype, 'constructor', { value: Steerable,  enumerable: false, writable: true });

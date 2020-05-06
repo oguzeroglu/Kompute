@@ -8,9 +8,11 @@ SeekBehavior.prototype = Object.create(SteeringBehavior.prototype);
 
 SeekBehavior.prototype.compute = function(){
 
+  this.result.linear.set(0, 0, 0);
+
   var steerable = this.steerable;
   if (!steerable.hasTargetPosition){
-    return null;
+    return this.result;
   }
 
   this.result.linear.copy(steerable.targetPosition).sub(steerable.position).normalize().multiplyScalar(steerable.maxAcceleration);
