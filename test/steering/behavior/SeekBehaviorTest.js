@@ -9,7 +9,7 @@ describe("SeekBehavior", function(){
     var seekBehavior = new Kompute.SeekBehavior(steerable);
 
     expect(seekBehavior.result).to.eql(new Kompute.SteerResult());
-    expect(seekBehavior.steerable).to.be.equal(steerable);
+    expect(seekBehavior.steerable).to.equal(steerable);
   });
 
   it("should not request movement if steerable has no target position", function(){

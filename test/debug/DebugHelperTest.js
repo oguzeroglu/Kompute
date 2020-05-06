@@ -11,9 +11,9 @@ describe("DebugHelper", function(){
 
     var debugHelper = new Kompute.DebugHelper(world, threeInstance, scene);
 
-    expect(debugHelper.world).to.be.equal(world);
-    expect(debugHelper.threeInstance).to.be.equal(threeInstance);
-    expect(debugHelper.scene).to.be.equal(scene);
+    expect(debugHelper.world).to.equal(world);
+    expect(debugHelper.threeInstance).to.equal(threeInstance);
+    expect(debugHelper.scene).to.equal(scene);
     expect(debugHelper.limeMaterial).to.be.an(MockMeshBasicMaterial);
     expect(debugHelper.magentaMaterial).to.be.an(MockMeshBasicMaterial);
     expect(debugHelper.meshesByEntityID).to.eql({});

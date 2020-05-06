@@ -62,6 +62,9 @@ Vector3D.prototype.sub = function(vect){
 
 Vector3D.prototype.normalize = function(){
   var len = this.getLength();
+  if (len == 0){
+    return this;
+  }
   this.x = this.x / len;
   this.y = this.y / len;
   this.z = this.z / len;

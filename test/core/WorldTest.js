@@ -67,8 +67,8 @@ describe("World", function(){
     world.insertEntity(entity1);
     world.insertEntity(entity2);
 
-    expect(world.getEntityByID("entity1")).to.be.equal(entity1);
-    expect(world.getEntityByID("entity2")).to.be.equal(entity2);
+    expect(world.getEntityByID("entity1")).to.equal(entity1);
+    expect(world.getEntityByID("entity2")).to.equal(entity2);
     expect(world.getEntityByID("entity3")).to.eql(null);
   });
 
@@ -130,7 +130,7 @@ describe("World", function(){
 
     world.insertEntity(entity);
 
-    expect(parameter).to.be.equal(entity);
+    expect(parameter).to.equal(entity);
   });
 
   it("should invoke onEntityUpdated", function(){
@@ -146,7 +146,7 @@ describe("World", function(){
 
     entity.setPosition(100, 200, 300);
 
-    expect(parameter).to.be.equal(entity);
+    expect(parameter).to.equal(entity);
   });
 
   it("should invoke onEntityRemoved", function(){
@@ -161,7 +161,7 @@ describe("World", function(){
     world.insertEntity(entity);
     world.removeEntity(entity);
 
-    expect(parameter).to.be.equal(entity);
+    expect(parameter).to.equal(entity);
   });
 
   it("should execute for each entity", function(){

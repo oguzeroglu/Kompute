@@ -9,7 +9,7 @@ describe("ArriveBehavior", function(){
     var arriveBehavior = new Kompute.ArriveBehavior(steerable, { satisfactionRadius: 50, slowDownRadius: 100 });
 
     expect(arriveBehavior.result).to.eql(new Kompute.SteerResult());
-    expect(arriveBehavior.steerable).to.be.equal(steerable);
+    expect(arriveBehavior.steerable).to.equal(steerable);
     expect(arriveBehavior.satisfactionRadius).to.eql(50);
     expect(arriveBehavior.slowDownRadius).to.eql(100);
   });

@@ -9,7 +9,7 @@ describe("SteeringBehavior", function(){
     var steeringBehavior = new Kompute.SteeringBehavior(steerable);
 
     expect(steeringBehavior.result).to.eql(new Kompute.SteerResult());
-    expect(steeringBehavior.steerable).to.be.equal(steerable);
+    expect(steeringBehavior.steerable).to.equal(steerable);
   });
 
 
