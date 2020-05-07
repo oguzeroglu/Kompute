@@ -18,6 +18,8 @@ var Entity = function(id, center, size){
 
   this.maxSpeed = Infinity;
   this.velocity = new Vector3D();
+
+  this.lookDirection = new Vector3D(0, 0, -1);
 }
 
 Entity.prototype.update = function(){

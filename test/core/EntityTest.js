@@ -19,6 +19,7 @@ describe("Entity", function(){
     expect(entity.nearbyObject).to.eql(null);
     expect(entity.velocity).to.eql(new Kompute.Vector3D());
     expect(entity.maxSpeed).to.eql(Infinity);
+    expect(entity.lookDirection).to.eql(new Kompute.Vector3D(0, 0, -1));
   });
 
   it("should have a nearbyObject after being inserted to world", function(){
