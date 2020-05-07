@@ -37,6 +37,12 @@ World.prototype.updateEntity = function(entity, position, size){
   }
 }
 
+World.prototype.onLookDirectionUpdated = function(entity){
+  if (this.onEntityLookDirectionUpdated){
+    this.onEntityLookDirectionUpdated(entity);
+  }
+}
+
 World.prototype.removeEntity = function(entity){
   delete this.entititesByID[entity.id];
   this.nearby.delete(entity.nearbyObject);

@@ -14,9 +14,13 @@ var DebugHelper = function(world, threeInstance, scene){
 
   this.limeMaterial = new threeInstance.MeshBasicMaterial({ color: "lime", wireframe: true });
   this.magentaMaterial = new threeInstance.MeshBasicMaterial({ color: "magenta", wireframe: true });
+  this.redMaterial = new threeInstance.MeshBasicMaterial({ color : "red", wireframe: false });
 
   this.meshesByEntityID = {};
   this.velocityMeshesByEntityID = {};
+  this.lookMeshesByEntityID = {};
+
+  this.LOOK_DISTANCE = 100;
 
   this.world.onEntityInserted = function(entity){
     if (!this.isActive){
@@ -37,6 +41,10 @@ var DebugHelper = function(world, threeInstance, scene){
       var velocityMesh = this.velocityMeshesByEntityID[entity.id];
       this.scene.remove(velocityMesh);
       delete this.velocityMeshesByEntityID[entity.id];
+
+      var lookMesh = this.lookMeshesByEntityID[entity.id];
+      this.scene.remove(lookMesh);
+      delete this.lookMeshesByEntityID[entity.id];
     }
   }.bind(this);
 
@@ -56,6 +64,21 @@ var DebugHelper = function(world, threeInstance, scene){
       vect.z = (vect.z + entity.position.z) / 2;
       velocityMesh.position.set(vect.x, vect.y, vect.z);
       velocityMesh.scale.set(box.max.x - box.min.x, box.max.y - box.min.y, box.max.z - box.min.z);
+
+      var lookMesh = this.lookMeshesByEntityID[entity.id];
+      vect.copy(entity.lookDirection).normalize().multiplyScalar(this.LOOK_DISTANCE).add(entity.position);
+      lookMesh.position.set(vect.x, vect.y, vect.z);
+    }
+  }.bind(this);
+
+  this.world.onEntityLookDirectionUpdated = function(entity){
+    if (!this.isActive){
+      return;
+    }
+    if (entity instanceof Steerable){
+      var lookMesh = this.lookMeshesByEntityID[entity.id];
+      vect.copy(entity.lookDirection).normalize().multiplyScalar(this.LOOK_DISTANCE).add(entity.position);
+      lookMesh.position.set(vect.x, vect.y, vect.z);
     }
   }.bind(this);
 }
@@ -70,6 +93,12 @@ DebugHelper.prototype.addEntity = function(entity){
     velocityMesh.position.set(entity.position.x, entity.position.y, entity.position.z);
     this.scene.add(velocityMesh);
     this.velocityMeshesByEntityID[entity.id] = velocityMesh;
+
+    var lookMesh = new this.threeInstance.Mesh(new this.threeInstance.BoxBufferGeometry(5, 5, 5), this.redMaterial);
+    var lookPosition = new Vector3D().copy(entity.lookDirection).normalize().add(entity.position).multiplyScalar(this.LOOK_DISTANCE);
+    lookMesh.position.set(lookPosition.x, lookPosition.y, lookPosition.z);
+    this.scene.add(lookMesh);
+    this.lookMeshesByEntityID[entity.id] = lookMesh;
   }
 }
 
@@ -92,8 +121,13 @@ DebugHelper.prototype.deactivate = function(){
     this.scene.remove(this.velocityMeshesByEntityID[entityID]);
   }
 
+  for (var entityID in this.lookMeshesByEntityID){
+    this.scene.remove(this.lookMeshesByEntityID[entityID]);
+  }
+
   this.meshesByEntityID = {};
   this.velocityMeshesByEntityID = {};
+  this.lookMeshesByEntityID = {};
 }
 
 DebugHelper.prototype.createMeshFromEntity = function(entity){

@@ -144,7 +144,23 @@ describe("World", function(){
 
     world.insertEntity(entity);
 
-    entity.setPosition(100, 200, 300);
+    entity.setPosition(new Kompute.Vector3D(100, 200, 300));
+
+    expect(parameter).to.equal(entity);
+  });
+
+  it("should invoke onEntityLookDirectionUpdated", function(){
+    var world = new Kompute.World(5000, 5000, 5000, 50);
+    var entity = new Kompute.Entity("entity1", new Kompute.Vector3D(), new Kompute.Vector3D(100, 100, 100));
+
+    var parameter = false;
+    world.onEntityLookDirectionUpdated = function(param){
+      parameter = param;
+    };
+
+    world.insertEntity(entity);
+
+    entity.setLookDirection(new Kompute.Vector3D(10, 20, 30));
 
     expect(parameter).to.equal(entity);
   });

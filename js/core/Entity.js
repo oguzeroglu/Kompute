@@ -32,12 +32,21 @@ Entity.prototype.update = function(){
   this.setPosition(this.position.add(vect));
 }
 
+
 Entity.prototype.setPosition = function(position){
   this.position.copy(position);
   this.box.setFromCenterAndSize(position, this.size);
 
   if (this.world){
     this.world.updateEntity(this, this.position, this.size);
+  }
+}
+
+Entity.prototype.setLookDirection = function(direction){
+  this.lookDirection.copy(vectorPool.get().copy(direction).normalize());
+
+  if (this.world){
+    this.world.onLookDirectionUpdated(this);
   }
 }
 

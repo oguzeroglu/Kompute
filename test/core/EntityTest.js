@@ -88,6 +88,32 @@ describe("Entity", function(){
     expect(world.nearby.query(40, 40, 40).size).to.eql(1);
   });
 
+  it("should set look direction", function(){
+    var center = new Kompute.Vector3D(10, 10, 10);
+    var entitySize = new Kompute.Vector3D(5, 5, 5);
+
+    var world = new Kompute.World(300, 300, 300, 10);
+    var entity = new Kompute.Entity("entity1", center, entitySize);
+
+    expect(entity.lookDirection).to.eql(new Kompute.Vector3D(0, 0, -1));
+
+    entity.setLookDirection(new Kompute.Vector3D(1, 0, 0));
+
+    expect(entity.lookDirection).to.eql(new Kompute.Vector3D(1, 0, 0));
+
+    var called = false;
+    world.onLookDirectionUpdated = function(){
+      called = true;
+    }
+
+    world.insertEntity(entity);
+
+    entity.setLookDirection(new Kompute.Vector3D(10, 20, 30));
+
+    expect(entity.lookDirection).to.eql(new Kompute.Vector3D(10, 20, 30).normalize());
+    expect(called).to.eql(true);
+  });
+
   it("should execute for each close entity", function(){
     var entitySize = new Kompute.Vector3D(5, 5, 5);
 
