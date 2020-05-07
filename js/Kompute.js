@@ -7,6 +7,7 @@ export { VectorPool } from "./core/VectorPool";
 export { Box } from "./core/Box";
 export { World } from "./core/World";
 export { Entity } from "./core/Entity";
+export { Quaternion } from "./core/Quaternion";
 export { Steerable } from "./steering/Steerable";
 export { SteerResult } from "./steering/SteerResult";
 export { SteeringBehavior } from "./steering/behavior/SteeringBehavior";
