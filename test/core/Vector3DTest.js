@@ -100,4 +100,17 @@ describe("Vector3D", function(){
 
     expect(vect.normalize().getLength()).to.eql(1);
   });
+
+  it("should perform dot product", function(){
+
+    var v1 = new Kompute.Vector3D(0, 0, 1);
+    var v2 = new Kompute.Vector3D(1, 0, 0);
+
+    expect(v1.dot(v2)).to.eql(0);
+
+    v1.set(10, 20, 30);
+    v2.set(-10, -20, -30);
+
+    expect(v1.dot(v2)).to.eql(-100-400-900);
+  });
 });

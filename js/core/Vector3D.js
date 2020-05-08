@@ -72,4 +72,8 @@ Vector3D.prototype.normalize = function(){
   return this;
 }
 
+Vector3D.prototype.dot = function(vect){
+  return (this.x * vect.x) + (this.y * vect.y) + (this.z * vect.z);
+}
+
 export { Vector3D };
