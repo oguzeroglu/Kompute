@@ -1,5 +1,7 @@
 import { MathUtils } from "./MathUtils";
+import { VectorPool } from "./VectorPool";
 
+var vectorPool = new VectorPool(10);
 var mathUtils = new MathUtils();
 
 var Quaternion = function(x, y, z, w){
@@ -92,6 +94,25 @@ Quaternion.prototype.rotateTowards = function(quaternion, step){
   }
 
   return this.sphericalLinearInterpolation(quaternion,  Math.min(1, step / radialDistance));
+}
+
+Quaternion.prototype.setFromVectors = function(vFrom, vTo){
+  var vFromNormalized = vectorPool.get().copy(vFrom).normalize();
+  var vToNormalized = vectorPool.get().copy(vTo).normalize();
+
+  var r = vFromNormalized.dot(vToNormalized) + 1;
+
+  if (r < Number.EPSILON){
+    if (Math.abs(vFromNormalized.x) > Math.abs(vToNormalized.z)){
+      this.set(-vFromNormalized.y, vFromNormalized.x, 0, 0);
+    }else{
+      this.set(0, -vFromNormalized.z, vFromNormalized.y, 0);
+    }
+  }else{
+    this.set(vFromNormalized.y * vToNormalized.z - vFromNormalized.z * vToNormalized.y, vFromNormalized.z * vToNormalized.x - vFromNormalized.x * vToNormalized.z, vFromNormalized.x * vToNormalized.y - vFromNormalized.y * vToNormalized.x, r);
+  }
+
+  return this.normalize();
 }
 
 export { Quaternion };

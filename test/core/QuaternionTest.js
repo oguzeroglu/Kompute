@@ -113,4 +113,19 @@ describe("Quaternion", function(){
     expect(q2.clone().rotateTowards(q1, 10)).to.eql(q1);
     expect(q1.clone().rotateTowards(q2, 0.5 * Math.PI / 2)).to.eql(q2.clone().rotateTowards(q1, 0.5 * Math.PI/2));
   });
+
+  it("should set from two vectors", function(){
+
+    var v1 = new Kompute.Vector3D(100, 0, 0);
+    var v2 = new Kompute.Vector3D(0, 100, 0);
+    var v3 = new Kompute.Vector3D(0, 0, 100);
+
+    expect(new Kompute.Quaternion().setFromVectors(v1, v2)).to.eql(new Kompute.Quaternion(0, 0, 0.7071067811865475, 0.7071067811865475));
+    expect(new Kompute.Quaternion().setFromVectors(v1, v3)).to.eql(new Kompute.Quaternion(0, -0.7071067811865475, 0, 0.7071067811865475));
+    expect(new Kompute.Quaternion().setFromVectors(v2, v3)).to.eql(new Kompute.Quaternion(0.7071067811865475, 0, 0, 0.7071067811865475));
+
+    expect(new Kompute.Quaternion().setFromVectors(v1, v2).radialDistanceTo(new Kompute.Quaternion().setFromVectors(v2, v1))).to.eql(Math.PI);
+    expect(new Kompute.Quaternion().setFromVectors(v1, v3).radialDistanceTo(new Kompute.Quaternion().setFromVectors(v3, v1))).to.eql(Math.PI);
+    expect(new Kompute.Quaternion().setFromVectors(v2, v3).radialDistanceTo(new Kompute.Quaternion().setFromVectors(v3, v2))).to.eql(Math.PI);
+  });
 });
