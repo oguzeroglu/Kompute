@@ -59,4 +59,48 @@ describe("Quaternion", function(){
     expect(q1.radialDistanceTo(q1)).to.eql(0);
     expect(q2.radialDistanceTo(q2)).to.eql(0);
   });
+
+  it("should calculate length", function(){
+
+    var q1 = new Kompute.Quaternion(10, 20, 30, 40);
+
+    expect(q1.getLength()).to.eql(Math.sqrt((10 * 10) + (20 * 20) + (30 * 30) + (40 * 40)));
+  });
+
+  it("should normalize", function(){
+
+    var quaternion = new Kompute.Quaternion(0, 0, 0, 0);
+
+    expect(quaternion.normalize()).to.eql(new Kompute.Quaternion());
+
+    quaternion.set(10, 30, 60, 70);
+
+    expect(quaternion.normalize().getLength()).to.eql(1);
+  });
+
+  it("should clone", function(){
+
+    var q1 = new Kompute.Quaternion(10, 20, 30, 40);
+
+    expect(q1.clone()).to.eql(q1);
+    expect(q1.clone()).not.to.equal(q1);
+  });
+
+  it("should perform spherical linear interpolation", function(){
+
+    var q1 = new Kompute.Quaternion(0, 0, 0, 1);
+    var q2 = new Kompute.Quaternion(0.7071067811865475, 0, 0, 0.7071067811865476);
+
+    expect(q1.clone().sphericalLinearInterpolation(q2.clone(), 0)).to.eql(q1);
+    expect(q1.clone().sphericalLinearInterpolation(q2.clone(), 1)).to.eql(q2);
+
+    var half1 = q1.clone().sphericalLinearInterpolation(q2.clone(), 0.5);
+    var half2 = q2.clone().sphericalLinearInterpolation(q1.clone(), 0.5);
+
+    expect(half1).to.eql(half2);
+
+    var radialDistance = half1.radialDistanceTo(q1);
+
+    expect(radialDistance.toFixed(5)).to.eql((Math.PI / 4).toFixed(5));
+  });
 });
