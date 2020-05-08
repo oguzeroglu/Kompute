@@ -1,3 +1,7 @@
+import { MathUtils } from "./MathUtils";
+
+var mathUtils = new MathUtils();
+
 var Quaternion = function(x, y, z, w){
   this.set(x || 0, y || 0, z || 0, w === undefined ? 1 : w);
 }
@@ -16,4 +20,13 @@ Quaternion.prototype.copy = function(quaternion){
 
   return this;
 }
+
+Quaternion.prototype.dot = function(quaternion){
+  return (this.x * quaternion.x) + (this.y * quaternion.y) + (this.z * quaternion.z) + (this.w * quaternion.w);
+}
+
+Quaternion.prototype.radialDistanceTo = function(quaternion){
+  return 2 * Math.acos(Math.abs(mathUtils.clamp(this.dot(quaternion), - 1, 1)));
+}
+
 export { Quaternion };

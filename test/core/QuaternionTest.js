@@ -41,4 +41,22 @@ describe("Quaternion", function(){
 
     expect(q1).to.eql(q2);
   });
+
+  it("should perform dot product with another quaternion", function(){
+
+    var q1 = new Kompute.Quaternion(10, 20, 30, 40);
+    var q2 = new Kompute.Quaternion(-10, -20, -30, -40);
+
+    expect(q1.dot(q2)).to.eql(-100-400-900-1600);
+  });
+
+  it("should calculate radial distance to another quaternion", function(){
+
+    var q1 = new Kompute.Quaternion(0, 0, 0, 1);
+    var q2 = new Kompute.Quaternion(0.7071067811865475, 0, 0, 0.7071067811865476);
+
+    expect(q1.radialDistanceTo(q2)).to.eql(Math.PI/2);
+    expect(q1.radialDistanceTo(q1)).to.eql(0);
+    expect(q2.radialDistanceTo(q2)).to.eql(0);
+  });
 });

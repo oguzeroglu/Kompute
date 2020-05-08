@@ -2,6 +2,7 @@ var Kompute = function(){
 
 }
 
+export { MathUtils } from "./core/MathUtils";
 export { Vector3D } from "./core/Vector3D";
 export { VectorPool } from "./core/VectorPool";
 export { Box } from "./core/Box";
