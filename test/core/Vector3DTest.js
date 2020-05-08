@@ -113,4 +113,16 @@ describe("Vector3D", function(){
 
     expect(v1.dot(v2)).to.eql(-100-400-900);
   });
+
+  it("should apply quaternion", function(){
+
+    var v1 = new Kompute.Vector3D(Math.random(), Math.random(), Math.random()).normalize();
+    var v2 = new Kompute.Vector3D(Math.random(), Math.random(), Math.random()).normalize();
+
+    var q = new Kompute.Quaternion().setFromVectors(v1, v2);
+
+    var dist = v1.applyQuaternion(q).sub(v2).getLength();
+
+    expect(dist <= Number.EPSILON).to.eql(true);
+  });
 });

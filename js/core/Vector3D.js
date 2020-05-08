@@ -76,4 +76,17 @@ Vector3D.prototype.dot = function(vect){
   return (this.x * vect.x) + (this.y * vect.y) + (this.z * vect.z);
 }
 
+Vector3D.prototype.applyQuaternion = function(quaternion){
+  var x = this.x, y = this.y, z = this.z;
+  var qx = quaternion.x, qy = quaternion.y, qz = quaternion.z, qw = quaternion.w;
+  var ix = qw * x + qy * z - qz * y;
+  var iy = qw * y + qz * x - qx * z;
+  var iz = qw * z + qx * y - qy * x;
+  var iw = - qx * x - qy * y - qz * z;
+  this.x = ix * qw + iw * - qx + iy * - qz - iz * - qy;
+  this.y = iy * qw + iw * - qy + iz * - qx - ix * - qz;
+  this.z = iz * qw + iw * - qz + ix * - qy - iy * - qx;
+  return this;
+}
+
 export { Vector3D };
