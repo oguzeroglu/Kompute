@@ -103,4 +103,14 @@ describe("Quaternion", function(){
 
     expect(radialDistance.toFixed(5)).to.eql((Math.PI / 4).toFixed(5));
   });
+
+  it("should rotate towards to another quaternion", function(){
+
+    var q1 = new Kompute.Quaternion(0, 0, 0, 1);
+    var q2 = new Kompute.Quaternion(0.7071067811865475, 0, 0, 0.7071067811865476);
+
+    expect(q1.clone().rotateTowards(q2, 10)).to.eql(q2);
+    expect(q2.clone().rotateTowards(q1, 10)).to.eql(q1);
+    expect(q1.clone().rotateTowards(q2, 0.5 * Math.PI / 2)).to.eql(q2.clone().rotateTowards(q1, 0.5 * Math.PI/2));
+  });
 });

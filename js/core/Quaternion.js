@@ -85,4 +85,13 @@ Quaternion.prototype.sphericalLinearInterpolation = function(quaternion, t){
   return this.set(x * ratioA + this.x * ratioB, y * ratioA + this.y * ratioB, z * ratioA + this.z * ratioB, w * ratioA + this.w * ratioB);
 }
 
+Quaternion.prototype.rotateTowards = function(quaternion, step){
+  var radialDistance = this.radialDistanceTo(quaternion);
+  if (radialDistance == 0){
+    return this;
+  }
+
+  return this.sphericalLinearInterpolation(quaternion,  Math.min(1, step / radialDistance));
+}
+
 export { Quaternion };
