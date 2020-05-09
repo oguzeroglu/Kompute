@@ -20,9 +20,9 @@ describe("Entity", function(){
     expect(entity.velocity).to.eql(new Kompute.Vector3D());
     expect(entity.maxSpeed).to.eql(Infinity);
     expect(entity.lookDirection).to.eql(new Kompute.Vector3D(0, 0, -1));
-    expect(entity.lookQuaternion).to.eql(new Kompute.Quaternion());
     expect(entity.hasLookTarget).to.eql(false);
     expect(entity.lookTarget).to.eql(new Kompute.Vector3D());
+    expect(entity.lookSpeed).to.eql(0.1);
   });
 
   it("should have a nearbyObject after being inserted to world", function(){
@@ -211,5 +211,49 @@ describe("Entity", function(){
     entity.unsetLookTarget();
 
     expect(entity.hasLookTarget).to.eql(false);
+  });
+
+  it("should gradually look at target", function(){
+    var entitySize = new Kompute.Vector3D(5, 5, 5);
+    var center = new Kompute.Vector3D();
+
+    var entity = new Kompute.Entity("entity1", center, entitySize);
+
+    var target = new Kompute.Vector3D(100, 0, 0);
+
+    entity.setLookTarget(target);
+
+    var dot = entity.lookDirection.dot(new Kompute.Vector3D().copy(target).sub(entity.position));
+    for (var i = 0; i < 1000; i ++){
+      entity.update();
+      var newDot = entity.lookDirection.normalize().dot(new Kompute.Vector3D().copy(target).sub(entity.position).normalize());
+      expect(newDot >= dot).to.eql(true);
+      dot = newDot;
+    }
+
+    expect(dot).to.eql(1);
+  });
+
+  it("should not overshoot when looking at target", function(){
+    var entitySize = new Kompute.Vector3D(5, 5, 5);
+    var center = new Kompute.Vector3D();
+
+    var entity = new Kompute.Entity("entity1", center, entitySize);
+
+    var target = new Kompute.Vector3D(100, 0, 0);
+
+    entity.setLookTarget(target);
+
+    entity.lookSpeed = 10000;
+
+    var dot = entity.lookDirection.dot(new Kompute.Vector3D().copy(target).sub(entity.position));
+    for (var i = 0; i < 1000; i ++){
+      entity.update();
+      var newDot = entity.lookDirection.normalize().dot(new Kompute.Vector3D().copy(target).sub(entity.position).normalize());
+      expect(newDot >= dot).to.eql(true);
+      dot = newDot;
+    }
+
+    expect(dot).to.eql(1);
   });
 });

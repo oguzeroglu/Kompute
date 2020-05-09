@@ -3,6 +3,8 @@ import { Vector3D } from "./Vector3D";
 import { VectorPool } from "./VectorPool";
 import { Quaternion } from "./Quaternion";
 
+var quaternion = new Quaternion();
+var quaternion2 = new Quaternion();
 var delta = 1/60;
 var vectorPool = new VectorPool(10);
 
@@ -23,8 +25,9 @@ var Entity = function(id, center, size){
   this.hasLookTarget = false;
   this.lookTarget = new Vector3D();
 
+  this.lookSpeed = 0.1;
+
   this.lookDirection = new Vector3D(0, 0, -1);
-  this.lookQuaternion = new Quaternion();
 }
 
 Entity.prototype.update = function(){
@@ -35,6 +38,14 @@ Entity.prototype.update = function(){
 
   var vect = vectorPool.get().copy(this.velocity).multiplyScalar(delta);
   this.setPosition(this.position.add(vect));
+
+  if (this.hasLookTarget){
+    var desiredDirection = vectorPool.get().copy(this.lookTarget).sub(this.position);
+    var desiredQuaternion = quaternion.setFromVectors(this.lookDirection, desiredDirection);
+    quaternion2.set(0, 0, 0, 1);
+    var v = vectorPool.get().copy(this.lookDirection).applyQuaternion(quaternion2.rotateTowards(quaternion, this.lookSpeed));
+    this.setLookDirection(v);
+  }
 }
 
 

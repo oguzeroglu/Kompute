@@ -121,8 +121,10 @@ describe("Vector3D", function(){
 
     var q = new Kompute.Quaternion().setFromVectors(v1, v2);
 
-    var dist = v1.applyQuaternion(q).sub(v2).getLength();
+    v1.applyQuaternion(q);
 
-    expect(dist <= Number.EPSILON).to.eql(true);
+    var dot = v1.dot(v2);
+
+    expect(Math.abs(dot - 1) <= Number.EPSILON).to.eql(true);
   });
 });
