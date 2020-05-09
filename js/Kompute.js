@@ -17,4 +17,5 @@ export { ArriveBehavior } from "./steering/behavior/ArriveBehavior";
 export { AvoidBehavior } from "./steering/behavior/AvoidBehavior";
 export { BlendedSteeringBehavior } from "./steering/behavior/BlendedSteeringBehavior";
 export { PursueBehavior } from "./steering/behavior/PursueBehavior";
+export { LookWhereYouAreGoingBehavior } from "./steering/behavior/LookWhereYouAreGoingBehavior";
 export { DebugHelper } from "./debug/DebugHelper";
