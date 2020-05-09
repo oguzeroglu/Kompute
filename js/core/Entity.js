@@ -1,6 +1,7 @@
 import { Box } from "./Box";
 import { Vector3D } from "./Vector3D";
 import { VectorPool } from "./VectorPool";
+import { Quaternion } from "./Quaternion";
 
 var delta = 1/60;
 var vectorPool = new VectorPool(10);
@@ -19,7 +20,11 @@ var Entity = function(id, center, size){
   this.maxSpeed = Infinity;
   this.velocity = new Vector3D();
 
+  this.hasLookTarget = false;
+  this.lookTarget = new Vector3D();
+
   this.lookDirection = new Vector3D(0, 0, -1);
+  this.lookQuaternion = new Quaternion();
 }
 
 Entity.prototype.update = function(){
@@ -60,6 +65,15 @@ Entity.prototype.executeForEachCloseEntity = function(func){
       func(this.world.getEntityByID(obj.id));
     }
   }
+}
+
+Entity.prototype.setLookTarget = function(target){
+  this.lookTarget.copy(target);
+  this.hasLookTarget = true;
+}
+
+Entity.prototype.unsetLookTarget = function(){
+  this.hasLookTarget = false;
 }
 
 export { Entity };

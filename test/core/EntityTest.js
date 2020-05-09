@@ -20,6 +20,9 @@ describe("Entity", function(){
     expect(entity.velocity).to.eql(new Kompute.Vector3D());
     expect(entity.maxSpeed).to.eql(Infinity);
     expect(entity.lookDirection).to.eql(new Kompute.Vector3D(0, 0, -1));
+    expect(entity.lookQuaternion).to.eql(new Kompute.Quaternion());
+    expect(entity.hasLookTarget).to.eql(false);
+    expect(entity.lookTarget).to.eql(new Kompute.Vector3D());
   });
 
   it("should have a nearbyObject after being inserted to world", function(){
@@ -182,5 +185,31 @@ describe("Entity", function(){
     entity.update();
 
     expect(entity.velocity.getLength()).to.eql(entity.maxSpeed);
+  });
+
+  it("should set look target", function(){
+    var entitySize = new Kompute.Vector3D(5, 5, 5);
+    var center = new Kompute.Vector3D();
+
+    var entity = new Kompute.Entity("entity1", center, entitySize);
+
+    var target = new Kompute.Vector3D(200, 400, 500);
+    entity.setLookTarget(target);
+
+    expect(entity.hasLookTarget).to.eql(true);
+    expect(entity.lookTarget).to.eql(target);
+  });
+
+  it("should unset look target", function(){
+    var entitySize = new Kompute.Vector3D(5, 5, 5);
+    var center = new Kompute.Vector3D();
+
+    var entity = new Kompute.Entity("entity1", center, entitySize);
+
+    var target = new Kompute.Vector3D(200, 400, 500);
+    entity.setLookTarget(target);
+    entity.unsetLookTarget();
+
+    expect(entity.hasLookTarget).to.eql(false);
   });
 });
