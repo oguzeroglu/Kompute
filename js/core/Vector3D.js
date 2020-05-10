@@ -93,4 +93,8 @@ Vector3D.prototype.cross = function(vec){
   return this.set(this.y * vec.z - this.z * vec.y, this.z * vec.x - this.x * vec.z, this.x * vec.y - this.y * vec.x);
 }
 
+Vector3D.prototype.negate = function(){
+  return this.set(-this.x, -this.y, -this.z);
+}
+
 export { Vector3D };

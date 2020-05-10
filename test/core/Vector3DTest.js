@@ -140,4 +140,11 @@ describe("Vector3D", function(){
       expect(v2.dot(cross2) <= Number.EPSILON).to.eql(true);
     }
   });
+
+  it("should negate", function(){
+    var vec = new Kompute.Vector3D(100 * (Math.random() - 0.5), 100 * (Math.random() - 0.5), 100 * (Math.random() - 0.5));
+    var negative = vec.clone().negate();
+
+    expect(vec.add(negative)).to.eql(new Kompute.Vector3D());
+  })
 });
