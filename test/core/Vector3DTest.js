@@ -127,4 +127,17 @@ describe("Vector3D", function(){
 
     expect(Math.abs(dot - 1) <= Number.EPSILON).to.eql(true);
   });
+
+  it("should perform cross product", function(){
+    for (var i = 0; i < 1000; i++){
+      var v1 = new Kompute.Vector3D(Math.random(), Math.random(), Math.random());
+      var v2 = new Kompute.Vector3D(Math.random(), Math.random(), Math.random());
+      var cross1 = new Kompute.Vector3D().copy(v1).cross(v2);
+      var cross2 = new Kompute.Vector3D().copy(v2).cross(v1);
+      expect(v1.dot(cross1) <= Number.EPSILON).to.eql(true);
+      expect(v2.dot(cross1) <= Number.EPSILON).to.eql(true);
+      expect(v1.dot(cross2) <= Number.EPSILON).to.eql(true);
+      expect(v2.dot(cross2) <= Number.EPSILON).to.eql(true);
+    }
+  });
 });

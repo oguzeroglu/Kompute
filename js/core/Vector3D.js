@@ -89,4 +89,8 @@ Vector3D.prototype.applyQuaternion = function(quaternion){
   return this;
 }
 
+Vector3D.prototype.cross = function(vec){
+  return this.set(this.y * vec.z - this.z * vec.y, this.z * vec.x - this.x * vec.z, this.x * vec.y - this.y * vec.x);
+}
+
 export { Vector3D };
