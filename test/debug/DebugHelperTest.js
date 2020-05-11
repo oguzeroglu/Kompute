@@ -17,9 +17,11 @@ describe("DebugHelper", function(){
     expect(debugHelper.limeMaterial).to.be.an(MockMeshBasicMaterial);
     expect(debugHelper.magentaMaterial).to.be.an(MockMeshBasicMaterial);
     expect(debugHelper.redMaterial).to.be.an(MockMeshBasicMaterial);
+    expect(debugHelper.orangeMaterial).to.be.an(MockMeshBasicMaterial);
     expect(debugHelper.meshesByEntityID).to.eql({});
-    expect(debugHelper.velocityMeshesByEntityID).to.be.eql({});
-    expect(debugHelper.lookMeshesByEntityID).to.be.eql({});
+    expect(debugHelper.velocityMeshesByEntityID).to.eql({});
+    expect(debugHelper.lookMeshesByEntityID).to.eql({});
+    expect(debugHelper.pathMeshes).to.eql([]);
     expect(world.onEntityInserted).to.exist;
     expect(world.onEntityRemoved).to.exist;
     expect(world.onEntityUpdated).to.exist;
@@ -237,13 +239,47 @@ describe("DebugHelper", function(){
     var entity1 = new Kompute.Entity("entity1", new Kompute.Vector3D(100, 300, 500), new Kompute.Vector3D(10, 10, 10));
     var entity2 = new Kompute.Entity("entity2", new Kompute.Vector3D(500, 300, 100), new Kompute.Vector3D(20, 20, 20));
 
+    var path = new Kompute.Path();
+    path.addWaypoint(new Kompute.Vector3D());
+
     world.insertEntity(entity1);
     world.insertEntity(entity2);
 
     debugHelper.activate();
+    debugHelper.visualisePath(path);
+
     debugHelper.deactivate();
 
     expect(Object.keys(debugHelper.meshesByEntityID)).to.have.length(0);
+    expect(debugHelper.pathMeshes).to.have.length(0);
+    expect(scene.children).to.have.length(0);
+  });
+
+  it("should visualise path", function(){
+    var threeInstance = mockThreeInstance();
+    var scene = new MockScene();
+    var world = new Kompute.World(1000, 1000, 1000, 10);
+
+    var debugHelper = new Kompute.DebugHelper(world, threeInstance, scene);
+
+    var path = new Kompute.Path();
+
+    for (var i = 0; i < 100; i ++){
+      path.addWaypoint(new Kompute.Vector3D(100 * Math.random(), 100 * Math.random(), 100 * Math.random()));
+    }
+
+    debugHelper.visualisePath(path);
+
+    expect(debugHelper.pathMeshes).to.have.length(100);
+    expect(scene.children).to.have.length(100);
+    for (var i = 0; i < 100; i ++){
+      var child = scene.children[i];
+      expect(child.position).to.eql(path.waypoints[i]);
+      expect(child.geometry).to.eql(new MockBoxBufferGeometry(1, 1, 1));
+    }
+
+    debugHelper.deactivate();
+    expect(debugHelper.pathMeshes).to.have.length(0);
     expect(scene.children).to.have.length(0);
   });
 });

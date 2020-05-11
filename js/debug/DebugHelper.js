@@ -15,10 +15,12 @@ var DebugHelper = function(world, threeInstance, scene){
   this.limeMaterial = new threeInstance.MeshBasicMaterial({ color: "lime", wireframe: true });
   this.magentaMaterial = new threeInstance.MeshBasicMaterial({ color: "magenta", wireframe: true });
   this.redMaterial = new threeInstance.MeshBasicMaterial({ color : "red", wireframe: false });
+  this.orangeMaterial = new threeInstance.MeshBasicMaterial({ color: "orange", wireframe: false });
 
   this.meshesByEntityID = {};
   this.velocityMeshesByEntityID = {};
   this.lookMeshesByEntityID = {};
+  this.pathMeshes = [];
 
   this.LOOK_DISTANCE = 100;
 
@@ -83,6 +85,16 @@ var DebugHelper = function(world, threeInstance, scene){
   }.bind(this);
 }
 
+DebugHelper.prototype.visualisePath = function(path){
+  for (var i = 0; i < path.waypoints.length; i ++){
+    var wp = path.waypoints[i];
+    var waypointMesh = new this.threeInstance.Mesh(new this.threeInstance.BoxBufferGeometry(1, 1, 1), this.orangeMaterial);
+    waypointMesh.position.set(wp.x, wp.y, wp.z);
+    this.scene.add(waypointMesh);
+    this.pathMeshes.push(waypointMesh);
+  }
+}
+
 DebugHelper.prototype.addEntity = function(entity){
   var mesh = this.createMeshFromEntity(entity);
   this.meshesByEntityID[entity.id] = mesh;
@@ -125,9 +137,14 @@ DebugHelper.prototype.deactivate = function(){
     this.scene.remove(this.lookMeshesByEntityID[entityID]);
   }
 
+  for (var i = 0; i < this.pathMeshes.length; i ++){
+    this.scene.remove(this.pathMeshes[i]);
+  }
+
   this.meshesByEntityID = {};
   this.velocityMeshesByEntityID = {};
   this.lookMeshesByEntityID = {};
+  this.pathMeshes = [];
 }
 
 DebugHelper.prototype.createMeshFromEntity = function(entity){
