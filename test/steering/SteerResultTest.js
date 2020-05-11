@@ -3,7 +3,7 @@ var Kompute = require("../../build/Kompute");
 
 describe("SteerResult", function(){
 
-  it("should initiate", function(){
+  it("should initialize", function(){
 
     var steerResult = new Kompute.SteerResult();
 

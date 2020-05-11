@@ -3,7 +3,7 @@ var Kompute = require("../../../build/Kompute");
 
 describe("ArriveBehavior", function(){
 
-  it("should initiate", function(){
+  it("should initialize", function(){
 
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
     var arriveBehavior = new Kompute.ArriveBehavior(steerable, { satisfactionRadius: 50, slowDownRadius: 100 });
@@ -29,7 +29,7 @@ describe("ArriveBehavior", function(){
       slowDownRadius: 100
     });
 
-    steerable.setTargetPosition(10, 10, 10);
+    steerable.setTargetPosition(new Kompute.Vector3D(10, 10, 10));
 
     expect(arriveBehavior.compute().linear).to.eql(new Kompute.Vector3D());
   });
@@ -41,7 +41,7 @@ describe("ArriveBehavior", function(){
     world.insertEntity(steerable);
 
     steerable.setBehavior(Kompute.ArriveBehavior, { satisfactionRadius: 0.1, slowDownRadius: 200 });
-    steerable.setTargetPosition(100, 100, 100);
+    steerable.setTargetPosition(new Kompute.Vector3D(100, 100, 100));
     steerable.maxSpeed = 0.1;
     steerable.maxAcceleration = 0.1;
 
@@ -66,7 +66,7 @@ describe("ArriveBehavior", function(){
     world.insertEntity(steerable);
 
     steerable.setBehavior(Kompute.ArriveBehavior, { satisfactionRadius: 0.001, slowDownRadius: 10 });
-    steerable.setTargetPosition(100, 100, 100);
+    steerable.setTargetPosition(new Kompute.Vector3D(100, 100, 100));
     steerable.maxSpeed = 1;
     steerable.maxAcceleration = 1;
     for (var i = 0; i < 100000; i ++){

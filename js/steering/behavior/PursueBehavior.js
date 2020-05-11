@@ -36,7 +36,7 @@ PursueBehavior.prototype.compute = function(){
   }
 
   var v = vectorPool.get().copy(targetEntity.velocity).multiplyScalar(predictionTime).add(targetPosition);
-  steerable.setTargetPosition(v.x, v.y, v.z);
+  steerable.setTargetPosition(v);
 
   return SeekBehavior.prototype.compute.call(this);
 }

@@ -3,7 +3,7 @@ var Kompute = require("../../../build/Kompute");
 
 describe("AvoidBehavior", function(){
 
-  it("should initiate", function(){
+  it("should initialize", function(){
 
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
     var avoidBehavior = new Kompute.AvoidBehavior(steerable, { maxSeeAhead: 50, maxAvoidForce: 100 });

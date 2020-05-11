@@ -39,7 +39,7 @@ describe("PursueBehavior", function(){
 
     var pursueResult = pursueBehavior.compute().linear;
 
-    steerable.setTargetPosition(targetFinalPosition.x, targetFinalPosition.y, targetFinalPosition.z);
+    steerable.setTargetPosition(new Kompute.Vector3D(targetFinalPosition.x, targetFinalPosition.y, targetFinalPosition.z));
     var seekResult = seekBehavior.compute().linear;
 
     expect(pursueResult).to.eql(seekResult);
@@ -65,7 +65,7 @@ describe("PursueBehavior", function(){
     ));
 
     var pursueResult = pursueBehavior.compute().linear;
-    steerable.setTargetPosition(targetFinalPosition.x, targetFinalPosition.y, targetFinalPosition.z);
+    steerable.setTargetPosition(new Kompute.Vector3D(targetFinalPosition.x, targetFinalPosition.y, targetFinalPosition.z));
     var seekResult = seekBehavior.compute().linear;
 
     expect(pursueResult).to.eql(seekResult);

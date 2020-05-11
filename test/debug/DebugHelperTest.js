@@ -3,7 +3,7 @@ var Kompute = require("../../build/Kompute");
 
 describe("DebugHelper", function(){
 
-  it("should initiate", function(){
+  it("should initialize", function(){
 
     var threeInstance = mockThreeInstance();
     var scene = new MockScene();

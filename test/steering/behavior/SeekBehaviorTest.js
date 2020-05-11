@@ -3,7 +3,7 @@ var Kompute = require("../../../build/Kompute");
 
 describe("SeekBehavior", function(){
 
-  it("should initiate", function(){
+  it("should initialize", function(){
 
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
     var seekBehavior = new Kompute.SeekBehavior(steerable);
@@ -25,7 +25,7 @@ describe("SeekBehavior", function(){
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
     var seekBehavior = new Kompute.SeekBehavior(steerable);
 
-    steerable.setTargetPosition(100, 200, 300);
+    steerable.setTargetPosition(new Kompute.Vector3D(100, 200, 300));
     steerable.maxAcceleration = 100;
 
     expect(seekBehavior.compute().linear.getLength()).to.eql(steerable.maxAcceleration);

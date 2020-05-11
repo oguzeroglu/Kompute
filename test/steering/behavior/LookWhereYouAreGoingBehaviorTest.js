@@ -3,7 +3,7 @@ var Kompute = require("../../../build/Kompute");
 
 describe("LookWhereYouAreGoing", function(){
 
-  it("should initiate", function(){
+  it("should initialize", function(){
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
     var lookWhereYouAreGoingBehavior = new Kompute.LookWhereYouAreGoingBehavior(steerable);
 

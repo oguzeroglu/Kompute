@@ -138,7 +138,7 @@ describe("Steerable", function(){
     var size = new Kompute.Vector3D(50, 60, 70);
     var entity = new Kompute.Steerable("steerable1", center, size);
 
-    entity.setTargetPosition(100, 200, 300);
+    entity.setTargetPosition(new Kompute.Vector3D(100, 200, 300));
 
     expect(entity.hasTargetPosition).to.eql(true);
     expect(entity.targetPosition).to.eql(new Kompute.Vector3D(100, 200, 300));
@@ -150,7 +150,7 @@ describe("Steerable", function(){
     var size = new Kompute.Vector3D(50, 60, 70);
     var entity = new Kompute.Steerable("steerable1", center, size);
 
-    entity.setTargetPosition(100, 200, 300);
+    entity.setTargetPosition(new Kompute.Vector3D(100, 200, 300));
     entity.unsetTargetPosition();
 
     expect(entity.hasTargetPosition).to.eql(false);

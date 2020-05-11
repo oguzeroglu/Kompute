@@ -47,8 +47,8 @@ Steerable.prototype.unsetTargetPosition = function(){
   this.hasTargetPosition = false;
 }
 
-Steerable.prototype.setTargetPosition = function(x, y, z){
-  this.targetPosition.set(x, y, z);
+Steerable.prototype.setTargetPosition = function(position){
+  this.targetPosition.copy(position);
   this.hasTargetPosition = true;
 }
 
