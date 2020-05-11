@@ -125,7 +125,7 @@ describe("Vector3D", function(){
 
     var dot = v1.dot(v2);
 
-    expect(Math.abs(dot - 1) <= Number.EPSILON).to.eql(true);
+    expect(Math.abs(dot - 1).toFixed(8)).to.eql(0);
   });
 
   it("should perform cross product", function(){
