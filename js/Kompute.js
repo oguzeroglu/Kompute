@@ -24,4 +24,5 @@ export { Wander3DBehavior } from "./steering/behavior/Wander3DBehavior";
 export { FleeBehavior } from "./steering/behavior/FleeBehavior";
 export { EvadeBehavior } from "./steering/behavior/EvadeBehavior";
 export { PathFollowingBehavior } from "./steering/behavior/PathFollowingBehavior";
+export { PrioritySteeringBehavior } from "./steering/behavior/PrioritySteeringBehavior";
 export { DebugHelper } from "./debug/DebugHelper";
