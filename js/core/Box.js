@@ -10,7 +10,6 @@ var Box = function(centerPosition, size){
   this.setFromCenterAndSize(centerPosition, size);
 }
 
-
 Box.prototype.setFromCenterAndSize = function(center, size){
   var half = vectorPool.get().copy(size).multiplyScalar(0.5);
   this.min.set(center.x - half.x, center.y - half.y, center.z - half.z);
@@ -74,6 +73,20 @@ Box.prototype.setFromTwoVectors = function(vec1, vec2, thickness){
   this.expandByPoint(v);
 
   return this;
+}
+
+Box.prototype.isEmpty = function(){
+  return (this.max.x < this.min.x) || (this.max.y < this.min.y) || (this.max.z < this.min.z);
+}
+
+Box.prototype.getBoundingRadius = function(){
+  var v = vectorPool.get().set(0, 0, 0);
+
+  if (!this.isEmpty()){
+    v.copy(this.max).sub(this.min);
+  }
+
+  return v.getLength() * 0.5;
 }
 
 export { Box };

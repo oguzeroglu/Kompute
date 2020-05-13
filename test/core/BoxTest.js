@@ -81,4 +81,24 @@ describe("Box", function(){
     expect(center.y > box.min.y).to.eql(true);
     expect(center.z > box.min.z).to.eql(true);
   });
+
+  it("should get if empty", function(){
+    var box = new Kompute.Box(new Kompute.Vector3D(), new Kompute.Vector3D(100, 200, 300));
+
+    expect(box.isEmpty()).to.eql(false);
+
+    box.makeEmpty();
+
+    expect(box.isEmpty()).to.eql(true);
+  });
+
+  it("should get bounding radius", function(){
+    var box = new Kompute.Box(new Kompute.Vector3D(), new Kompute.Vector3D(10, 20, 30));
+
+    expect(box.getBoundingRadius()).to.eql(Math.sqrt(100 + 400 + 900) / 2);
+
+    box.makeEmpty();
+
+    expect(box.getBoundingRadius()).to.eql(0);
+  });
 });
