@@ -180,6 +180,31 @@ describe("Steerable", function(){
     expect(entity.hasTargetEntity).to.eql(false);
     expect(entity.targetEntity).to.eql(null);
   });
+
+  it("should set hide target entity", function(){
+    var center = new Kompute.Vector3D(0, 0, 0);
+    var size = new Kompute.Vector3D(50, 60, 70);
+    var entity = new Kompute.Steerable("steerable1", center, size);
+    var target = new Kompute.Steerable("steerable2", center, size);
+
+    entity.setHideTargetEntity(target);
+
+    expect(entity.hasHideTargetEntity).to.eql(true);
+    expect(entity.hideTargetEntity).to.equal(target);
+  });
+
+  it("should unset hide target entity", function(){
+    var center = new Kompute.Vector3D(0, 0, 0);
+    var size = new Kompute.Vector3D(50, 60, 70);
+    var entity = new Kompute.Steerable("steerable1", center, size);
+    var target = new Kompute.Steerable("steerable2", center, size);
+
+    entity.setHideTargetEntity(target);
+    entity.unsetHideTargetEntity();
+
+    expect(entity.hasHideTargetEntity).to.eql(false);
+    expect(entity.hideTargetEntity).to.eql(null);
+  });
 });
 
 class MockSteeringBehavior extends Kompute.SteeringBehavior{

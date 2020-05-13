@@ -10,8 +10,11 @@ var Steerable = function(id, center, size){
 
   this.hasTargetPosition = false;
   this.hasTargetEntity = false;
+  this.hasHideTargetEntity = false;
+
   this.targetPosition = new Vector3D();
   this.targetEntity = null;
+  this.hideTargetEntity = null;
 
   this.linearAcceleration = new Vector3D();
   this.maxAcceleration = Infinity;
@@ -60,6 +63,16 @@ Steerable.prototype.setTargetEntity = function(entity){
 Steerable.prototype.unsetTargetEntity = function(){
   this.hasTargetEntity = false;
   this.targetEntity = null;
+}
+
+Steerable.prototype.setHideTargetEntity = function(entity){
+  this.hideTargetEntity = entity;
+  this.hasHideTargetEntity = true;
+}
+
+Steerable.prototype.unsetHideTargetEntity = function(){
+  this.hasHideTargetEntity = false;
+  this.hideTargetEntity = null;
 }
 
 Object.defineProperty(Steerable.prototype, 'constructor', { value: Steerable,  enumerable: false, writable: true });

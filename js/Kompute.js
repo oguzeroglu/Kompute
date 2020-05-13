@@ -25,4 +25,5 @@ export { FleeBehavior } from "./steering/behavior/FleeBehavior";
 export { EvadeBehavior } from "./steering/behavior/EvadeBehavior";
 export { PathFollowingBehavior } from "./steering/behavior/PathFollowingBehavior";
 export { PrioritySteeringBehavior } from "./steering/behavior/PrioritySteeringBehavior";
+export { HideBehavior } from "./steering/behavior/HideBehavior";
 export { DebugHelper } from "./debug/DebugHelper";
