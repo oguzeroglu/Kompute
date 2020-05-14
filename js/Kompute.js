@@ -1,7 +1,3 @@
-var Kompute = function(){
-
-}
-
 export { MathUtils } from "./core/MathUtils";
 export { Vector3D } from "./core/Vector3D";
 export { VectorPool } from "./core/VectorPool";
@@ -27,4 +23,5 @@ export { PathFollowingBehavior } from "./steering/behavior/PathFollowingBehavior
 export { PrioritySteeringBehavior } from "./steering/behavior/PrioritySteeringBehavior";
 export { HideBehavior } from "./steering/behavior/HideBehavior";
 export { RandomWaypointBehavior } from "./steering/behavior/RandomWaypointBehavior";
+export { SeparationBehavior } from "./steering/behavior/SeparationBehavior";
 export { DebugHelper } from "./debug/DebugHelper";
