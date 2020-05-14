@@ -12,12 +12,22 @@ var PathFollowingBehavior = function(steerable, options){
 
 PathFollowingBehavior.prototype = Object.create(SeekBehavior.prototype);
 
+PathFollowingBehavior.prototype.getNext = function(){
+  var path = this.path;
+  path.next();
+  return path.getCurrentWaypoint();
+}
+
+PathFollowingBehavior.prototype.getCurrentWaypoint = function(){
+  return this.path.getCurrentWaypoint();
+}
+
 PathFollowingBehavior.prototype.compute = function(){
   this.result.linear.set(0, 0, 0);
   var steerable = this.steerable;
   var path = this.path;
 
-  var currentWayPoint = path.getCurrentWaypoint();
+  var currentWayPoint = this.getCurrentWaypoint();
   if (!currentWayPoint){
     return this.result;
   }
@@ -25,9 +35,8 @@ PathFollowingBehavior.prototype.compute = function(){
   var distance = vectorPool.get().copy(currentWayPoint).sub(steerable.position).getLength();
 
   if (distance <= this.satisfactionRadius){
-    path.next();
-    currentWayPoint = path.getCurrentWaypoint();
-    
+    currentWayPoint = this.getNext();
+
     if (!currentWayPoint){
       return this.result;
     }
