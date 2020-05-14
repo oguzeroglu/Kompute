@@ -9,7 +9,8 @@ describe("HideBehavior", function(){
     var hideBehavior = new Kompute.HideBehavior(steerable, {
       arriveSatisfactionRadius: 50,
       arriveSlowDownRadius: 100,
-      hideDistance: 150
+      hideDistance: 150,
+      threatDistance: 2000
     });
 
     expect(hideBehavior.result).to.eql(new Kompute.SteerResult());
@@ -19,6 +20,7 @@ describe("HideBehavior", function(){
     expect(hideBehavior.hideDistance).to.eql(150);
     expect(hideBehavior.bestHidingSpot).to.eql(new Kompute.Vector3D());
     expect(hideBehavior.hidingSpotFound).to.eql(false);
+    expect(hideBehavior.threatDistance).to.eql(2000);
   });
 
   it("should not request acceleration if steerable has no hide target entity", function(){
@@ -26,7 +28,8 @@ describe("HideBehavior", function(){
     var hideBehavior = new Kompute.HideBehavior(steerable, {
       arriveSatisfactionRadius: 50,
       arriveSlowDownRadius: 100,
-      hideDistance: 150
+      hideDistance: 150,
+      threatDistance: 2000
     });
 
     expect(hideBehavior.compute().linear).to.eql(new Kompute.Vector3D());
@@ -39,7 +42,8 @@ describe("HideBehavior", function(){
     var hideBehavior = new Kompute.HideBehavior(steerable, {
       arriveSatisfactionRadius: 50,
       arriveSlowDownRadius: 100,
-      hideDistance: 150
+      hideDistance: 150,
+      threatDistance: 2000
     });
 
     steerable.setHideTargetEntity(hideTarget);
@@ -73,7 +77,8 @@ describe("HideBehavior", function(){
     var hideBehavior = new Kompute.HideBehavior(steerable, {
       arriveSatisfactionRadius: 50,
       arriveSlowDownRadius: 100,
-      hideDistance: 150
+      hideDistance: 150,
+      threatDistance: 2000
     });
 
     expect(hideBehavior.hidingSpotFound).to.eql(false);
@@ -99,7 +104,8 @@ describe("HideBehavior", function(){
     var hideBehavior = new Kompute.HideBehavior(steerable, {
       arriveSatisfactionRadius: 50,
       arriveSlowDownRadius: 100,
-      hideDistance: 150
+      hideDistance: 150,
+      threatDistance: 2000
     });
 
     hideBehavior.findHidingSpot();
@@ -136,7 +142,8 @@ describe("HideBehavior", function(){
     var hideBehavior = new Kompute.HideBehavior(steerable, {
       arriveSatisfactionRadius: 50,
       arriveSlowDownRadius: 100,
-      hideDistance: 150
+      hideDistance: 150,
+      threatDistance: 2000
     });
 
     var result = hideBehavior.compute();
@@ -154,12 +161,16 @@ describe("HideBehavior", function(){
     world.insertEntity(steerable);
     world.insertEntity(obstacle);
 
+    steerable.maxSpeed = 100;
+    steerable.maxAcceleration = 100;
+
     steerable.setHideTargetEntity(hideTarget);
 
     var hideBehavior = new Kompute.HideBehavior(steerable, {
       arriveSatisfactionRadius: 50,
       arriveSlowDownRadius: 100,
-      hideDistance: 150
+      hideDistance: 150,
+      threatDistance: 2000
     });
 
     var result = hideBehavior.compute();
@@ -169,5 +180,31 @@ describe("HideBehavior", function(){
     var result2 = arriveBehavior.compute();
 
     expect(result.linear).to.eql(result2.linear);
+  });
+
+  it("should not request acceleration if target not within threatDistance", function(){
+    var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
+    var obstacle = new Kompute.Entity("entity1", new Kompute.Vector3D(30, 30, 30), new Kompute.Vector3D(10, 10, 10));
+    var hideTarget = new Kompute.Steerable("steerable2", new Kompute.Vector3D(400, 400, 400), new Kompute.Vector3D(10, 10, 10));
+
+    var world = new Kompute.World(1000, 1000, 1000, 50);
+    world.insertEntity(steerable);
+    world.insertEntity(obstacle);
+
+    steerable.maxSpeed = 100;
+    steerable.maxAcceleration = 100;
+
+    steerable.setHideTargetEntity(hideTarget);
+
+    var hideBehavior = new Kompute.HideBehavior(steerable, {
+      arriveSatisfactionRadius: 50,
+      arriveSlowDownRadius: 100,
+      hideDistance: 150,
+      threatDistance: 20
+    });
+
+    var result = hideBehavior.compute();
+
+    expect(result.linear).to.eql(new Kompute.Vector3D());
   });
 });

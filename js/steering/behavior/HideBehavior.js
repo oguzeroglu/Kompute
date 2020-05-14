@@ -12,6 +12,7 @@ var HideBehavior = function(steerable, options){
   });
 
   this.hideDistance = options.hideDistance;
+  this.threatDistance = options.threatDistance;
 
   this.hidingSpotFound = false;
   this.bestHidingSpot = new Vector3D();
@@ -25,6 +26,10 @@ HideBehavior.prototype.compute = function(){
   var steerable = this.steerable;
 
   if (!steerable.hideTargetEntity){
+    return this.result;
+  }
+
+  if (vectorPool.get().copy(steerable.position).sub(steerable.hideTargetEntity.position).getLength() > this.threatDistance){
     return this.result;
   }
 
