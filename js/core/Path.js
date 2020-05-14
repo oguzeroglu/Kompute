@@ -57,4 +57,8 @@ Path.prototype.next = function(){
   }
 }
 
+Path.prototype.getRandomWaypoint = function(){
+  return this.waypoints[Math.floor(Math.random() * this.waypoints.length)] || null;
+}
+
 export { Path };

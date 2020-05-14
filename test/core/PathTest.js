@@ -168,4 +168,26 @@ describe("Path", function(){
     path.next();
     expect(path.getCurrentWaypoint()).to.eql(vp2);
   });
+
+  it("should get random waypoint", function(){
+    var vp1 = new Kompute.Vector3D(Math.random(), Math.random(), Math.random());
+    var vp2 = new Kompute.Vector3D(Math.random(), Math.random(), Math.random());
+    var vp3 = new Kompute.Vector3D(Math.random(), Math.random(), Math.random());
+
+    var path = new Kompute.Path({});
+
+    path.addWaypoint(vp1);
+    path.addWaypoint(vp2);
+    path.addWaypoint(vp3);
+
+    for (var i = 0; i < 1000; i ++){
+      var vp = path.getRandomWaypoint();
+      expect(vp.eql(vp1) || vp.eql(vp2) || vp.eql(vp3)).to.eql(true);
+    }
+  });
+
+  it("should return null to getRandomWaypoint if no waypoint added", function(){
+    var path = new Kompute.Path({});
+    expect(path.getRandomWaypoint()).to.eql(null);
+  });
 });

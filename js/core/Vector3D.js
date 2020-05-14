@@ -97,4 +97,8 @@ Vector3D.prototype.negate = function(){
   return this.set(-this.x, -this.y, -this.z);
 }
 
+Vector3D.prototype.eql = function(vec){
+  return vec.x == this.x && vec.y == this.y && vec.z == this.z;
+}
+
 export { Vector3D };

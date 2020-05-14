@@ -146,5 +146,13 @@ describe("Vector3D", function(){
     var negative = vec.clone().negate();
 
     expect(vec.add(negative)).to.eql(new Kompute.Vector3D());
-  })
+  });
+
+  it("should check if equal", function(){
+    var vec = new Kompute.Vector3D(10, 20, 30);
+    var vec2 = new Kompute.Vector3D(30, 40, 50);
+
+    expect(vec.clone().eql(vec)).to.eql(true);
+    expect(vec.eql(vec2)).to.eql(false);
+  });
 });
