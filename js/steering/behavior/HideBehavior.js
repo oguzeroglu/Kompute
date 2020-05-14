@@ -12,6 +12,9 @@ var HideBehavior = function(steerable, options){
   });
 
   this.hideDistance = options.hideDistance;
+
+  this.hidingSpotFound = false;
+  this.bestHidingSpot = new Vector3D();
 }
 
 HideBehavior.prototype = Object.create(ArriveBehavior.prototype);
@@ -24,6 +27,41 @@ HideBehavior.prototype.compute = function(){
   if (!steerable.hideTargetEntity){
     return this.result;
   }
+
+  this.findHidingSpot();
+
+  if (!this.hidingSpotFound){
+    return this.result;
+  }
+
+  steerable.setTargetPosition(this.bestHidingSpot);
+
+  return ArriveBehavior.prototype.compute.call(this);
+}
+
+HideBehavior.prototype.findHidingSpot = function(){
+  this.hidingSpotFound = false;
+  var steerable = this.steerable;
+
+  var closest = null;
+
+  var self = this;
+
+  steerable.executeForEachCloseEntity(function(entity){
+    if (entity instanceof Steerable){
+      return;
+    }
+
+    var hidingPosition = self.getHidingPosition(entity);
+
+    var dist = vectorPool.get().copy(hidingPosition).sub(steerable.position).getLength();
+
+    if (closest == null || dist < closest){
+      closest = dist;
+      self.hidingSpotFound = true;
+      self.bestHidingSpot.copy(hidingPosition);
+    }
+  });
 }
 
 HideBehavior.prototype.getHidingPosition = function(hideableEntity){

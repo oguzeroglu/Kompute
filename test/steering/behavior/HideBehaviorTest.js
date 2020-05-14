@@ -17,6 +17,8 @@ describe("HideBehavior", function(){
     expect(hideBehavior.satisfactionRadius).to.eql(50);
     expect(hideBehavior.slowDownRadius).to.eql(100);
     expect(hideBehavior.hideDistance).to.eql(150);
+    expect(hideBehavior.bestHidingSpot).to.eql(new Kompute.Vector3D());
+    expect(hideBehavior.hidingSpotFound).to.eql(false);
   });
 
   it("should not request acceleration if steerable has no hide target entity", function(){
@@ -54,5 +56,118 @@ describe("HideBehavior", function(){
     var v2 = new Kompute.Vector3D().copy(hidingPosition).sub(hideableEntity.position).normalize();
 
     expect(v1.dot(v2)).to.eql(1);
+  });
+
+  it("should not request acceleration if no hiding spot is found", function(){
+    var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
+    var obstacle = new Kompute.Entity("entity1", new Kompute.Vector3D(400, 400, 400), new Kompute.Vector3D(10, 10, 10));
+    var hideTarget = new Kompute.Steerable("steerable2", new Kompute.Vector3D(100, 200, 300), new Kompute.Vector3D(10, 10, 10));
+
+    var world = new Kompute.World(1000, 1000, 1000, 50);
+    world.insertEntity(steerable);
+    world.insertEntity(obstacle);
+    world.insertEntity(hideTarget);
+
+    steerable.setHideTargetEntity(hideTarget);
+
+    var hideBehavior = new Kompute.HideBehavior(steerable, {
+      arriveSatisfactionRadius: 50,
+      arriveSlowDownRadius: 100,
+      hideDistance: 150
+    });
+
+    expect(hideBehavior.hidingSpotFound).to.eql(false);
+    expect(hideBehavior.compute().linear).to.eql(new Kompute.Vector3D());
+  });
+
+  it("should find best hiding spot", function(){
+    var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
+    var obstacle = new Kompute.Entity("entity1", new Kompute.Vector3D(30, 30, 30), new Kompute.Vector3D(10, 10, 10));
+    var obstacle2 = new Kompute.Entity("entity2", new Kompute.Vector3D(10, 10, 10), new Kompute.Vector3D(10, 10, 10));
+    var noiseSteerable = new Kompute.Steerable("steerable3", new Kompute.Vector3D(5, 5, 5), new Kompute.Vector3D(10, 10, 10));
+    var hideTarget = new Kompute.Steerable("steerable2", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
+
+    var world = new Kompute.World(1000, 1000, 1000, 50);
+    world.insertEntity(steerable);
+    world.insertEntity(obstacle);
+    world.insertEntity(obstacle2);
+    world.insertEntity(hideTarget);
+    world.insertEntity(noiseSteerable);
+
+    steerable.setHideTargetEntity(hideTarget);
+
+    var hideBehavior = new Kompute.HideBehavior(steerable, {
+      arriveSatisfactionRadius: 50,
+      arriveSlowDownRadius: 100,
+      hideDistance: 150
+    });
+
+    hideBehavior.findHidingSpot();
+
+    expect(hideBehavior.hidingSpotFound).to.eql(true);
+    expect(hideBehavior.bestHidingSpot).to.eql(hideBehavior.getHidingPosition(obstacle2));
+
+    obstacle.setPosition(new Kompute.Vector3D(6, 6, 6));
+
+    hideBehavior.findHidingSpot();
+
+    expect(hideBehavior.hidingSpotFound).to.eql(true);
+    expect(hideBehavior.bestHidingSpot).to.eql(hideBehavior.getHidingPosition(obstacle));
+
+    obstacle.setPosition(new Kompute.Vector3D(600, 600, 600));
+    obstacle2.setPosition(new Kompute.Vector3D(600, 600, 600));
+
+    hideBehavior.findHidingSpot();
+
+    expect(hideBehavior.hidingSpotFound).to.eql(false);
+  });
+
+  it("should set target position of steerable", function(){
+    var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
+    var obstacle = new Kompute.Entity("entity1", new Kompute.Vector3D(30, 30, 30), new Kompute.Vector3D(10, 10, 10));
+    var hideTarget = new Kompute.Steerable("steerable2", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
+
+    var world = new Kompute.World(1000, 1000, 1000, 50);
+    world.insertEntity(steerable);
+    world.insertEntity(obstacle);
+
+    steerable.setHideTargetEntity(hideTarget);
+
+    var hideBehavior = new Kompute.HideBehavior(steerable, {
+      arriveSatisfactionRadius: 50,
+      arriveSlowDownRadius: 100,
+      hideDistance: 150
+    });
+
+    var result = hideBehavior.compute();
+
+    expect(result.linear).not.to.eql(new Kompute.Vector3D());
+    expect(steerable.targetPosition).to.eql(hideBehavior.bestHidingSpot);
+  });
+
+  it("should delegate to ArriveBehavior", function(){
+    var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
+    var obstacle = new Kompute.Entity("entity1", new Kompute.Vector3D(30, 30, 30), new Kompute.Vector3D(10, 10, 10));
+    var hideTarget = new Kompute.Steerable("steerable2", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
+
+    var world = new Kompute.World(1000, 1000, 1000, 50);
+    world.insertEntity(steerable);
+    world.insertEntity(obstacle);
+
+    steerable.setHideTargetEntity(hideTarget);
+
+    var hideBehavior = new Kompute.HideBehavior(steerable, {
+      arriveSatisfactionRadius: 50,
+      arriveSlowDownRadius: 100,
+      hideDistance: 150
+    });
+
+    var result = hideBehavior.compute();
+
+    var arriveBehavior = new Kompute.ArriveBehavior(steerable, { satisfactionRadius: 50, slowDownRadius: 100 });
+
+    var result2 = arriveBehavior.compute();
+
+    expect(result.linear).to.eql(result2.linear);
   });
 });
