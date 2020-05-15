@@ -155,4 +155,10 @@ describe("Vector3D", function(){
     expect(vec.clone().eql(vec)).to.eql(true);
     expect(vec.eql(vec2)).to.eql(false);
   });
+
+  it("should perform toFixed", function(){
+    var vec = new Kompute.Vector3D(0.0123456, 0.5671912, 0.45438909834);
+
+    expect(vec.toFixed(3)).to.eql(new Kompute.Vector3D(0.012, 0.567, 0.454));
+  });
 });

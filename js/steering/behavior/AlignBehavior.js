@@ -1,8 +1,5 @@
 import { SteeringBehavior } from "./SteeringBehavior";
-import { VectorPool } from "../../core/VectorPool";
 import { Steerable } from "../Steerable";
-
-var vectorPool = new VectorPool(10);
 
 var AlignBehavior = function(steerable){
   SteeringBehavior.call(this, steerable);

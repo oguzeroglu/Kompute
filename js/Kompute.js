@@ -25,4 +25,5 @@ export { HideBehavior } from "./steering/behavior/HideBehavior";
 export { RandomWaypointBehavior } from "./steering/behavior/RandomWaypointBehavior";
 export { SeparationBehavior } from "./steering/behavior/SeparationBehavior";
 export { AlignBehavior } from "./steering/behavior/AlignBehavior";
+export { CohesionBehavior } from "./steering/behavior/CohesionBehavior";
 export { DebugHelper } from "./debug/DebugHelper";

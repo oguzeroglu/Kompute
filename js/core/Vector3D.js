@@ -101,4 +101,8 @@ Vector3D.prototype.eql = function(vec){
   return vec.x == this.x && vec.y == this.y && vec.z == this.z;
 }
 
+Vector3D.prototype.toFixed = function(num){
+  return this.set(this.x.toFixed(num), this.y.toFixed(num), this.z.toFixed(num));
+}
+
 export { Vector3D };
