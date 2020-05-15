@@ -24,4 +24,5 @@ export { PrioritySteeringBehavior } from "./steering/behavior/PrioritySteeringBe
 export { HideBehavior } from "./steering/behavior/HideBehavior";
 export { RandomWaypointBehavior } from "./steering/behavior/RandomWaypointBehavior";
 export { SeparationBehavior } from "./steering/behavior/SeparationBehavior";
+export { AlignBehavior } from "./steering/behavior/AlignBehavior";
 export { DebugHelper } from "./debug/DebugHelper";
