@@ -349,6 +349,7 @@ describe("Steerable", function(){
     expect(entity.targetPosition).to.eql(new Kompute.Vector3D(100, 200, 300));
     expect(entity.isJumpInitiated).to.eql(true);
     expect(entity.isJumpReady).to.eql(false);
+    expect(entity.isJumpTakenOff).to.eql(false);
   });
 
   it("should trigger onJumpReady if position within run-up radius", function(){
@@ -459,6 +460,24 @@ describe("Steerable", function(){
     entity.update();
 
     expect(called).to.eql(false);
+  });
+
+  it("should perform onJumpReady", function(){
+    var center = new Kompute.Vector3D(0, 0, 0);
+    var size = new Kompute.Vector3D(50, 60, 70);
+    var entity = new Kompute.Steerable("steerable1", center, size);
+
+    var mockBehavior = new MockSteeringBehavior();
+
+    entity.jumpBehavior = mockBehavior;
+
+    entity.onJumpReady();
+
+    expect(entity.isJumpReady).to.eql(true);
+    expect(entity.isJumpInitiated).to.eql(true);
+    expect(entity.isJumpTakenOff).to.eql(false);
+    expect(entity.behavior).to.equal(mockBehavior);
+    expect(mockBehavior.steerable).to.equal(entity);
   });
 });
 

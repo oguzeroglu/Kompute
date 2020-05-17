@@ -117,6 +117,7 @@ Steerable.prototype.unsetHideTargetEntity = function(){
 Steerable.prototype.jump = function(toRunupBehavior, jumpDescriptor){
   this.isJumpInitiated = false;
   this.isJumpReady = false;
+  this.isJumpTakenOff = false;
 
   this.unsetTargetEntity();
   this.unsetHideTargetEntity();
@@ -130,7 +131,10 @@ Steerable.prototype.jump = function(toRunupBehavior, jumpDescriptor){
 }
 
 Steerable.prototype.onJumpReady = function(){
-
+  this.isJumpReady = true;
+  this.isJumpInitiated = false;
+  this.setBehavior(this.jumpBehavior);
+  this.isJumpInitiated = true;
 }
 
 Object.defineProperty(Steerable.prototype, 'constructor', { value: Steerable,  enumerable: false, writable: true });
