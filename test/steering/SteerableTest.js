@@ -222,6 +222,19 @@ describe("Steerable", function(){
     expect(behavior.steerable).to.equal(entity);
   });
 
+  it ("should set jump behavior", function(){
+    var center = new Kompute.Vector3D(0, 0, 0);
+    var size = new Kompute.Vector3D(50, 60, 70);
+    var entity = new Kompute.Steerable("steerable1", center, size);
+
+    var behavior = new MockSteeringBehavior();
+
+    entity.setJumpBehavior(behavior);
+
+    expect(entity.jumpBehavior).to.equal(behavior);
+    expect(behavior.steerable).to.equal(entity);
+  });
+
   it("should not set behavior if a jump is initiated", function(){
     var center = new Kompute.Vector3D(0, 0, 0);
     var size = new Kompute.Vector3D(50, 60, 70);
@@ -234,6 +247,21 @@ describe("Steerable", function(){
     entity.setBehavior(behavior);
 
     expect(entity.behavior).to.eql(undefined);
+    expect(behavior.steerable).to.eql(undefined);
+  });
+
+  it("should not set jump behavior if a jump is initiated", function(){
+    var center = new Kompute.Vector3D(0, 0, 0);
+    var size = new Kompute.Vector3D(50, 60, 70);
+    var entity = new Kompute.Steerable("steerable1", center, size);
+
+    var behavior = new MockSteeringBehavior();
+
+    entity.isJumpInitiated = true;
+
+    entity.setJumpBehavior(behavior);
+
+    expect(entity.jumpBehavior).to.eql(undefined);
     expect(behavior.steerable).to.eql(undefined);
   });
 

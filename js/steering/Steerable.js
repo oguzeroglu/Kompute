@@ -52,6 +52,15 @@ Steerable.prototype.update = function(){
   }
 }
 
+Steerable.prototype.setJumpBehavior = function(behavior){
+  if (this.isJumpInitiated){
+    return;
+  }
+  
+  behavior.setSteerable(this);
+  this.jumpBehavior = behavior;
+}
+
 Steerable.prototype.setBehavior = function(behavior){
   if (this.isJumpInitiated){
     return;
