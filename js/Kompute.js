@@ -8,6 +8,7 @@ export { Quaternion } from "./core/Quaternion";
 export { Path } from "./core/Path";
 export { Steerable } from "./steering/Steerable";
 export { SteerResult } from "./steering/SteerResult";
+export { JumpDescriptor } from "./steering/JumpDescriptor";
 export { SteeringBehavior } from "./steering/behavior/SteeringBehavior";
 export { SeekBehavior } from "./steering/behavior/SeekBehavior";
 export { ArriveBehavior } from "./steering/behavior/ArriveBehavior";
