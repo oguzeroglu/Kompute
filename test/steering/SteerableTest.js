@@ -26,6 +26,7 @@ describe("Steerable", function(){
     expect(entity.targetPosition).to.eql(new Kompute.Vector3D());
     expect(entity.targetEntity).to.eql(null);
     expect(entity.isJumpInitiated).to.eql(false);
+    expect(entity.isJumpTakenOff).to.eql(false);
   });
 
   it("should update", function(){
@@ -194,6 +195,19 @@ describe("Steerable", function(){
     expect(entity.hideTargetEntity).to.equal(target);
   });
 
+  it("should unset hide target entity", function(){
+    var center = new Kompute.Vector3D(0, 0, 0);
+    var size = new Kompute.Vector3D(50, 60, 70);
+    var entity = new Kompute.Steerable("steerable1", center, size);
+    var target = new Kompute.Steerable("steerable2", center, size);
+
+    entity.setHideTargetEntity(target);
+    entity.unsetHideTargetEntity();
+
+    expect(entity.hasHideTargetEntity).to.eql(false);
+    expect(entity.hideTargetEntity).to.eql(null);
+  });
+
   it ("should set behavior", function(){
     var center = new Kompute.Vector3D(0, 0, 0);
     var size = new Kompute.Vector3D(50, 60, 70);
@@ -252,17 +266,87 @@ describe("Steerable", function(){
     expect(entity.targetPosition).to.eql(new Kompute.Vector3D(100, 200, 300));
   });
 
-  it("should unset hide target entity", function(){
+  it("should not set target entity if a jump is initiated", function(){
+    var center = new Kompute.Vector3D(0, 0, 0);
+    var size = new Kompute.Vector3D(50, 60, 70);
+    var entity = new Kompute.Steerable("steerable1", center, size);
+    var target = new Kompute.Steerable("steerable2", center, size);
+
+    entity.isJumpInitiated = true;
+
+    entity.setTargetEntity(target);
+
+    expect(entity.hasTargetEntity).to.eql(false);
+    expect(entity.targetEntity).to.eql(null);
+  });
+
+  it("should not unset target entity if a jump is initiated", function(){
+    var center = new Kompute.Vector3D(0, 0, 0);
+    var size = new Kompute.Vector3D(50, 60, 70);
+    var entity = new Kompute.Steerable("steerable1", center, size);
+    var target = new Kompute.Steerable("steerable2", center, size);
+
+    entity.setTargetEntity(target);
+
+    entity.isJumpInitiated = true;
+
+    entity.unsetTargetEntity();
+
+    expect(entity.hasTargetEntity).to.eql(true);
+    expect(entity.targetEntity).to.equal(target);
+  });
+
+  it("should not set hide target entity if a jump is initiated", function(){
+    var center = new Kompute.Vector3D(0, 0, 0);
+    var size = new Kompute.Vector3D(50, 60, 70);
+    var entity = new Kompute.Steerable("steerable1", center, size);
+    var target = new Kompute.Steerable("steerable2", center, size);
+
+    entity.isJumpInitiated = true;
+
+    entity.setHideTargetEntity(target);
+
+    expect(entity.hasHideTargetEntity).to.eql(false);
+    expect(entity.hideTargetEntity).to.eql(null);
+  });
+
+  it("should not unset hide target entity if a jump is initiated", function(){
     var center = new Kompute.Vector3D(0, 0, 0);
     var size = new Kompute.Vector3D(50, 60, 70);
     var entity = new Kompute.Steerable("steerable1", center, size);
     var target = new Kompute.Steerable("steerable2", center, size);
 
     entity.setHideTargetEntity(target);
+
+    entity.isJumpInitiated = true;
+
     entity.unsetHideTargetEntity();
 
+    expect(entity.hasHideTargetEntity).to.eql(true);
+    expect(entity.hideTargetEntity).to.equal(target);
+  });
+
+  it("should jump", function(){
+
+    var center = new Kompute.Vector3D(0, 0, 0);
+    var size = new Kompute.Vector3D(50, 60, 70);
+    var entity = new Kompute.Steerable("steerable1", center, size);
+
+    var toRunupBehavior = new MockSteeringBehavior();
+    var jumpDescriptor = new Kompute.JumpDescriptor({
+      takeoffPosition: new Kompute.Vector3D(100, 200, 300),
+      landingPosition: new Kompute.Vector3D(400, 500, 600),
+      runupRadius: 100
+    });
+
+    entity.jump(toRunupBehavior, jumpDescriptor);
+
+    expect(entity.behavior).to.equal(toRunupBehavior);
+    expect(entity.hasTargetEntity).to.eql(false);
     expect(entity.hasHideTargetEntity).to.eql(false);
-    expect(entity.hideTargetEntity).to.eql(null);
+    expect(entity.hasTargetPosition).to.eql(true);
+    expect(entity.targetPosition).to.eql(new Kompute.Vector3D(100, 200, 300));
+    expect(entity.isJumpInitiated).to.eql(true);
   });
 });
 
