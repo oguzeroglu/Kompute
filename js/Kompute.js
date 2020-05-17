@@ -27,4 +27,5 @@ export { RandomWaypointBehavior } from "./steering/behavior/RandomWaypointBehavi
 export { SeparationBehavior } from "./steering/behavior/SeparationBehavior";
 export { AlignBehavior } from "./steering/behavior/AlignBehavior";
 export { CohesionBehavior } from "./steering/behavior/CohesionBehavior";
+export { JumpBehavior } from "./steering/behavior/JumpBehavior";
 export { DebugHelper } from "./debug/DebugHelper";
