@@ -25,6 +25,7 @@ describe("Steerable", function(){
     expect(entity.hasTargetEntity).to.eql(false);
     expect(entity.targetPosition).to.eql(new Kompute.Vector3D());
     expect(entity.targetEntity).to.eql(null);
+    expect(entity.isJumpInitiated).to.eql(false);
   });
 
   it("should update", function(){
@@ -191,6 +192,64 @@ describe("Steerable", function(){
 
     expect(entity.hasHideTargetEntity).to.eql(true);
     expect(entity.hideTargetEntity).to.equal(target);
+  });
+
+  it ("should set behavior", function(){
+    var center = new Kompute.Vector3D(0, 0, 0);
+    var size = new Kompute.Vector3D(50, 60, 70);
+    var entity = new Kompute.Steerable("steerable1", center, size);
+
+    var behavior = new MockSteeringBehavior();
+
+    entity.setBehavior(behavior);
+
+    expect(entity.behavior).to.equal(behavior);
+    expect(behavior.steerable).to.equal(entity);
+  });
+
+  it("should not set behavior if a jump is initiated", function(){
+    var center = new Kompute.Vector3D(0, 0, 0);
+    var size = new Kompute.Vector3D(50, 60, 70);
+    var entity = new Kompute.Steerable("steerable1", center, size);
+
+    var behavior = new MockSteeringBehavior();
+
+    entity.isJumpInitiated = true;
+
+    entity.setBehavior(behavior);
+
+    expect(entity.behavior).to.eql(undefined);
+    expect(behavior.steerable).to.eql(undefined);
+  });
+
+  it("should not set target position if a jump is initiated", function(){
+
+    var center = new Kompute.Vector3D(0, 0, 0);
+    var size = new Kompute.Vector3D(50, 60, 70);
+    var entity = new Kompute.Steerable("steerable1", center, size);
+
+    entity.isJumpInitiated = true;
+
+    entity.setTargetPosition(new Kompute.Vector3D(100, 200, 300));
+
+    expect(entity.hasTargetPosition).to.eql(false);
+    expect(entity.targetPosition).to.eql(new Kompute.Vector3D());
+  });
+
+  it("should not unset target position if a jump is initiated", function(){
+
+    var center = new Kompute.Vector3D(0, 0, 0);
+    var size = new Kompute.Vector3D(50, 60, 70);
+    var entity = new Kompute.Steerable("steerable1", center, size);
+
+    entity.setTargetPosition(new Kompute.Vector3D(100, 200, 300));
+
+    entity.isJumpInitiated = true;
+
+    entity.unsetTargetPosition();
+
+    expect(entity.hasTargetPosition).to.eql(true);
+    expect(entity.targetPosition).to.eql(new Kompute.Vector3D(100, 200, 300));
   });
 
   it("should unset hide target entity", function(){

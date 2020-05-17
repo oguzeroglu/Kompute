@@ -18,6 +18,8 @@ var Steerable = function(id, center, size){
 
   this.linearAcceleration = new Vector3D();
   this.maxAcceleration = Infinity;
+
+  this.isJumpInitiated = false;
 }
 
 Steerable.prototype = Object.create(Entity.prototype);
@@ -42,15 +44,27 @@ Steerable.prototype.update = function(){
 }
 
 Steerable.prototype.setBehavior = function(behavior){
+  if (this.isJumpInitiated){
+    return;
+  }
+
   behavior.setSteerable(this);
   this.behavior = behavior;
 }
 
 Steerable.prototype.unsetTargetPosition = function(){
+  if (this.isJumpInitiated){
+    return;
+  }
+
   this.hasTargetPosition = false;
 }
 
 Steerable.prototype.setTargetPosition = function(position){
+  if (this.isJumpInitiated){
+    return;
+  }
+  
   this.targetPosition.copy(position);
   this.hasTargetPosition = true;
 }
