@@ -27,6 +27,7 @@ describe("Steerable", function(){
     expect(entity.targetEntity).to.eql(null);
     expect(entity.isJumpInitiated).to.eql(false);
     expect(entity.isJumpTakenOff).to.eql(false);
+    expect(entity.isJumpReady).to.eql(false);
   });
 
   it("should update", function(){
@@ -347,6 +348,117 @@ describe("Steerable", function(){
     expect(entity.hasTargetPosition).to.eql(true);
     expect(entity.targetPosition).to.eql(new Kompute.Vector3D(100, 200, 300));
     expect(entity.isJumpInitiated).to.eql(true);
+    expect(entity.isJumpReady).to.eql(false);
+  });
+
+  it("should trigger onJumpReady if position within run-up radius", function(){
+    var center = new Kompute.Vector3D(0, 0, 0);
+    var size = new Kompute.Vector3D(50, 60, 70);
+    var entity = new Kompute.Steerable("steerable1", center, size);
+
+    var world = new Kompute.World(1000, 1000, 1000, 10);
+    world.insertEntity(entity);
+
+    var toRunupBehavior = new MockSteeringBehavior();
+    var jumpDescriptor = new Kompute.JumpDescriptor({
+      takeoffPosition: new Kompute.Vector3D(10, 10, 10),
+      landingPosition: new Kompute.Vector3D(400, 500, 600),
+      runupRadius: 100
+    });
+
+    var called = false;
+    entity.onJumpReady = function(){
+      called = true;
+    };
+
+    entity.linearAcceleration.set(0, 0, 0);
+    entity.jump(toRunupBehavior, jumpDescriptor);
+    entity.update();
+
+    expect(called).to.eql(true);
+  });
+
+  it("should not trigger onJumpReady if position out of run-up radius", function(){
+    var center = new Kompute.Vector3D(0, 0, 0);
+    var size = new Kompute.Vector3D(50, 60, 70);
+    var entity = new Kompute.Steerable("steerable1", center, size);
+
+    var world = new Kompute.World(1000, 1000, 1000, 10);
+    world.insertEntity(entity);
+
+    var toRunupBehavior = new MockSteeringBehavior();
+    var jumpDescriptor = new Kompute.JumpDescriptor({
+      takeoffPosition: new Kompute.Vector3D(500, 500, 500),
+      landingPosition: new Kompute.Vector3D(400, 500, 600),
+      runupRadius: 100
+    });
+
+    var called = false;
+    entity.onJumpReady = function(){
+      called = true;
+    };
+
+    entity.linearAcceleration.set(0, 0, 0);
+    entity.jump(toRunupBehavior, jumpDescriptor);
+    entity.update();
+
+    expect(called).to.eql(false);
+  });
+
+  it("should not trigger onJumpReady if jump is already ready", function(){
+    var center = new Kompute.Vector3D(0, 0, 0);
+    var size = new Kompute.Vector3D(50, 60, 70);
+    var entity = new Kompute.Steerable("steerable1", center, size);
+
+    var world = new Kompute.World(1000, 1000, 1000, 10);
+    world.insertEntity(entity);
+
+    var toRunupBehavior = new MockSteeringBehavior();
+    var jumpDescriptor = new Kompute.JumpDescriptor({
+      takeoffPosition: new Kompute.Vector3D(10, 10, 10),
+      landingPosition: new Kompute.Vector3D(400, 500, 600),
+      runupRadius: 100
+    });
+
+    var called = false;
+    entity.onJumpReady = function(){
+      called = true;
+    };
+
+    entity.linearAcceleration.set(0, 0, 0);
+    entity.jump(toRunupBehavior, jumpDescriptor);
+    entity.isJumpReady = true;
+    entity.update();
+
+    expect(called).to.eql(false);
+  });
+
+  it("should not trigger onJumpReady if jump is taken off", function(){
+    var center = new Kompute.Vector3D(0, 0, 0);
+    var size = new Kompute.Vector3D(50, 60, 70);
+    var entity = new Kompute.Steerable("steerable1", center, size);
+
+    var world = new Kompute.World(1000, 1000, 1000, 10);
+    world.insertEntity(entity);
+
+    var toRunupBehavior = new MockSteeringBehavior();
+    var jumpDescriptor = new Kompute.JumpDescriptor({
+      takeoffPosition: new Kompute.Vector3D(10, 10, 10),
+      landingPosition: new Kompute.Vector3D(400, 500, 600),
+      runupRadius: 100
+    });
+
+    var called = false;
+    entity.onJumpReady = function(){
+      called = true;
+    };
+
+    entity.linearAcceleration.set(0, 0, 0);
+    entity.jump(toRunupBehavior, jumpDescriptor);
+    entity.isJumpTakenOff = true;
+    entity.update();
+
+    expect(called).to.eql(false);
   });
 });
 
