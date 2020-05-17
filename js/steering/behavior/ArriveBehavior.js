@@ -3,8 +3,8 @@ import { VectorPool } from "../../core/VectorPool";
 
 var vectorPool = new VectorPool(10);
 
-var ArriveBehavior = function(steerable, options){
-  SteeringBehavior.call(this, steerable);
+var ArriveBehavior = function(options){
+  SteeringBehavior.call(this);
 
   this.satisfactionRadius = options.satisfactionRadius;
   this.slowDownRadius = options.slowDownRadius;

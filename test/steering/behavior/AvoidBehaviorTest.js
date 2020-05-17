@@ -6,7 +6,9 @@ describe("AvoidBehavior", function(){
   it("should initialize", function(){
 
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
-    var avoidBehavior = new Kompute.AvoidBehavior(steerable, { maxSeeAhead: 50, maxAvoidForce: 100 });
+    var avoidBehavior = new Kompute.AvoidBehavior({ maxSeeAhead: 50, maxAvoidForce: 100 });
+
+    steerable.setBehavior(avoidBehavior);
 
     expect(avoidBehavior.result).to.eql(new Kompute.SteerResult());
     expect(avoidBehavior.steerable).to.equal(steerable);
@@ -25,7 +27,9 @@ describe("AvoidBehavior", function(){
 
     steerable.velocity = new Kompute.Vector3D(-10, 0, -10);
 
-    var avoidBehavior = new Kompute.AvoidBehavior(steerable, { maxSeeAhead: 50, maxAvoidForce: 100 });
+    var avoidBehavior = new Kompute.AvoidBehavior({ maxSeeAhead: 50, maxAvoidForce: 100 });
+
+    steerable.setBehavior(avoidBehavior);
 
     expect(avoidBehavior.findMostThreateningObstacle()).to.eql(null);
   });
@@ -41,7 +45,9 @@ describe("AvoidBehavior", function(){
 
     steerable.velocity = new Kompute.Vector3D(1000, 0, 1000);
 
-    var avoidBehavior = new Kompute.AvoidBehavior(steerable, { maxSeeAhead: 50000, maxAvoidForce: 100 });
+    var avoidBehavior = new Kompute.AvoidBehavior({ maxSeeAhead: 50000, maxAvoidForce: 100 });
+
+    steerable.setBehavior(avoidBehavior);
 
     expect(avoidBehavior.findMostThreateningObstacle()).to.eql(null);
   });
@@ -57,7 +63,9 @@ describe("AvoidBehavior", function(){
 
     steerable.velocity.set(100, 0, 100);
 
-    var avoidBehavior = new Kompute.AvoidBehavior(steerable, { maxSeeAhead: 100, maxAvoidForce: 100 });
+    var avoidBehavior = new Kompute.AvoidBehavior({ maxSeeAhead: 100, maxAvoidForce: 100 });
+
+    steerable.setBehavior(avoidBehavior);
 
     expect(avoidBehavior.findMostThreateningObstacle()).to.eql(obstacle);
   });
@@ -73,7 +81,9 @@ describe("AvoidBehavior", function(){
 
     steerable.velocity.set(100, 0, 100);
 
-    var avoidBehavior = new Kompute.AvoidBehavior(steerable, { maxSeeAhead: 100, maxAvoidForce: 100 });
+    var avoidBehavior = new Kompute.AvoidBehavior({ maxSeeAhead: 100, maxAvoidForce: 100 });
+
+    steerable.setBehavior(avoidBehavior);
 
     expect(avoidBehavior.findMostThreateningObstacle()).to.eql(obstacle);
   });
@@ -91,7 +101,9 @@ describe("AvoidBehavior", function(){
 
     steerable.velocity.set(100, 0, 100);
 
-    var avoidBehavior = new Kompute.AvoidBehavior(steerable, { maxSeeAhead: 100000, maxAvoidForce: 100 });
+    var avoidBehavior = new Kompute.AvoidBehavior({ maxSeeAhead: 100000, maxAvoidForce: 100 });
+
+    steerable.setBehavior(avoidBehavior);
 
     expect(avoidBehavior.findMostThreateningObstacle()).to.eql(obstacle1);
   });
@@ -107,7 +119,9 @@ describe("AvoidBehavior", function(){
 
     steerable.velocity = new Kompute.Vector3D(-10, 0, -10);
 
-    var avoidBehavior = new Kompute.AvoidBehavior(steerable, { maxSeeAhead: 50, maxAvoidForce: 100 });
+    var avoidBehavior = new Kompute.AvoidBehavior({ maxSeeAhead: 50, maxAvoidForce: 100 });
+
+    steerable.setBehavior(avoidBehavior);
 
     expect(avoidBehavior.compute().linear).to.eql(new Kompute.Vector3D());
   });
@@ -121,7 +135,7 @@ describe("AvoidBehavior", function(){
     world.insertEntity(obstacle);
 
     steerable.velocity = new Kompute.Vector3D(0, 0, 1);
-    steerable.setBehavior(Kompute.AvoidBehavior, { maxSeeAhead: 500, maxAvoidForce: 100 });
+    steerable.setBehavior(new Kompute.AvoidBehavior({ maxSeeAhead: 500, maxAvoidForce: 100 }));
     steerable.update();
     expect(steerable.velocity.normalize()).to.eql(new Kompute.Vector3D(0, 0, -1));
   });

@@ -5,12 +5,14 @@ describe("Wander2DBehavior", function(){
 
   it("should initialize", function(){
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
-    var wanderBehavior = new Kompute.Wander2DBehavior(steerable, {
+    var wanderBehavior = new Kompute.Wander2DBehavior({
       angleChange: Math.PI / 100,
       normal: new Kompute.Vector3D(0, 1, 0),
       wanderCircleDistance: 100,
       wanderCircleRadius: 50
     });
+
+    steerable.setBehavior(wanderBehavior);
 
     expect(wanderBehavior.result).to.eql(new Kompute.SteerResult());
     expect(wanderBehavior.steerable).to.equal(steerable);
@@ -23,12 +25,14 @@ describe("Wander2DBehavior", function(){
 
   it("should get circle center", function(){
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
-    var wanderBehavior = new Kompute.Wander2DBehavior(steerable, {
+    var wanderBehavior = new Kompute.Wander2DBehavior({
       angleChange: Math.PI / 100,
       normal: new Kompute.Vector3D(0, 1, 0),
       wanderCircleDistance: 10,
       wanderCircleRadius: 50
     });
+
+    steerable.setBehavior(wanderBehavior);
 
     steerable.position.set(100, 200, 300);
     steerable.velocity.set(1000, 0, 0);
@@ -41,12 +45,15 @@ describe("Wander2DBehavior", function(){
 
     for (var i = 0; i < 1000; i ++){
       var normal = new Kompute.Vector3D(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
-      var wanderBehavior = new Kompute.Wander2DBehavior(steerable, {
+      var wanderBehavior = new Kompute.Wander2DBehavior({
         angleChange: Math.PI / 100,
         normal: normal,
         wanderCircleDistance: 100 * Math.random(),
         wanderCircleRadius: 100 * Math.random()
       });
+
+      steerable.setBehavior(wanderBehavior);
+
       wanderBehavior.angle = Math.PI * (Math.random() - 0.5);
       steerable.position.set((Math.random() - 0.5) * 1000, (Math.random() - 0.5) * 1000, (Math.random() - 0.5) * 1000);
       steerable.velocity.set((Math.random() - 0.5) * 1000, (Math.random() - 0.5) * 1000, (Math.random() - 0.5) * 1000);
@@ -62,12 +69,15 @@ describe("Wander2DBehavior", function(){
 
     for (var i = 0; i < 1000; i ++){
       var normal = new Kompute.Vector3D(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
-      var wanderBehavior = new Kompute.Wander2DBehavior(steerable, {
+      var wanderBehavior = new Kompute.Wander2DBehavior({
         angleChange: Math.PI / 100,
         normal: normal,
         wanderCircleDistance: 100 * Math.random(),
         wanderCircleRadius: 100 * Math.random()
       });
+
+      steerable.setBehavior(wanderBehavior);
+
       steerable.position.set((Math.random() - 0.5) * 1000, (Math.random() - 0.5) * 1000, (Math.random() - 0.5) * 1000);
       steerable.velocity.set((Math.random() - 0.5) * 1000, (Math.random() - 0.5) * 1000, (Math.random() - 0.5) * 1000);
       wanderBehavior.compute();
@@ -83,12 +93,14 @@ describe("Wander2DBehavior", function(){
     steerable.position.set(100, 300, 400);
     steerable.velocity.set(-1000, 230, 500);
 
-    var wanderBehavior = new Kompute.Wander2DBehavior(steerable, {
+    var wanderBehavior = new Kompute.Wander2DBehavior({
       angleChange: Math.PI / 100,
       normal: new Kompute.Vector3D(0, 1, 0),
       wanderCircleDistance: 100,
       wanderCircleRadius: 50
     });
+
+    steerable.setBehavior(wanderBehavior);
 
     var angle = wanderBehavior.angle
     var circleCenter = wanderBehavior.getCircleCenter();

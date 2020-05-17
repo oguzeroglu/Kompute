@@ -3,8 +3,8 @@ import { VectorPool } from "../../core/VectorPool";
 
 var vectorPool = new VectorPool(10);
 
-var PathFollowingBehavior = function(steerable, options){
-  SeekBehavior.call(this, steerable);
+var PathFollowingBehavior = function(options){
+  SeekBehavior.call(this);
 
   this.path = options.path;
   this.satisfactionRadius = options.satisfactionRadius || 0;

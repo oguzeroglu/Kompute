@@ -6,7 +6,9 @@ describe("ArriveBehavior", function(){
   it("should initialize", function(){
 
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
-    var arriveBehavior = new Kompute.ArriveBehavior(steerable, { satisfactionRadius: 50, slowDownRadius: 100 });
+    var arriveBehavior = new Kompute.ArriveBehavior({ satisfactionRadius: 50, slowDownRadius: 100 });
+
+    steerable.setBehavior(arriveBehavior);
 
     expect(arriveBehavior.result).to.eql(new Kompute.SteerResult());
     expect(arriveBehavior.steerable).to.equal(steerable);
@@ -17,17 +19,21 @@ describe("ArriveBehavior", function(){
   it("should not request acceleration if steerable has no target position", function(){
 
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
-    var arriveBehavior = new Kompute.ArriveBehavior(steerable, { satisfactionRadius: 50, slowDownRadius: 100 });
+    var arriveBehavior = new Kompute.ArriveBehavior({ satisfactionRadius: 50, slowDownRadius: 100 });
+
+    steerable.setBehavior(arriveBehavior);
 
     expect(arriveBehavior.compute().linear).to.eql(new Kompute.Vector3D(0, 0, 0));
   });
 
   it("should not request acceleration if steerable in satisfactionRadius", function(){
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
-    var arriveBehavior = new Kompute.ArriveBehavior(steerable, {
+    var arriveBehavior = new Kompute.ArriveBehavior({
       satisfactionRadius: 50,
       slowDownRadius: 100
     });
+
+    steerable.setBehavior(arriveBehavior);
 
     steerable.setTargetPosition(new Kompute.Vector3D(10, 10, 10));
 
@@ -40,7 +46,9 @@ describe("ArriveBehavior", function(){
     var world = new Kompute.World(1000, 1000, 1000, 10);
     world.insertEntity(steerable);
 
-    steerable.setBehavior(Kompute.ArriveBehavior, { satisfactionRadius: 0.1, slowDownRadius: 200 });
+    var arriveBehavior = new Kompute.ArriveBehavior({ satisfactionRadius: 0.1, slowDownRadius: 200 });
+
+    steerable.setBehavior(arriveBehavior);
     steerable.setTargetPosition(new Kompute.Vector3D(100, 100, 100));
     steerable.maxSpeed = 0.1;
     steerable.maxAcceleration = 0.1;
@@ -65,7 +73,7 @@ describe("ArriveBehavior", function(){
     var world = new Kompute.World(1000, 1000, 1000, 10);
     world.insertEntity(steerable);
 
-    steerable.setBehavior(Kompute.ArriveBehavior, { satisfactionRadius: 0.001, slowDownRadius: 10 });
+    steerable.setBehavior(new Kompute.ArriveBehavior({ satisfactionRadius: 0.001, slowDownRadius: 10 }));
     steerable.setTargetPosition(new Kompute.Vector3D(100, 100, 100));
     steerable.maxSpeed = 1;
     steerable.maxAcceleration = 1;

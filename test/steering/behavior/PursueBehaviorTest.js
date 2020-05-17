@@ -6,7 +6,9 @@ describe("PursueBehavior", function(){
   it("should initialize", function(){
 
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
-    var pursueBehavior = new Kompute.PursueBehavior(steerable, {maxPredictionTime: 100});
+    var pursueBehavior = new Kompute.PursueBehavior({maxPredictionTime: 100});
+
+    steerable.setBehavior(pursueBehavior);
 
     expect(pursueBehavior.result).to.eql(new Kompute.SteerResult());
     expect(pursueBehavior.steerable).to.equal(steerable);
@@ -15,7 +17,9 @@ describe("PursueBehavior", function(){
 
   it("should not request acceleration if steerable has no target entity", function(){
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
-    var pursueBehavior = new Kompute.PursueBehavior(steerable, {maxPredictionTime: 100});
+    var pursueBehavior = new Kompute.PursueBehavior({maxPredictionTime: 100});
+
+    steerable.setBehavior(pursueBehavior);
 
     expect(pursueBehavior.compute().linear).to.eql(new Kompute.Vector3D());
   });
@@ -28,8 +32,11 @@ describe("PursueBehavior", function(){
 
     steerable.setTargetEntity(targetSteerable);
 
-    var pursueBehavior = new Kompute.PursueBehavior(steerable, {maxPredictionTime: 10});
-    var seekBehavior = new Kompute.SeekBehavior(steerable);
+    var pursueBehavior = new Kompute.PursueBehavior({maxPredictionTime: 10});
+    var seekBehavior = new Kompute.SeekBehavior();
+
+    steerable.setBehavior(pursueBehavior);
+    seekBehavior.setSteerable(steerable);
 
     steerable.maxAcceleration = 100;
 
@@ -53,8 +60,11 @@ describe("PursueBehavior", function(){
 
     steerable.setTargetEntity(targetSteerable);
 
-    var pursueBehavior = new Kompute.PursueBehavior(steerable, {maxPredictionTime: 10});
-    var seekBehavior = new Kompute.SeekBehavior(steerable);
+    var pursueBehavior = new Kompute.PursueBehavior({maxPredictionTime: 10});
+    var seekBehavior = new Kompute.SeekBehavior();
+
+    steerable.setBehavior(pursueBehavior);
+    seekBehavior.setSteerable(steerable);
 
     steerable.maxAcceleration = 100;
 
@@ -79,7 +89,9 @@ describe("PursueBehavior", function(){
 
     steerable.setTargetEntity(targetSteerable);
 
-    var pursueBehavior = new Kompute.PursueBehavior(steerable, {maxPredictionTime: 10});
+    var pursueBehavior = new Kompute.PursueBehavior({maxPredictionTime: 10});
+
+    steerable.setBehavior(pursueBehavior);
 
     steerable.maxAcceleration = 100;
     steerable.velocity.set(10, 10, 10);

@@ -37,7 +37,7 @@ describe("Steerable", function(){
     var world = new Kompute.World(1000, 1000, 1000, 10);
     world.insertEntity(entity);
 
-    entity.setBehavior(MockSteeringBehavior);
+    entity.setBehavior(new MockSteeringBehavior());
 
     entity.update();
     expect(entity.position).to.eql(center);
@@ -60,7 +60,7 @@ describe("Steerable", function(){
     var world = new Kompute.World(1000, 1000, 1000, 10);
     world.insertEntity(entity);
 
-    entity.setBehavior(MockSteeringBehavior);
+    entity.setBehavior(new MockSteeringBehavior());
 
     entity.linearAcceleration.set(100, 200, 300);
     entity.maxAcceleration = 10;
@@ -119,7 +119,7 @@ describe("Steerable", function(){
     var world = new Kompute.World(1000, 1000, 1000, 10);
     world.insertEntity(entity);
 
-    entity.setBehavior(Kompute.SteeringBehavior);
+    entity.setBehavior(new Kompute.SteeringBehavior());
 
     entity.update();
     expect(entity.position).to.eql(center);

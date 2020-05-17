@@ -41,8 +41,8 @@ Steerable.prototype.update = function(){
   Entity.prototype.update.call(this);
 }
 
-Steerable.prototype.setBehavior = function(behaviorConstructor, options){
-  var behavior = new behaviorConstructor(this, options);
+Steerable.prototype.setBehavior = function(behavior){
+  behavior.setSteerable(this);
   this.behavior = behavior;
 }
 

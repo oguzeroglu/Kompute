@@ -1,20 +1,22 @@
 import { SteeringBehavior } from "./SteeringBehavior";
 
-var PrioritySteeringBehavior = function(steerable, options){
-  SteeringBehavior.call(this, steerable);
+var PrioritySteeringBehavior = function(options){
+  SteeringBehavior.call(this);
 
   this.threshold = options.threshold;
 
-  this.list = [];
-
-  for (var i = 0; i < options.list.length; i ++){
-    var description = options.list[i];
-    var behaviorConstructor = description.behavior;
-    this.list.push(new behaviorConstructor(steerable, description.parameters));
-  }
+  this.list = options.list;
 }
 
 PrioritySteeringBehavior.prototype = Object.create(SteeringBehavior.prototype);
+
+PrioritySteeringBehavior.prototype.setSteerable = function(steerable){
+  for (var i = 0; i < this.list.length; i++){
+    this.list[i].setSteerable(steerable);
+  }
+
+  SteeringBehavior.prototype.setSteerable.call(this, steerable);
+}
 
 PrioritySteeringBehavior.prototype.compute = function(){
   this.result.linear.set(0, 0, 0);

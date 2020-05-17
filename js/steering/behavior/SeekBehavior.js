@@ -1,7 +1,7 @@
 import { SteeringBehavior } from "./SteeringBehavior";
 
-var SeekBehavior = function(steerable){
-  SteeringBehavior.call(this, steerable);
+var SeekBehavior = function(){
+  SteeringBehavior.call(this);
 }
 
 SeekBehavior.prototype = Object.create(SteeringBehavior.prototype);

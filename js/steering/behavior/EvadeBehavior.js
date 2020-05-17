@@ -1,7 +1,7 @@
 import { PursueBehavior } from "./PursueBehavior";
 
-var EvadeBehavior = function(steerable, options){
-  PursueBehavior.call(this, steerable, options);
+var EvadeBehavior = function(options){
+  PursueBehavior.call(this, options);
 }
 
 EvadeBehavior.prototype = Object.create(PursueBehavior.prototype);
