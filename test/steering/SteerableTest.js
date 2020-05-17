@@ -28,6 +28,7 @@ describe("Steerable", function(){
     expect(entity.isJumpInitiated).to.eql(false);
     expect(entity.isJumpTakenOff).to.eql(false);
     expect(entity.isJumpReady).to.eql(false);
+    expect(entity.jumpSpeed).to.eql(Infinity);
   });
 
   it("should update", function(){

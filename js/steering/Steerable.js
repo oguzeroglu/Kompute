@@ -22,6 +22,8 @@ var Steerable = function(id, center, size){
   this.isJumpInitiated = false;
   this.isJumpReady = false;
   this.isJumpTakenOff = false;
+
+  this.jumpSpeed = Infinity;
 }
 
 Steerable.prototype = Object.create(Entity.prototype);
@@ -56,7 +58,7 @@ Steerable.prototype.setJumpBehavior = function(behavior){
   if (this.isJumpInitiated){
     return;
   }
-  
+
   behavior.setSteerable(this);
   this.jumpBehavior = behavior;
 }

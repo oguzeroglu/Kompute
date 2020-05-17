@@ -6,11 +6,11 @@ var World = function(width, height, depth, binSize){
 
   this.entititesByID = {};
 
-  this.gravity = new Vector3D(0, 0, 0);
+  this.gravity = 0
 }
 
-World.prototype.setGravity = function(gravityVector){
-  this.gravity.copy(gravityVector);
+World.prototype.setGravity = function(gravity){
+  this.gravity = gravity;
 }
 
 World.prototype.getEntityByID = function(entityID){
