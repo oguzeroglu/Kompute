@@ -43,7 +43,7 @@ describe("JumpBehavior", function(){
     steerable.jumpSpeed = 1000;
 
     var jumpDescriptor = new Kompute.JumpDescriptor({
-      takeoffPosition: new Kompute.Vector3D(10, 0, 0),
+      takeoffPosition: new Kompute.Vector3D(10, 0, 10),
       landingPosition: new Kompute.Vector3D(150, 100, 0),
       runupSatisfactionRadius: 50,
       takeoffPositionSatisfactionRadius: 35,
@@ -65,5 +65,6 @@ describe("JumpBehavior", function(){
     var result = jumpBehavior.compute();
     expect(result.linear).to.eql(new Kompute.Vector3D());
     expect(steerable.isJumpTakenOff).to.eql(true);
+    expect(steerable.velocity).to.eql(new Kompute.Vector3D(jumpDescriptor.equationResult.vx, 1000, jumpDescriptor.equationResult.vz));
   });
 });

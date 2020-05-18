@@ -160,6 +160,11 @@ Steerable.prototype.onJumpReady = function(){
 
 Steerable.prototype.onJumpTakeOff = function(){
   this.isJumpTakenOff = true;
+
+  var jumpDescriptor = this.jumpDescriptor;
+  var equationResult = jumpDescriptor.equationResult;
+
+  this.velocity.set(equationResult.vx, this.jumpSpeed, equationResult.vz);
 }
 
 Object.defineProperty(Steerable.prototype, 'constructor', { value: Steerable,  enumerable: false, writable: true });
