@@ -551,7 +551,7 @@ describe("Steerable", function(){
     expect(mockBehavior.steerable).to.equal(entity);
   });
 
-  it("should consider gravity when updating", function(){
+  it("should consider gravity when updating if jump took off", function(){
     var center = new Kompute.Vector3D(0, 0, 0);
     var size = new Kompute.Vector3D(50, 60, 70);
     var entity = new Kompute.Steerable("steerable1", center, size);
@@ -560,6 +560,8 @@ describe("Steerable", function(){
     world.insertEntity(entity);
 
     entity.setBehavior(new MockSteeringBehavior());
+
+    entity.isJumpTakenOff = true;
 
     var pos1 = entity.position.clone();
     entity.update();
