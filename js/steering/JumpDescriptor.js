@@ -1,7 +1,9 @@
 var JumpDescriptor = function(parameters){
   this.takeoffPosition = parameters.takeoffPosition.clone();
   this.landingPosition = parameters.landingPosition.clone();
-  this.runupRadius = parameters.runupRadius;
+  this.runupSatisfactionRadius = parameters.runupSatisfactionRadius;
+  this.takeoffPositionSatisfactionRadius = parameters.takeoffPositionSatisfactionRadius;
+  this.takeoffVelocitySatisfactionRadius = parameters.takeoffVelocitySatisfactionRadius;
 
   this.delta = this.landingPosition.clone().sub(this.takeoffPosition);
 
@@ -40,6 +42,10 @@ JumpDescriptor.prototype.solveQuadraticEquation = function(steerable){
     this.equationResult.vx = result.vx;
     this.equationResult.vz = result.vz;
     this.equationResult.isAchievable = result.isAchievable;
+  }
+
+  if (!this.equationResult.isAchievable){
+    return false;
   }
 
   return this.equationResult;

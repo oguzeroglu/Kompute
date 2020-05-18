@@ -8,15 +8,19 @@ describe("JumpDescriptor", function(){
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(100, 0, 0),
       landingPosition: new Kompute.Vector3D(150, 100, 0),
-      runupRadius: 50
+      runupSatisfactionRadius: 50,
+      takeoffPositionSatisfactionRadius: 35,
+      takeoffVelocitySatisfactionRadius: 20
     });
 
     expect(jumpDescriptor.takeoffPosition).to.eql(new Kompute.Vector3D(100, 0, 0));
     expect(jumpDescriptor.landingPosition).to.eql(new Kompute.Vector3D(150, 100, 0));
-    expect(jumpDescriptor.runupRadius).to.eql(50);
+    expect(jumpDescriptor.runupSatisfactionRadius).to.eql(50);
     expect(jumpDescriptor.delta).to.eql(new Kompute.Vector3D(50, 100, 0));
     expect(jumpDescriptor.equationResult).to.eql({time: 0, vx: 0, vz: 0, isAchievable: false});
     expect(jumpDescriptor.checkTimeResult).to.eql({ vx: 0, vz: 0, isAchievable: false });
+    expect(jumpDescriptor.takeoffPositionSatisfactionRadius).to.eql(35);
+    expect(jumpDescriptor.takeoffVelocitySatisfactionRadius).to.eql(20);
   });
 
   it("should check time", function(){
@@ -24,7 +28,9 @@ describe("JumpDescriptor", function(){
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(),
       landingPosition: new Kompute.Vector3D(),
-      runupRadius: 0
+      runupSatisfactionRadius: 0,
+      takeoffPositionSatisfactionRadius: 0,
+      takeoffVelocitySatisfactionRadius: 0
     });
 
     jumpDescriptor.delta = new Kompute.Vector3D(10, 20, 30);
@@ -56,7 +62,9 @@ describe("JumpDescriptor", function(){
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(),
       landingPosition: new Kompute.Vector3D(10, 20, 30),
-      runupRadius: 0
+      runupSatisfactionRadius: 0,
+      takeoffPositionSatisfactionRadius: 0,
+      takeoffVelocitySatisfactionRadius: 0
     });
 
     var result = jumpDescriptor.solveQuadraticEquation(steerable);
@@ -74,6 +82,6 @@ describe("JumpDescriptor", function(){
     steerable.maxSpeed = 1;
     result = jumpDescriptor.solveQuadraticEquation(steerable);
 
-    expect(result.isAchievable).to.eql(false);
+    expect(result).to.eql(false);
   });
 });

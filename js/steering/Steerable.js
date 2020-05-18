@@ -48,7 +48,7 @@ Steerable.prototype.update = function(){
 
   if (this.isJumpInitiated && !this.isJumpTakenOff && !this.isJumpReady){
     var distToTakeoffPosition = vectorPool.get().copy(this.position).sub(this.jumpDescriptor.takeoffPosition).getLength();
-    if (distToTakeoffPosition < this.jumpDescriptor.runupRadius){
+    if (distToTakeoffPosition < this.jumpDescriptor.runupSatisfactionRadius){
       this.onJumpReady();
     }
   }
@@ -126,6 +126,12 @@ Steerable.prototype.unsetHideTargetEntity = function(){
 }
 
 Steerable.prototype.jump = function(toRunupBehavior, jumpDescriptor){
+
+  var result = jumpDescriptor.solveQuadraticEquation(this);
+  if (!result){
+    return false;
+  }
+
   this.isJumpInitiated = false;
   this.isJumpReady = false;
   this.isJumpTakenOff = false;
@@ -139,6 +145,8 @@ Steerable.prototype.jump = function(toRunupBehavior, jumpDescriptor){
   this.jumpDescriptor = jumpDescriptor;
 
   this.isJumpInitiated = true;
+
+  return true;
 }
 
 Steerable.prototype.onJumpReady = function(){
@@ -146,6 +154,10 @@ Steerable.prototype.onJumpReady = function(){
   this.isJumpInitiated = false;
   this.setBehavior(this.jumpBehavior);
   this.isJumpInitiated = true;
+}
+
+Steerable.prototype.onJumpTakeOff = function(){
+  this.isJumpTakenOff = true;
 }
 
 Object.defineProperty(Steerable.prototype, 'constructor', { value: Steerable,  enumerable: false, writable: true });

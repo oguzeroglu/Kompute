@@ -362,14 +362,19 @@ describe("Steerable", function(){
     var size = new Kompute.Vector3D(50, 60, 70);
     var entity = new Kompute.Steerable("steerable1", center, size);
 
+    var world = new Kompute.World(1000, 1000, 1000, 10);
+    world.insertEntity(entity);
+
     var toRunupBehavior = new MockSteeringBehavior();
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(100, 200, 300),
       landingPosition: new Kompute.Vector3D(400, 500, 600),
-      runupRadius: 100
+      runupSatisfactionRadius: 100,
+      takeoffPositionSatisfactionRadius: 35,
+      takeoffVelocitySatisfactionRadius: 20
     });
 
-    entity.jump(toRunupBehavior, jumpDescriptor);
+    var result = entity.jump(toRunupBehavior, jumpDescriptor);
 
     expect(entity.behavior).to.equal(toRunupBehavior);
     expect(entity.hasTargetEntity).to.eql(false);
@@ -379,6 +384,35 @@ describe("Steerable", function(){
     expect(entity.isJumpInitiated).to.eql(true);
     expect(entity.isJumpReady).to.eql(false);
     expect(entity.isJumpTakenOff).to.eql(false);
+    expect(result).to.eql(true);
+  });
+
+  it("should not jump if jump not isAchievable", function(){
+    var center = new Kompute.Vector3D(0, 0, 0);
+    var size = new Kompute.Vector3D(50, 60, 70);
+    var entity = new Kompute.Steerable("steerable1", center, size);
+
+    entity.maxSpeed = 1;
+    entity.jumpSpeed = 1;
+
+    var world = new Kompute.World(1000, 1000, 1000, 10);
+    world.insertEntity(entity);
+
+    world.setGravity(-1000);
+
+    var toRunupBehavior = new MockSteeringBehavior();
+    var jumpDescriptor = new Kompute.JumpDescriptor({
+      takeoffPosition: new Kompute.Vector3D(100, 200, 300),
+      landingPosition: new Kompute.Vector3D(400, 500, 600),
+      runupSatisfactionRadius: 100,
+      takeoffPositionSatisfactionRadius: 35,
+      takeoffVelocitySatisfactionRadius: 20
+    });
+
+    var result = entity.jump(toRunupBehavior, jumpDescriptor);
+
+    expect(result).to.eql(false);
+    expect(entity.isJumpInitiated).to.eql(false);
   });
 
   it("should trigger onJumpReady if position within run-up radius", function(){
@@ -393,7 +427,9 @@ describe("Steerable", function(){
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(10, 10, 10),
       landingPosition: new Kompute.Vector3D(400, 500, 600),
-      runupRadius: 100
+      runupSatisfactionRadius: 100,
+      takeoffPositionSatisfactionRadius: 35,
+      takeoffVelocitySatisfactionRadius: 20
     });
 
     var called = false;
@@ -420,7 +456,9 @@ describe("Steerable", function(){
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(500, 500, 500),
       landingPosition: new Kompute.Vector3D(400, 500, 600),
-      runupRadius: 100
+      runupSatisfactionRadius: 100,
+      takeoffPositionSatisfactionRadius: 35,
+      takeoffVelocitySatisfactionRadius: 20
     });
 
     var called = false;
@@ -447,7 +485,9 @@ describe("Steerable", function(){
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(10, 10, 10),
       landingPosition: new Kompute.Vector3D(400, 500, 600),
-      runupRadius: 100
+      runupSatisfactionRadius: 100,
+      takeoffPositionSatisfactionRadius: 35,
+      takeoffVelocitySatisfactionRadius: 20
     });
 
     var called = false;
@@ -475,7 +515,9 @@ describe("Steerable", function(){
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(10, 10, 10),
       landingPosition: new Kompute.Vector3D(400, 500, 600),
-      runupRadius: 100
+      runupSatisfactionRadius: 100,
+      takeoffPositionSatisfactionRadius: 35,
+      takeoffVelocitySatisfactionRadius: 20
     });
 
     var called = false;
