@@ -42,6 +42,8 @@ Steerable.prototype.update = function(){
     this.linearAcceleration.copy(this.linearAcceleration.normalize().multiplyScalar(this.maxAcceleration));
   }
 
+  this.linearAcceleration.y += this.world.gravity;
+
   var vect = vectorPool.get().copy(this.linearAcceleration).multiplyScalar(delta);
   this.velocity.add(vect);
   Entity.prototype.update.call(this);

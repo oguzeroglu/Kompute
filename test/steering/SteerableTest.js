@@ -550,6 +550,27 @@ describe("Steerable", function(){
     expect(entity.behavior).to.equal(mockBehavior);
     expect(mockBehavior.steerable).to.equal(entity);
   });
+
+  it("should consider gravity when updating", function(){
+    var center = new Kompute.Vector3D(0, 0, 0);
+    var size = new Kompute.Vector3D(50, 60, 70);
+    var entity = new Kompute.Steerable("steerable1", center, size);
+
+    var world = new Kompute.World(1000, 1000, 1000, 10);
+    world.insertEntity(entity);
+
+    entity.setBehavior(new MockSteeringBehavior());
+
+    var pos1 = entity.position.clone();
+    entity.update();
+    var pos2 = entity.position.clone();
+    expect(pos1).to.eql(pos2);
+
+    world.setGravity(-100);
+
+    entity.update();
+    expect(entity.position.y < pos1.y).to.eql(true);
+  });
 });
 
 class MockSteeringBehavior extends Kompute.SteeringBehavior{
