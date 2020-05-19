@@ -23,9 +23,14 @@ JumpBehavior.prototype.compute = function(){
   var jumpDescriptor = steerable.jumpDescriptor;
   var equationResult = jumpDescriptor.equationResult;
 
+  if (equationResult.time == 0){
+    return this.result;
+  }
+
+  var targetVelocity = vectorPool.get().set(equationResult.vx, 0, equationResult.vz);
+
   var posDiff = vectorPool.get().copy(steerable.position).sub(jumpDescriptor.takeoffPosition).getLength();
   if (posDiff <= jumpDescriptor.takeoffPositionSatisfactionRadius){
-    var targetVelocity = vectorPool.get().set(equationResult.vx, 0, equationResult.vz);
     var velocityDiff = vectorPool.get().copy(steerable.velocity).sub(targetVelocity).getLength();
     if (velocityDiff <= jumpDescriptor.takeoffVelocitySatisfactionRadius){
       steerable.onJumpTakeOff();
@@ -33,7 +38,15 @@ JumpBehavior.prototype.compute = function(){
     }
   }
 
-  throw new Error("NOT IMPLEMENTED");
+  return this.matchVelocity(equationResult.time, targetVelocity);
+}
+
+JumpBehavior.prototype.matchVelocity = function(time, targetVelocity){
+  var linear = this.result.linear;
+  var steerable = this.steerable;
+  targetVelocity.sub(steerable.velocity).multiplyScalar(1 / time);
+  linear.copy(targetVelocity);
+  return this.result;
 }
 
 Object.defineProperty(JumpBehavior.prototype, 'constructor', { value: JumpBehavior,  enumerable: false, writable: true });

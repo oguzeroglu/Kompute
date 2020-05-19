@@ -391,7 +391,7 @@ describe("Steerable", function(){
     expect(result).to.eql(true);
   });
 
-  it.only("should complete jumping", function(){
+  it("should complete jumping", function(){
 
     var center = new Kompute.Vector3D(0, 0, 0);
     var size = new Kompute.Vector3D(50, 60, 70);

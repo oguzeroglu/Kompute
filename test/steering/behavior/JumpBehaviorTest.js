@@ -35,6 +35,18 @@ describe("JumpBehavior", function(){
     expect(jumpBehavior.compute().linear).to.eql(new Kompute.Vector3D());
   });
 
+  it("should not request acceleration if equation time is zero", function(){
+    var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
+    var jumpBehavior = new Kompute.JumpBehavior();
+
+    steerable.setJumpBehavior(jumpBehavior);
+    steerable.jumpDescriptor = {equationResult: {time: 0}};
+
+    steerable.isJumpReady = true;
+
+    expect(jumpBehavior.compute().linear).to.eql(new Kompute.Vector3D());
+  });
+
   it("should take off", function(){
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
     var jumpBehavior = new Kompute.JumpBehavior();
@@ -66,5 +78,29 @@ describe("JumpBehavior", function(){
     expect(result.linear).to.eql(new Kompute.Vector3D());
     expect(steerable.isJumpTakenOff).to.eql(true);
     expect(steerable.velocity).to.eql(new Kompute.Vector3D(jumpDescriptor.equationResult.vx, 1000, jumpDescriptor.equationResult.vz));
+  });
+
+  it("should match velocity", function(){
+    var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
+    var jumpBehavior = new Kompute.JumpBehavior();
+
+    jumpBehavior.steerable = steerable;
+
+    steerable.jumpDescriptor = {
+      takeoffPosition: new Kompute.Vector3D(0, 0, 0),
+      takeoffVelocitySatisfactionRadius: 0,
+      takeoffPositionSatisfactionRadius: 10000,
+      equationResult: {
+        time: 2,
+        vx: 30,
+        vz: 60
+      }
+    };
+
+    steerable.isJumpReady = true;
+
+    var result = jumpBehavior.compute();
+
+    expect(result.linear).to.eql(new Kompute.Vector3D(15, 0, 30));
   });
 });
