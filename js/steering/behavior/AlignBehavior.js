@@ -1,8 +1,8 @@
 import { SteeringBehavior } from "./SteeringBehavior";
 import { Steerable } from "../Steerable";
 
-var AlignBehavior = function(steerable){
-  SteeringBehavior.call(this, steerable);
+var AlignBehavior = function(){
+  SteeringBehavior.call(this);
 }
 
 AlignBehavior.prototype = Object.create(SteeringBehavior.prototype);

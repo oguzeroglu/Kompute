@@ -3,29 +3,28 @@ import { VectorPool } from "../../core/VectorPool";
 
 var vectorPool = new VectorPool(10);
 
-var BlendedSteeringBehavior = function(steerable, list){
-  SteeringBehavior.call(this, steerable);
+var BlendedSteeringBehavior = function(list){
+  SteeringBehavior.call(this);
 
-  this.behaviors = {};
-
-  for (var i = 0; i < list.length; i ++){
-    var description = list[i];
-    var behaviorConstructor = description.behavior;
-    this.behaviors[i] = {
-      behavior: new behaviorConstructor(steerable, description.parameters),
-      weight: description.weight
-    }
-  }
+  this.definitions = list;
 }
 
 BlendedSteeringBehavior.prototype = Object.create(SteeringBehavior.prototype);
+
+BlendedSteeringBehavior.prototype.setSteerable = function(steerable){
+  for (var i = 0; i < this.definitions.length; i++){
+    this.definitions[i].behavior.setSteerable(steerable);
+  }
+
+  SteeringBehavior.prototype.setSteerable.call(this, steerable);
+}
 
 BlendedSteeringBehavior.prototype.compute = function(){
 
   this.result.linear.set(0, 0, 0);
 
-  for (var key in this.behaviors){
-    var elem = this.behaviors[key];
+  for (var i = 0; i < this.definitions.length; i ++){
+    var elem = this.definitions[i];
     var behavior = elem.behavior;
     var weight = elem.weight;
 

@@ -4,8 +4,8 @@ import { Steerable } from "../Steerable";
 
 var vectorPool = new VectorPool(10);
 
-var SeparationBehavior = function(steerable, options){
-  SteeringBehavior.call(this, steerable);
+var SeparationBehavior = function(options){
+  SteeringBehavior.call(this);
 
   this.strength = options.strength;
 }

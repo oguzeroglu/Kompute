@@ -5,8 +5,8 @@ import { Steerable } from "../Steerable";
 
 var vectorPool = new VectorPool(10);
 
-var HideBehavior = function(steerable, options){
-  ArriveBehavior.call(this, steerable, {
+var HideBehavior = function(options){
+  ArriveBehavior.call(this, {
     satisfactionRadius: options.arriveSatisfactionRadius,
     slowDownRadius: options.arriveSlowDownRadius
   });

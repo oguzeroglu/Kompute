@@ -3,8 +3,8 @@ import { VectorPool } from "../../core/VectorPool";
 
 var vectorPool = new VectorPool(10);
 
-var PursueBehavior = function(steerable, options){
-  SeekBehavior.call(this, steerable);
+var PursueBehavior = function(options){
+  SeekBehavior.call(this);
 
   this.maxPredictionTime = options.maxPredictionTime;
 }

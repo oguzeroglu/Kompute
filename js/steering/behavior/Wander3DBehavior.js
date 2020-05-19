@@ -4,8 +4,8 @@ import { Vector3D } from "../../core/Vector3D";
 
 var vectorPool = new VectorPool(10);
 
-var Wander3DBehavior = function(steerable, options){
-  Wander2DBehavior.call(this, steerable, {
+var Wander3DBehavior = function(options){
+  Wander2DBehavior.call(this, {
     wanderCircleDistance: options.wanderSphereDistance,
     angleChange: options.angleChange,
     normal: new Vector3D()

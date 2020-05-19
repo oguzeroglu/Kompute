@@ -9,6 +9,7 @@ describe("World", function(){
 
     expect(world.entititesByID).to.eql({});
     expect(world.nearby).to.exist;
+    expect(world.gravity).to.eql(0);
   });
 
   it("should insert entity", function(){
@@ -197,5 +198,14 @@ describe("World", function(){
     });
 
     expect(obj).to.eql({ entity1: true, entity2: true, entity3: false });
+  });
+
+  it("should set gravity", function(){
+
+    var world = new Kompute.World(5000, 5000, 5000, 50);
+
+    world.setGravity(-10);
+
+    expect(world.gravity).to.eql(-10);
   });
 });

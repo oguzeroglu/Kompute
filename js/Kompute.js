@@ -8,6 +8,7 @@ export { Quaternion } from "./core/Quaternion";
 export { Path } from "./core/Path";
 export { Steerable } from "./steering/Steerable";
 export { SteerResult } from "./steering/SteerResult";
+export { JumpDescriptor } from "./steering/JumpDescriptor";
 export { SteeringBehavior } from "./steering/behavior/SteeringBehavior";
 export { SeekBehavior } from "./steering/behavior/SeekBehavior";
 export { ArriveBehavior } from "./steering/behavior/ArriveBehavior";
@@ -26,4 +27,5 @@ export { RandomWaypointBehavior } from "./steering/behavior/RandomWaypointBehavi
 export { SeparationBehavior } from "./steering/behavior/SeparationBehavior";
 export { AlignBehavior } from "./steering/behavior/AlignBehavior";
 export { CohesionBehavior } from "./steering/behavior/CohesionBehavior";
+export { JumpBehavior } from "./steering/behavior/JumpBehavior";
 export { DebugHelper } from "./debug/DebugHelper";

@@ -5,7 +5,9 @@ describe("LookWhereYouAreGoing", function(){
 
   it("should initialize", function(){
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
-    var lookWhereYouAreGoingBehavior = new Kompute.LookWhereYouAreGoingBehavior(steerable);
+    var lookWhereYouAreGoingBehavior = new Kompute.LookWhereYouAreGoingBehavior();
+
+    steerable.setBehavior(lookWhereYouAreGoingBehavior);
 
     expect(lookWhereYouAreGoingBehavior.result).to.eql(new Kompute.SteerResult());
     expect(lookWhereYouAreGoingBehavior.steerable).to.equal(steerable);
@@ -13,7 +15,9 @@ describe("LookWhereYouAreGoing", function(){
 
   it("should set look target of entity based on its velocity", function(){
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(700, 800, 900), new Kompute.Vector3D(10, 10, 10));
-    var lookWhereYouAreGoingBehavior = new Kompute.LookWhereYouAreGoingBehavior(steerable);
+    var lookWhereYouAreGoingBehavior = new Kompute.LookWhereYouAreGoingBehavior();
+
+    steerable.setBehavior(lookWhereYouAreGoingBehavior);
 
     steerable.velocity.set(100, 500, 700);
 
@@ -24,7 +28,9 @@ describe("LookWhereYouAreGoing", function(){
 
   it("should not request linear acceleartion", function(){
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(700, 800, 900), new Kompute.Vector3D(10, 10, 10));
-    var lookWhereYouAreGoingBehavior = new Kompute.LookWhereYouAreGoingBehavior(steerable);
+    var lookWhereYouAreGoingBehavior = new Kompute.LookWhereYouAreGoingBehavior();
+
+    steerable.setBehavior(lookWhereYouAreGoingBehavior);
 
     var result = lookWhereYouAreGoingBehavior.compute();
 

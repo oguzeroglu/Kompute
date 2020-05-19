@@ -3,8 +3,8 @@ import { VectorPool } from "../../core/VectorPool";
 
 var vectorPool = new VectorPool(10);
 
-var LookWhereYouAreGoingBehavior = function(steerable){
-  SteeringBehavior.call(this, steerable);
+var LookWhereYouAreGoingBehavior = function(){
+  SteeringBehavior.call(this);
 }
 
 LookWhereYouAreGoingBehavior.prototype = Object.create(SteeringBehavior.prototype);
@@ -16,7 +16,7 @@ LookWhereYouAreGoingBehavior.prototype.compute = function(){
   var target = vectorPool.get().copy(steerable.position).add(steerable.velocity);
 
   steerable.setLookTarget(target);
-  
+
   return this.result;
 }
 

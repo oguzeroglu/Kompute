@@ -1,9 +1,16 @@
 import Nearby from "../third-party/Nearby";
+import { Vector3D } from "./Vector3D";
 
 var World = function(width, height, depth, binSize){
   this.nearby = new Nearby(width, height, depth, binSize);
 
   this.entititesByID = {};
+
+  this.gravity = 0
+}
+
+World.prototype.setGravity = function(gravity){
+  this.gravity = gravity;
 }
 
 World.prototype.getEntityByID = function(entityID){

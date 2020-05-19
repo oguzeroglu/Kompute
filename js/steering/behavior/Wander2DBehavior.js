@@ -5,8 +5,8 @@ import { Quaternion } from "../../core/Quaternion";
 var vectorPool = new VectorPool(10);
 var quaternion = new Quaternion();
 
-var Wander2DBehavior = function(steerable, options){
-  SteeringBehavior.call(this, steerable);
+var Wander2DBehavior = function(options){
+  SteeringBehavior.call(this);
 
   this.normal = options.normal.clone().normalize();
   this.wanderCircleDistance = options.wanderCircleDistance;

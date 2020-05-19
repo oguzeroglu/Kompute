@@ -1,7 +1,7 @@
 import { PathFollowingBehavior } from "./PathFollowingBehavior";
 
-var RandomWaypointBehavior = function(steerable, options){
-  PathFollowingBehavior.call(this, steerable, options);
+var RandomWaypointBehavior = function(options){
+  PathFollowingBehavior.call(this, options);
 }
 
 RandomWaypointBehavior.prototype = Object.create(PathFollowingBehavior.prototype);

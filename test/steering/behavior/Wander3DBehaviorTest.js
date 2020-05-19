@@ -4,11 +4,13 @@ var Kompute = require("../../../build/Kompute");
 describe("Wander3DBehavior", function(){
   it("should initialize", function(){
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
-    var wanderBehavior = new Kompute.Wander3DBehavior(steerable, {
+    var wanderBehavior = new Kompute.Wander3DBehavior({
       angleChange: Math.PI / 100,
       wanderSphereDistance: 100,
       wanderSphereRadius: 50
     });
+
+    steerable.setBehavior(wanderBehavior);
 
     expect(wanderBehavior.result).to.eql(new Kompute.SteerResult());
     expect(wanderBehavior.steerable).to.equal(steerable);
@@ -21,11 +23,13 @@ describe("Wander3DBehavior", function(){
 
   it("should get circle center", function(){
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
-    var wanderBehavior = new Kompute.Wander3DBehavior(steerable, {
+    var wanderBehavior = new Kompute.Wander3DBehavior({
       angleChange: Math.PI / 100,
       wanderSphereDistance: 10,
       wanderSphereRadius: 50
     });
+
+    steerable.setBehavior(wanderBehavior);
 
     steerable.position.set(100, 200, 300);
     steerable.velocity.set(1000, 0, 0);
@@ -36,11 +40,13 @@ describe("Wander3DBehavior", function(){
   it("should get displacement force", function(){
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
 
-    var wanderBehavior = new Kompute.Wander3DBehavior(steerable, {
+    var wanderBehavior = new Kompute.Wander3DBehavior({
       angleChange: Math.PI / 100,
       wanderSphereDistance: 100,
       wanderSphereRadius: 50
     });
+
+    steerable.setBehavior(wanderBehavior);
 
     var displacementForce = wanderBehavior.getDisplacementForce();
     expect(displacementForce.getLength()).to.eql(50);
@@ -54,11 +60,14 @@ describe("Wander3DBehavior", function(){
 
     for (var i = 0; i < 1000; i ++){
       var normal = new Kompute.Vector3D(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
-      var wanderBehavior = new Kompute.Wander3DBehavior(steerable, {
+      var wanderBehavior = new Kompute.Wander3DBehavior({
         angleChange: Math.PI / 100,
         wanderSphereDistance: 100 * Math.random(),
         wanderSphereRadius: 100 * Math.random()
       });
+
+      steerable.setBehavior(wanderBehavior);
+
       steerable.position.set((Math.random() - 0.5) * 1000, (Math.random() - 0.5) * 1000, (Math.random() - 0.5) * 1000);
       steerable.velocity.set((Math.random() - 0.5) * 1000, (Math.random() - 0.5) * 1000, (Math.random() - 0.5) * 1000);
       wanderBehavior.compute();
@@ -77,11 +86,13 @@ describe("Wander3DBehavior", function(){
     steerable.position.set(100, 300, 400);
     steerable.velocity.set(-1000, 230, 500);
 
-    var wanderBehavior = new Kompute.Wander3DBehavior(steerable, {
+    var wanderBehavior = new Kompute.Wander3DBehavior({
       angleChange: Math.PI / 100,
       wanderSphereDistance: 100,
       wanderSphereRadius: 50
     });
+
+    steerable.setBehavior(wanderBehavior);
 
     var angle = wanderBehavior.angle;
     var angle2 = wanderBehavior.angle2;

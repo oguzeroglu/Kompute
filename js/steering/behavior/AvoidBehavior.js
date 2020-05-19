@@ -6,8 +6,8 @@ import { VectorPool } from "../../core/VectorPool";
 var box = new Box(new Vector3D(), new Vector3D());
 var vectorPool = new VectorPool(10);
 
-var AvoidBehavior = function(steerable, options){
-  SteeringBehavior.call(this, steerable);
+var AvoidBehavior = function(options){
+  SteeringBehavior.call(this);
 
   this.maxSeeAhead = options.maxSeeAhead;
   this.maxAvoidForce = options.maxAvoidForce;

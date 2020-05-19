@@ -1,8 +1,8 @@
 import { SeekBehavior } from "./SeekBehavior";
 import { Steerable } from "../Steerable";
 
-var CohesionBehavior = function(steerable){
-  SeekBehavior.call(this, steerable);
+var CohesionBehavior = function(){
+  SeekBehavior.call(this);
 }
 
 CohesionBehavior.prototype = Object.create(SeekBehavior.prototype);
