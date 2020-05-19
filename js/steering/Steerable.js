@@ -184,6 +184,18 @@ Steerable.prototype.onJumpCompleted = function(){
   this.position.y = this.jumpDescriptor.landingPosition.y;
   this.velocity.set(0, 0, 0);
   this.linearAcceleration.set(0, 0, 0);
+
+  if (this.jumpCompletionCallback){
+    this.jumpCompletionCallback();
+  }
+}
+
+Steerable.prototype.setJumpCompletionListener = function(callback){
+  this.jumpCompletionCallback = callback;
+}
+
+Steerable.prototype.removeJumpCompletionListener = function(){
+  this.jumpCompletionCallback = null;
 }
 
 Object.defineProperty(Steerable.prototype, 'constructor', { value: Steerable,  enumerable: false, writable: true });

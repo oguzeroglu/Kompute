@@ -647,6 +647,43 @@ describe("Steerable", function(){
     expect(entity.linearAcceleration).to.eql(new Kompute.Vector3D());
     expect(entity.velocity).to.eql(new Kompute.Vector3D());
   });
+
+  it("should set jump completion listener", function(){
+    var center = new Kompute.Vector3D(0, 0, 0);
+    var size = new Kompute.Vector3D(50, 60, 70);
+    var entity = new Kompute.Steerable("steerable1", center, size);
+
+    entity.jumpDescriptor = { landingPosition: new Kompute.Vector3D() };
+
+    var called = false;
+    var callback = function(){
+      called = true;
+    };
+
+    entity.setJumpCompletionListener(callback);
+    expect(called).to.eql(false);
+    entity.onJumpCompleted();
+    expect(called).to.eql(true);
+  });
+
+  it("should remove jump completion listener", function(){
+    var center = new Kompute.Vector3D(0, 0, 0);
+    var size = new Kompute.Vector3D(50, 60, 70);
+    var entity = new Kompute.Steerable("steerable1", center, size);
+
+    entity.jumpDescriptor = { landingPosition: new Kompute.Vector3D() };
+
+    var called = false;
+    var callback = function(){
+      called = true;
+    };
+
+    entity.setJumpCompletionListener(callback);
+    expect(called).to.eql(false);
+    entity.removeJumpCompletionListener();
+    entity.onJumpCompleted();
+    expect(called).to.eql(false);
+  });
 });
 
 class MockSteeringBehavior extends Kompute.SteeringBehavior{
