@@ -24,6 +24,7 @@ var Steerable = function(id, center, size){
   this.isJumpTakenOff = false;
 
   this.jumpSpeed = Infinity;
+  this.jumpTime = 0;
 }
 
 Steerable.prototype = Object.create(Entity.prototype);
@@ -44,6 +45,10 @@ Steerable.prototype.update = function(){
 
   if (this.isJumpTakenOff){
     this.linearAcceleration.y += this.world.gravity;
+    this.jumpTime += delta;
+    if (this.jumpTime >= this.jumpDescriptor.equationResult.time){
+      this.onJumpCompleted();
+    }
   }
 
   var vect = vectorPool.get().copy(this.linearAcceleration).multiplyScalar(delta);
@@ -150,6 +155,8 @@ Steerable.prototype.jump = function(toRunupBehavior, jumpDescriptor){
 
   this.isJumpInitiated = true;
 
+  this.jumpTime = 0;
+
   return true;
 }
 
@@ -167,6 +174,16 @@ Steerable.prototype.onJumpTakeOff = function(){
   var equationResult = jumpDescriptor.equationResult;
 
   this.velocity.set(equationResult.vx, this.jumpSpeed, equationResult.vz);
+}
+
+Steerable.prototype.onJumpCompleted = function(){
+  this.isJumpInitiated = false;
+  this.isJumpReady = false;
+  this.isJumpTakenOff = false;
+
+  this.position.y = this.jumpDescriptor.landingPosition.y;
+  this.velocity.set(0, 0, 0);
+  this.linearAcceleration.set(0, 0, 0);
 }
 
 Object.defineProperty(Steerable.prototype, 'constructor', { value: Steerable,  enumerable: false, writable: true });
