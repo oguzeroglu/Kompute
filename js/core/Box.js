@@ -36,6 +36,12 @@ Box.prototype.intersectsBox = function(box){
               box.max.z < this.min.z || box.min.z > this.max.z);
 }
 
+Box.prototype.containsBox = function(box){
+  return (this.min.x <= box.min.x && box.max.x <= this.max.x &&
+			     this.min.y <= box.min.y && box.max.y <= this.max.y &&
+			        this.min.z <= box.min.z && box.max.z <= this.max.z);
+}
+
 Box.prototype.setFromTwoVectors = function(vec1, vec2, thickness){
   this.makeEmpty();
   this.expandByPoint(vec1);

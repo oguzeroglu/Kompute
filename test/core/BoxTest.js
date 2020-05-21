@@ -64,6 +64,18 @@ describe("Box", function(){
     expect(box1.intersectsBox(box3)).to.eql(false);
   });
 
+  it("should check if contains another box", function(){
+
+    var box1 = new Kompute.Box(new Kompute.Vector3D(), new Kompute.Vector3D(100, 100, 100));
+    var box2 = new Kompute.Box(new Kompute.Vector3D(10, 10, 10), new Kompute.Vector3D(10, 10, 10));
+
+    expect(box1.containsBox(box2)).to.eql(true);
+    expect(box2.containsBox(box1)).to.eql(false);
+
+    var box3 = new Kompute.Box(new Kompute.Vector3D(52, 52, 52), new Kompute.Vector3D(1, 1, 1));
+    expect(box1.containsBox(box3)).to.eql(false);
+  });
+
   it("should set from two vectors", function(){
 
     var box = new Kompute.Box(new Kompute.Vector3D(), new Kompute.Vector3D());
