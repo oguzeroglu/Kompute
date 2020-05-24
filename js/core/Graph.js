@@ -2,6 +2,8 @@ import { Edge } from "./Edge";
 
 var Graph = function(){
   this.connections = {};
+
+  this.totalVertexCount = 0;
 }
 
 Graph.prototype.addVertex = function(vertex){
@@ -25,6 +27,8 @@ Graph.prototype.addVertex = function(vertex){
   if (!this.connections[x][y][z]){
     this.connections[x][y][z] = [];
   }
+
+  this.totalVertexCount ++;
 
   return true;
 }
@@ -69,6 +73,8 @@ Graph.prototype.removeVertex = function(vertex){
       }
     }
   }
+
+  this.totalVertexCount --;
 
   return true;
 }

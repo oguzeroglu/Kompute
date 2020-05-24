@@ -8,6 +8,7 @@ describe("Graph", function(){
     var graph = new Kompute.Graph();
 
     expect(graph.connections).to.eql({});
+    expect(graph.totalVertexCount).to.eql(0);
   });
 
   it("should add vertex", function(){
@@ -20,6 +21,7 @@ describe("Graph", function(){
 
     expect(graph.connections[10][20][30]).to.eql([]);
     expect(res).to.eql(true);
+    expect(graph.totalVertexCount).to.eql(1);
 
     var vertex2 = new Kompute.Vector3D(10, 20, 40);
 
@@ -27,10 +29,12 @@ describe("Graph", function(){
 
     expect(graph.connections[10][20][40]).to.eql([]);
     expect(graph.connections[10][20][30]).to.eql([]);
+    expect(graph.totalVertexCount).to.eql(2);
     expect(res).to.eql(true);
 
     expect(graph.addVertex(vertex)).to.eql(false);
     expect(graph.addVertex(vertex2)).to.eql(false);
+    expect(graph.totalVertexCount).to.eql(2);
   });
 
   it("should remove vertex", function(){
@@ -50,14 +54,17 @@ describe("Graph", function(){
     graph.removeVertex(vertex);
 
     expect(graph.connections).to.eql({40: {50: {60: []}}});
+    expect(graph.totalVertexCount).to.eql(1);
 
     var vertex2 = new Kompute.Vector3D(40, 100, 70);
     graph.addVertex(vertex2);
     graph.removeVertex(vertex2);
     expect(graph.connections).to.eql({40: {50: {60: []}}});
+    expect(graph.totalVertexCount).to.eql(1);
 
     graph.removeVertex(new Kompute.Vector3D(40, 50, 60));
     expect(graph.connections).to.eql({});
+    expect(graph.totalVertexCount).to.eql(0);
 
     graph.addVertex(vertex);
     graph.addVertex(vertex2);
