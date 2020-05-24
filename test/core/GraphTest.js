@@ -158,4 +158,38 @@ describe("Graph", function(){
       40: {50: {60: []}}
     });
   });
+
+  it("should perform forEachNeighbor operation", function(){
+    var graph = new Kompute.Graph();
+
+    var vertex = new Kompute.Vector3D(10, 20, 30);
+    var vertex2 = new Kompute.Vector3D(40, 50, 60);
+
+    graph.addVertex(vertex);
+    graph.addVertex(vertex2);
+
+    graph.addEdge(vertex, vertex2);
+
+    var param1 = null, param2 = null, count = 0;
+
+    var fn = function(neighborVertex, cost){
+      param1 = neighborVertex;
+      param2 = cost;
+      count ++;
+    };
+
+    graph.forEachNeighbor(vertex, fn);
+
+    expect(count).to.eql(1);
+    expect(param1).to.eql(vertex2);
+    expect(param2).to.eql(vertex2.clone().sub(vertex).getLength());
+
+    var called = false;
+    var fn2 = function(){
+      called = true;
+    };
+
+    graph.forEachNeighbor(vertex2, fn2);
+    expect(called).to.eql(false);
+  });
 });

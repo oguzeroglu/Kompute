@@ -128,4 +128,17 @@ Graph.prototype.removeEdge = function(fromVertex, toVertex){
   return true;
 }
 
+Graph.prototype.forEachNeighbor = function(vertex, fn){
+  if (!this.hasVertex(vertex)){
+    return;
+  }
+
+  var ary = this.connections[vertex.x][vertex.y][vertex.z];
+
+  for (var i = 0; i < ary.length; i ++){
+    var edge = ary[i];
+    fn(edge.toVertex, edge.cost);
+  }
+}
+
 export { Graph };
