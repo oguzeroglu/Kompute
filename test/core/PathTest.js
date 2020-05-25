@@ -15,6 +15,7 @@ describe("Path", function(){
     expect(path1.isRewinding).to.eql(false);
     expect(path1.isFinished).to.eql(false);
     expect(path1.waypoints).to.eql([]);
+    expect(path1.length).to.eql(0);
 
     expect(path2.index).to.eql(0);
     expect(path2.loop).to.eql(false);
@@ -22,6 +23,7 @@ describe("Path", function(){
     expect(path2.isRewinding).to.eql(false);
     expect(path2.isFinished).to.eql(false);
     expect(path2.waypoints).to.eql([]);
+    expect(path2.length).to.eql(0);
 
     expect(path3.index).to.eql(0);
     expect(path3.loop).to.eql(false);
@@ -29,6 +31,7 @@ describe("Path", function(){
     expect(path3.isRewinding).to.eql(false);
     expect(path3.isFinished).to.eql(false);
     expect(path3.waypoints).to.eql([]);
+    expect(path3.length).to.eql(0);
   });
 
   it("should add waypoint", function(){

@@ -4,6 +4,8 @@ var Path = function(options){
 
   this.index = 0;
 
+  this.length = 0;
+
   this.loop = !!options.loop;
   this.rewind = !!options.rewind;
 
@@ -15,6 +17,7 @@ var Path = function(options){
 
 Path.prototype.addWaypoint = function(waypoint){
   this.waypoints.push(waypoint.clone());
+  this.length ++;
 }
 
 Path.prototype.getCurrentWaypoint = function(){
@@ -26,7 +29,7 @@ Path.prototype.next = function(){
     return;
   }
 
-  var len = this.waypoints.length;
+  var len = this.length
 
   if (!this.isRewinding){
     this.index ++;
@@ -58,7 +61,7 @@ Path.prototype.next = function(){
 }
 
 Path.prototype.getRandomWaypoint = function(){
-  return this.waypoints[Math.floor(Math.random() * this.waypoints.length)] || null;
+  return this.waypoints[Math.floor(Math.random() * this.length)] || null;
 }
 
 export { Path };
