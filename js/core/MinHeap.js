@@ -52,6 +52,23 @@ MinHeap.prototype.insert = function(heapNode){
   return true;
 }
 
+MinHeap.prototype.remove = function(node){
+  var index = this.data.indexOf(node);
+
+  if (index == -1){
+    return false;
+  }
+
+  var lastIndex = this.length - 1;
+  this.swap(index, lastIndex);
+  this.data[lastIndex] = null;
+  this.length --;
+
+  this.reconstruct(index);
+
+  return true;
+}
+
 MinHeap.prototype.heapCheck = function(rootIndex){
   var root = this.data[rootIndex];
 
@@ -105,7 +122,12 @@ MinHeap.prototype.pop = function(){
   this.data[lastIndex] = null;
   this.length --;
 
-  var rootIndex = 0;
+  this.reconstruct(0);
+
+  return minData;
+}
+
+MinHeap.prototype.reconstruct = function(rootIndex){
   var heapCheckResult = this.heapCheck(rootIndex);
   while (heapCheckResult != this.HEAP_CHECK_RESULT_OK){
     if (heapCheckResult == this.HEAP_CHECK_RESULT_LEFT){
@@ -120,8 +142,6 @@ MinHeap.prototype.pop = function(){
 
     heapCheckResult = this.heapCheck(rootIndex);
   }
-
-  return minData;
 }
 
 export { MinHeap };

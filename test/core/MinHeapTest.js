@@ -42,6 +42,57 @@ describe("MinHeap", function(){
     expect(minHeap.peek()).to.eql({priority: 0.1});
   });
 
+  it("should remove", function(){
+
+    var minHeap = new Kompute.MinHeap(3);
+
+    var n1 = {priority: 1};
+    var n2 = {priority: 2};
+    var n3 = {priority: 3};
+
+    expect(minHeap.remove(n1)).to.eql(false);
+    expect(minHeap.length).to.eql(0);
+
+    minHeap.insert(n1);
+    minHeap.insert(n2);
+    minHeap.insert(n3);
+
+    expect(minHeap.remove({priority: 4})).to.eql(false);
+    expect(minHeap.length).to.eql(3);
+
+    expect(minHeap.remove(n3)).to.eql(true);
+    expect(minHeap.length).to.eql(2);
+    expect(minHeap.data).to.eql([n1, n2, null]);
+
+    expect(minHeap.remove(n1)).to.eql(true);
+    expect(minHeap.length).to.eql(1);
+    expect(minHeap.data).to.eql([n2, null, null]);
+
+    expect(minHeap.remove(n2)).to.eql(true);
+    expect(minHeap.length).to.eql(0);
+    expect(minHeap.data).to.eql([null, null, null]);
+
+    minHeap = new Kompute.MinHeap(4);
+    var n4 = {priority: 4};
+    minHeap.insert(n1);
+    minHeap.insert(n2);
+    minHeap.insert(n3);
+    minHeap.insert(n4);
+
+    expect(minHeap.data).to.eql([n1, n2, n3, n4]);
+    minHeap.remove(n3);
+    expect(minHeap.data).to.eql([n1, n2, n4, null]);
+
+    minHeap.insert(n3);
+    expect(minHeap.data).to.eql([n1, n2, n4, n3]);
+    minHeap.remove(n2);
+    expect(minHeap.data).to.eql([n1, n3, n4, null]);
+    minHeap.insert(n2);
+    expect(minHeap.data).to.eql([n1, n2, n4, n3]);
+    minHeap.remove(n1);
+    expect(minHeap.data).to.eql([n2, n3, n4, null]);
+  });
+
   it("should do heap check", function(){
 
     var minHeap = new Kompute.MinHeap(0);
