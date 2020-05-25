@@ -147,4 +147,14 @@ Graph.prototype.forEachNeighbor = function(vertex, fn){
   }
 }
 
+Graph.prototype.forEachVertex = function(fn){
+  for (var x in this.connections){
+    for (var y in this.connections[x]){
+      for (var z in this.connections[x][y]){
+        fn(parseFloat(x), parseFloat(y), parseFloat(z));
+      }
+    }
+  }
+}
+
 export { Graph };

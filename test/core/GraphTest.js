@@ -199,4 +199,34 @@ describe("Graph", function(){
     graph.forEachNeighbor(vertex2, fn2);
     expect(called).to.eql(false);
   });
+
+  it("should run for each vertex", function(){
+    var graph = new Kompute.Graph();
+
+    var vertices = [];
+
+    var v1 = new Kompute.Vector3D(100, 200, 300);
+    var v2 = new Kompute.Vector3D(200, 300, 400);
+    var v3 = new Kompute.Vector3D(500, 600, 700);
+
+    graph.addVertex(v1);
+    graph.addVertex(v2);
+    graph.addVertex(v3);
+
+    var fn = function(x, y, z){
+      vertices.push(new Kompute.Vector3D(x, y, z));
+    };
+
+    graph.forEachVertex(fn);
+
+    expect(vertices.length).to.eql(3);
+
+    var totX = vertices[0].x + vertices[1].x + vertices[2].x;
+    var totY = vertices[0].y + vertices[1].y + vertices[2].y;
+    var totZ = vertices[0].z + vertices[1].z + vertices[2].z;
+
+    expect(totX).to.eql(800);
+    expect(totY).to.eql(1100);
+    expect(totZ).to.eql(1400);
+  });
 });
