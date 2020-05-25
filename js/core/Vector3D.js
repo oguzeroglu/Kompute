@@ -105,4 +105,12 @@ Vector3D.prototype.toFixed = function(num){
   return this.set(this.x.toFixed(num), this.y.toFixed(num), this.z.toFixed(num));
 }
 
+Vector3D.prototype.getDistanceSq = function(vec){
+  var xDiff = this.x - vec.x;
+  var yDiff = this.y - vec.y;
+  var zDiff = this.z - vec.z;
+  
+  return (xDiff * xDiff) + (yDiff * yDiff) + (zDiff * zDiff);
+}
+
 export { Vector3D };
