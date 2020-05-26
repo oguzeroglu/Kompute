@@ -144,4 +144,8 @@ MinHeap.prototype.reconstruct = function(rootIndex){
   }
 }
 
+MinHeap.prototype.hasNode = function(node){
+  return this.data.indexOf(node) >= 0;
+}
+
 export { MinHeap };

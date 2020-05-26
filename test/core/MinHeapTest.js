@@ -187,4 +187,17 @@ describe("MinHeap", function(){
       expect(minHeap.pop()).to.eql(original[i]);
     }
   });
+
+  it("should check if node exists", function(){
+
+    var minHeap = new Kompute.MinHeap(80);
+
+    var n1 = {priority: 1};
+
+    expect(minHeap.hasNode(n1)).to.eql(false);
+
+    minHeap.insert(n1);
+
+    expect(minHeap.hasNode(n1)).to.eql(true);
+  });
 });
