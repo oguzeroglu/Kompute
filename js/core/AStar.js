@@ -92,6 +92,9 @@ AStar.prototype.findShortestPath = function(fromVector, toVector){
   var searchID = this.searchID;
 
   var heap = this.heap;
+
+  heap.reset();
+
   var graph = this.graph;
   if (!graph.hasVertex(fromVector) || !graph.hasVertex(toVector)){
     return false;

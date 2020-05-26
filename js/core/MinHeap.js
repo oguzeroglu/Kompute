@@ -11,6 +11,14 @@ var MinHeap = function(maxNodeCount){
   this.HEAP_CHECK_RESULT_RIGHT = 2;
 }
 
+MinHeap.prototype.reset = function(){
+  for (var i = 0; i < this.data.length; i ++){
+    this.data[i] = null;
+  }
+
+  this.length = 0;
+}
+
 MinHeap.prototype.peek = function(){
   return this.data[0];
 }

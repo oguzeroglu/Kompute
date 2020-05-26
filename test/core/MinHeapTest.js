@@ -200,4 +200,21 @@ describe("MinHeap", function(){
 
     expect(minHeap.hasNode(n1)).to.eql(true);
   });
+
+  it("should reset", function(){
+    var minHeap = new Kompute.MinHeap(2);
+
+    var n1 = {priority: 1};
+    var n2 = {priority: 2};
+    minHeap.insert(n1);
+    minHeap.insert(n2);
+
+    expect(minHeap.data).not.to.eql([null, null]);
+    expect(minHeap.length).not.to.eql(0);
+
+    minHeap.reset();
+
+    expect(minHeap.data).to.eql([null, null]);
+    expect(minHeap.length).to.eql(0);
+  });
 });
