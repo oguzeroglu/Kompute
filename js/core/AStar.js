@@ -34,8 +34,8 @@ var AStar = function(graph){
   this.searchID = 0;
 }
 
-AStar.prototype.getHeapNode = function(x, y, z){
-  var nx = this.heapNodes[x];
+AStar.prototype.getHeapNode = function(x, y, z, heapNodes){
+  var nx = heapNodes ? heapNodes[x] : this.heapNodes[x];
   if (nx){
     var ny = nx[y];
     if (ny){
@@ -75,17 +75,21 @@ AStar.prototype.generatePath = function(endVector){
   return path;
 }
 
-AStar.prototype.markNodeAsClosed = function(node){
-  node.closedTag = this.searchID;
+AStar.prototype.markNodeAsClosed = function(node, searchID){
+  node.closedTag = searchID;
 }
 
-AStar.prototype.isNodeClosed = function(node){
-  return node.closedTag === this.searchID;
+AStar.prototype.isNodeClosed = function(node, searchID){
+  return node.closedTag === searchID;
 }
 
-AStar.prototype.getShortestPath = function(fromVector, toVector){
+AStar.prototype.findShortestPath = function(fromVector, toVector){
+
+  var heapNodes = this.heapNodes;
 
   this.searchID ++;
+
+  var searchID = this.searchID;
 
   var heap = this.heap;
   var graph = this.graph;
@@ -107,19 +111,19 @@ AStar.prototype.getShortestPath = function(fromVector, toVector){
       return this.generatePath(toVector);
     }
 
-    markNodeAsClosed(heapNode);
+    markNodeAsClosed(heapNode, searchID);
 
     vec.set(heapNode.x, heapNode.y, heapNode.z);
     graph.forEachNeighbor(vec, function(neighborVec, cost){
 
-      var neighborHeapNode = getHeapNode(neighborVec);
+      var neighborHeapNode = getHeapNode(neighborVec.x, neighborVec.y, neighborVec.z, heapNodes);
 
       var heuristicCost = neighborVec.getDistanceSq(toVector);
 
-      if (!isNodeClosed(neighborHeapNode)){
+      if (!isNodeClosed(neighborHeapNode, searchID)){
         neighborHeapNode.priority = cost + heuristicCost;
         neighborHeapNode.parent = heapNode;
-        markNodeAsClosed(neighborHeapNode);
+        markNodeAsClosed(neighborHeapNode, searchID);
         heap.insert(neighborHeapNode);
       }
 
