@@ -22,7 +22,7 @@ var AStar = function(graph){
     }
 
     if (!heapNodes[x][y][z]){
-      heapNodes[x][y][z] = { priority: 0, parent: null, x: x, y: y, z: z, closedTag: null };
+      heapNodes[x][y][z] = { priority: 0, parent: null, x: parseFloat(x), y: parseFloat(y), z: parseFloat(z), closedTag: null };
     }
   });
 
@@ -87,22 +87,58 @@ AStar.prototype.getShortestPath = function(fromVector, toVector){
 
   this.searchID ++;
 
+  var heap = this.heap;
   var graph = this.graph;
   if (!graph.hasVertex(fromVector) || !graph.hasVertex(toVector)){
     return false;
   }
 
-  var heapNode = this.getHeapNode(fromVector.x, fromVector.y, fromVector.z);
+  var getHeapNode = this.getHeapNode;
+  var isNodeClosed = this.isNodeClosed;
+  var markNodeAsClosed = this.markNodeAsClosed;
 
-  this.heap.insert(heapNode);
+  var heapNode = this.getHeapNode(fromVector.x, fromVector.y, fromVector.z);
+  var vec = vectorPool.get();
+
+  heap.insert(heapNode);
 
   while (heapNode){
     if (this.isNodeBelongToVector(heapNode, toVector)){
       return this.generatePath(toVector);
     }
 
-    heapNode = this.heap.pop();
+    markNodeAsClosed(heapNode);
+
+    vec.set(heapNode.x, heapNode.y, heapNode.z);
+    graph.forEachNeighbor(vec, function(neighborVec, cost){
+
+      var neighborHeapNode = getHeapNode(neighborVec);
+
+      var heuristicCost = neighborVec.getDistanceSq(toVector);
+
+      if (!isNodeClosed(neighborHeapNode)){
+        neighborHeapNode.priority = cost + heuristicCost;
+        neighborHeapNode.parent = heapNode;
+        markNodeAsClosed(neighborHeapNode);
+        heap.insert(neighborHeapNode);
+      }
+
+      if (heap.hasNode(neighborHeapNode)){
+        var currentPriority = heuristicCost + cost;
+
+        if (currentPriority < neighborHeapNode.priority){
+          neighborHeapNode.priority = currentPriority;
+          neighborHeapNode.parent = heapNode;
+          heap.remove(neighborHeapNode);
+          heap.insert(neighborHeapNode);
+        }
+      }
+    });
+
+    heapNode = heap.pop();
   }
+
+  return false;
 }
 
 export { AStar };
