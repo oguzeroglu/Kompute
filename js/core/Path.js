@@ -1,3 +1,5 @@
+import { Vector3D } from "./Vector3D";
+
 var Path = function(options){
 
   options = options || {};
@@ -13,6 +15,16 @@ var Path = function(options){
   this.isFinished = false;
 
   this.waypoints = [];
+
+  if (options.fixedLength){
+    for (var i = 0; i < options.fixedLength; i ++){
+      this.waypoints.push(new Vector3D());
+    }
+  }
+}
+
+Path.prototype.insertWaypoint = function(waypoint){
+  this.waypoints[this.length ++].copy(waypoint);
 }
 
 Path.prototype.addWaypoint = function(waypoint){

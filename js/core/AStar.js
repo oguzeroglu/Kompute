@@ -1,16 +1,14 @@
 import { Vector3D } from "./Vector3D";
+import { VectorPool } from "./VectorPool";
 import { Path } from "./Path";
 import { MinHeap } from "./MinHeap";
 
 var ZERO_VECTOR = new Vector3D();
+var vectorPool = new VectorPool(10);
 
 var AStar = function(graph){
 
-  var path = new Path();
-
-  for (var i = 0; i < graph.totalVertexCount; i ++){
-    path.waypoints.push(ZERO_VECTOR);
-  }
+  var path = new Path({ fixedLength: graph.totalVertexCount });
 
   var heapNodes = {};
 
@@ -24,7 +22,7 @@ var AStar = function(graph){
     }
 
     if (!heapNodes[x][y][z]){
-      heapNodes[x][y][z] = { priority: 0, parent: null, next: null };
+      heapNodes[x][y][z] = { priority: 0, parent: null, next: null, x: x, y: y, z: z };
     }
   });
 
@@ -50,5 +48,45 @@ AStar.prototype.isNodeBelongToVector = function(node, vector){
   return node === this.getHeapNode(vector.x, vector.y, vector.z);
 }
 
+AStar.prototype.generatePath = function(startVector){
+
+  var path = this.path;
+  path.length = 0;
+
+  var vec = startVector;
+  var heapNode = this.getHeapNode(startVector.x, startVector.y, startVector.z);
+
+  while (heapNode){
+    path.insertWaypoint(vec);
+
+    heapNode = heapNode.next;
+
+    if (heapNode){
+      vec = vectorPool.get().set(heapNode.x, heapNode.y, heapNode.z);
+    }
+  }
+
+  return path;
+}
+
+AStar.prototype.getShortestPath = function(fromVector, toVector){
+
+  var graph = this.graph;
+  if (!graph.hasVertex(fromVector) || !graph.hasVertex(toVector)){
+    return false;
+  }
+
+  var heapNode = this.getHeapNode(fromVector.x, fromVector.y, fromVector.z);
+
+  this.heap.insert(heapNode);
+
+  while (heapNode){
+    if (this.isNodeBelongToVector(heapNode, toVector)){
+      return this.generatePath(fromVector);
+    }
+
+    heapNode = this.heap.pop();
+  }
+}
 
 export { AStar };
