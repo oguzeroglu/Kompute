@@ -161,4 +161,16 @@ describe("Vector3D", function(){
 
     expect(vec.toFixed(3)).to.eql(new Kompute.Vector3D(0.012, 0.567, 0.454));
   });
+
+  it("should get distance square", function(){
+
+    var v1 = new Kompute.Vector3D(100, 200, 300);
+    var v2 = new Kompute.Vector3D(300, 400, 500);
+
+    var distanceSq = v1.getDistanceSq(v2);
+
+    var len = v1.sub(v2).getLength();
+
+    expect(distanceSq).to.eql(len * len);
+  });
 });

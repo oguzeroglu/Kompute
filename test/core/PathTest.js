@@ -8,6 +8,7 @@ describe("Path", function(){
     var path1 = new Kompute.Path({ loop: true });
     var path2 = new Kompute.Path({ rewind: true });
     var path3 = new Kompute.Path();
+    var path4 = new Kompute.Path({ fixedLength: 3 });
 
     expect(path1.index).to.eql(0);
     expect(path1.loop).to.eql(true);
@@ -15,6 +16,7 @@ describe("Path", function(){
     expect(path1.isRewinding).to.eql(false);
     expect(path1.isFinished).to.eql(false);
     expect(path1.waypoints).to.eql([]);
+    expect(path1.length).to.eql(0);
 
     expect(path2.index).to.eql(0);
     expect(path2.loop).to.eql(false);
@@ -22,6 +24,7 @@ describe("Path", function(){
     expect(path2.isRewinding).to.eql(false);
     expect(path2.isFinished).to.eql(false);
     expect(path2.waypoints).to.eql([]);
+    expect(path2.length).to.eql(0);
 
     expect(path3.index).to.eql(0);
     expect(path3.loop).to.eql(false);
@@ -29,6 +32,15 @@ describe("Path", function(){
     expect(path3.isRewinding).to.eql(false);
     expect(path3.isFinished).to.eql(false);
     expect(path3.waypoints).to.eql([]);
+    expect(path3.length).to.eql(0);
+
+    expect(path4.index).to.eql(0);
+    expect(path4.loop).to.eql(false);
+    expect(path4.rewind).to.eql(false);
+    expect(path4.isRewinding).to.eql(false);
+    expect(path4.isFinished).to.eql(false);
+    expect(path4.waypoints).to.eql([new Kompute.Vector3D(), new Kompute.Vector3D(), new Kompute.Vector3D()]);
+    expect(path4.length).to.eql(0);
   });
 
   it("should add waypoint", function(){
@@ -44,6 +56,22 @@ describe("Path", function(){
     path.addWaypoint(vp3);
 
     expect(path.waypoints).to.eql([vp1, vp2, vp3]);
+  });
+
+  it("should insert waypoint", function(){
+
+    var vp1 = new Kompute.Vector3D(Math.random(), Math.random(), Math.random());
+    var vp2 = new Kompute.Vector3D(Math.random(), Math.random(), Math.random());
+    var vp3 = new Kompute.Vector3D(Math.random(), Math.random(), Math.random());
+
+    var path = new Kompute.Path({ fixedLength: 3 });
+
+    path.insertWaypoint(vp1);
+    path.insertWaypoint(vp2);
+    path.insertWaypoint(vp3);
+
+    expect(path.waypoints).to.eql([vp1, vp2, vp3]);
+    expect(path.length).to.eql(3);
   });
 
   it("should get current waypoint", function(){
