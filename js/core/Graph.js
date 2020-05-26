@@ -96,7 +96,7 @@ Graph.prototype.addEdge = function(fromVertex, toVertex){
 
   for (var i = 0; i < edges.length; i ++){
     var to = edges[i].toVertex;
-    if (to.x == toVertex.x && to.y == toVertex.y && toVertex.z == toVertex.z){
+    if (to.x == toVertex.x && to.y == toVertex.y && to.z == toVertex.z){
       return false;
     }
   }
