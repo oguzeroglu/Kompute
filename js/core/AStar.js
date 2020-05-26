@@ -22,7 +22,7 @@ var AStar = function(graph){
     }
 
     if (!heapNodes[x][y][z]){
-      heapNodes[x][y][z] = { priority: 0, parent: null, x: parseFloat(x), y: parseFloat(y), z: parseFloat(z), closedTag: null };
+      heapNodes[x][y][z] = { priority: 0, parent: null, x: parseFloat(x), y: parseFloat(y), z: parseFloat(z), closedTag: null, parentTag: null };
     }
   });
 
@@ -61,7 +61,11 @@ AStar.prototype.generatePath = function(endVector){
   while (heapNode){
     path.insertWaypoint(vec);
 
+    var parentTag = heapNode.parentTag;
     heapNode = heapNode.parent;
+    if (heapNode && parentTag != this.searchID){
+      heapNode = null;
+    }
 
     if (heapNode){
       vec = vectorPool.get().set(heapNode.x, heapNode.y, heapNode.z);
@@ -126,6 +130,7 @@ AStar.prototype.findShortestPath = function(fromVector, toVector){
       if (!isNodeClosed(neighborHeapNode, searchID)){
         neighborHeapNode.priority = cost + heuristicCost;
         neighborHeapNode.parent = heapNode;
+        neighborHeapNode.parentTag = searchID;
         markNodeAsClosed(neighborHeapNode, searchID);
         heap.insert(neighborHeapNode);
       }
@@ -136,6 +141,7 @@ AStar.prototype.findShortestPath = function(fromVector, toVector){
         if (currentPriority < neighborHeapNode.priority){
           neighborHeapNode.priority = currentPriority;
           neighborHeapNode.parent = heapNode;
+          neighborHeapNode.parentTag = searchID;
           heap.remove(neighborHeapNode);
           heap.insert(neighborHeapNode);
         }

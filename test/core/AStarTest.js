@@ -18,9 +18,9 @@ describe("AStar", function(){
     var aStar = new Kompute.AStar(graph);
 
     var zeroVector = new Kompute.Vector3D();
-    var heapNode1 = { priority: 0, parent: null, x: 100, y: 200, z: 300, closedTag: null };
-    var heapNode2 = { priority: 0, parent: null, x: 400, y: 500, z: 600, closedTag: null };
-    var heapNode3 = { priority: 0, parent: null, x: 700, y: 800, z: 900, closedTag: null };
+    var heapNode1 = { priority: 0, parent: null, x: 100, y: 200, z: 300, closedTag: null, parentTag: null };
+    var heapNode2 = { priority: 0, parent: null, x: 400, y: 500, z: 600, closedTag: null, parentTag: null };
+    var heapNode3 = { priority: 0, parent: null, x: 700, y: 800, z: 900, closedTag: null, parentTag: null };
 
     expect(aStar.path.waypoints).to.eql([zeroVector, zeroVector, zeroVector]);
 
@@ -51,9 +51,9 @@ describe("AStar", function(){
 
     var aStar = new Kompute.AStar(graph);
 
-    expect(aStar.getHeapNode(v1.x, v1.y, v1.z)).to.eql({ priority: 0, parent: null, x: 100, y: 200, z: 300, closedTag: null });
-    expect(aStar.getHeapNode(v2.x, v2.y, v2.z)).to.eql({ priority: 0, parent: null, x: 400, y: 500, z: 600, closedTag: null });
-    expect(aStar.getHeapNode(v3.x, v3.y, v3.z)).to.eql({ priority: 0, parent: null, x: 700, y: 800, z: 900, closedTag: null });
+    expect(aStar.getHeapNode(v1.x, v1.y, v1.z)).to.eql({ priority: 0, parent: null, x: 100, y: 200, z: 300, closedTag: null, parentTag: null });
+    expect(aStar.getHeapNode(v2.x, v2.y, v2.z)).to.eql({ priority: 0, parent: null, x: 400, y: 500, z: 600, closedTag: null, parentTag: null });
+    expect(aStar.getHeapNode(v3.x, v3.y, v3.z)).to.eql({ priority: 0, parent: null, x: 700, y: 800, z: 900, closedTag: null, parentTag: null });
     expect(aStar.getHeapNode(600, 700, 100)).to.eql(null);
   });
 
@@ -99,6 +99,7 @@ describe("AStar", function(){
 
     var aStar = new Kompute.AStar(graph);
 
+    aStar.getHeapNode(v1.x, v1.y, v1.z).parentTag = 0;
     aStar.getHeapNode(v1.x, v1.y, v1.z).parent = aStar.getHeapNode(v3.x, v3.y, v3.z);
 
     var path = aStar.generatePath(v1);
@@ -114,6 +115,7 @@ describe("AStar", function(){
     path.next();
     expect(path.getCurrentWaypoint()).to.eql(false);
 
+    aStar.getHeapNode(v3.x, v3.y, v3.z).parentTag = 0;
     aStar.getHeapNode(v3.x, v3.y, v3.z).parent = aStar.getHeapNode(v2.x, v2.y, v2.z);
 
     path = aStar.generatePath(v1);
@@ -252,5 +254,107 @@ describe("AStar", function(){
     expect(path.getCurrentWaypoint()).to.eql(v3);
     path.next();
     expect(path.getCurrentWaypoint()).to.eql(false);
+  });
+});
+
+describe("AStar - Integration", function(){
+
+  it("should find shortest path", function(){
+    var aVec = new Kompute.Vector3D(200, 150, -200);
+    var bVec = new Kompute.Vector3D(100, 150, -200);
+    var cVec = new Kompute.Vector3D(100, 150, -100);
+    var dVec = new Kompute.Vector3D(100, 150, 0);
+    var eVec = new Kompute.Vector3D(200, 150, 0);
+    var fVec = new Kompute.Vector3D(200, 150, 200);
+    var gVec = new Kompute.Vector3D(0, 150, 200);
+    var hVec = new Kompute.Vector3D(0, 150, 100);
+    var jVec = new Kompute.Vector3D(0, 150, 0);
+    var xVec = new Kompute.Vector3D(-200, 150, 0);
+    var yVec = new Kompute.Vector3D(-200, 150, -200);
+    var zVec = new Kompute.Vector3D(-200, 150, 200);
+    var wVec = new Kompute.Vector3D(-100, 150, -200);
+
+    var graph = new Kompute.Graph();
+
+    graph.addVertex(aVec);
+    graph.addVertex(bVec);
+    graph.addVertex(cVec);
+    graph.addVertex(dVec);
+    graph.addVertex(eVec);
+    graph.addVertex(fVec);
+    graph.addVertex(gVec);
+    graph.addVertex(hVec);
+    graph.addVertex(jVec);
+    graph.addVertex(xVec);
+    graph.addVertex(yVec);
+    graph.addVertex(zVec);
+    graph.addVertex(wVec);
+
+    graph.addEdge(aVec, bVec);
+    graph.addEdge(bVec, aVec);
+
+    graph.addEdge(bVec, cVec);
+    graph.addEdge(cVec, bVec);
+
+    graph.addEdge(cVec, dVec);
+    graph.addEdge(dVec, cVec);
+
+    graph.addEdge(eVec, dVec);
+    graph.addEdge(dVec, eVec);
+
+    graph.addEdge(eVec, fVec);
+    graph.addEdge(fVec, eVec);
+
+    graph.addEdge(fVec, gVec);
+    graph.addEdge(gVec, fVec);
+
+    graph.addEdge(gVec, hVec);
+    graph.addEdge(hVec, gVec);
+
+    graph.addEdge(hVec, jVec);
+    graph.addEdge(jVec, hVec);
+
+    graph.addEdge(jVec, xVec);
+    graph.addEdge(xVec, jVec);
+
+    graph.addEdge(xVec, yVec);
+    graph.addEdge(yVec, xVec);
+
+    graph.addEdge(xVec, zVec);
+    graph.addEdge(zVec, xVec);
+
+    graph.addEdge(yVec, wVec);
+    graph.addEdge(wVec, yVec);
+
+    graph.addEdge(dVec, jVec);
+    graph.addEdge(jVec, dVec);
+
+    var aStar = new Kompute.AStar(graph);
+
+    var find = function(from, to){
+      var path = aStar.findShortestPath(from, to);
+      if (!path){
+        return false;
+      }
+
+      var ary = [];
+
+      var cur = path.getCurrentWaypoint();
+      while (cur){
+        ary.push(cur);
+        path.next();
+        cur = path.getCurrentWaypoint();
+      }
+
+      return ary;
+    }
+
+    expect(find(aVec, wVec)).to.eql([aVec, bVec, cVec, dVec, jVec, xVec, yVec, wVec]);
+    expect(find(xVec, wVec)).to.eql([xVec, yVec, wVec]);
+    expect(find(wVec, aVec)).to.eql([wVec, yVec, xVec, jVec, dVec, cVec, bVec, aVec]);
+    expect(find(aVec, zVec)).to.eql([aVec, bVec, cVec, dVec, jVec, xVec, zVec]);
+    expect(find(aVec, gVec)).to.eql([aVec, bVec, cVec, dVec, jVec, hVec, gVec]);
+    expect(find(jVec, gVec)).to.eql([jVec, hVec, gVec]);
+    expect(find(fVec, jVec)).to.eql([fVec, gVec, hVec, jVec]);
   });
 });
