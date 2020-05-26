@@ -22,7 +22,7 @@ var AStar = function(graph){
     }
 
     if (!heapNodes[x][y][z]){
-      heapNodes[x][y][z] = { priority: 0, parent: null, next: null, x: x, y: y, z: z };
+      heapNodes[x][y][z] = { priority: 0, parent: null, next: null, x: x, y: y, z: z, closedTag: null };
     }
   });
 
@@ -30,6 +30,8 @@ var AStar = function(graph){
   this.path = path;
   this.graph = graph;
   this.heap = new MinHeap(graph.totalVertexCount);
+
+  this.searchID = 0;
 }
 
 AStar.prototype.getHeapNode = function(x, y, z){
@@ -69,7 +71,17 @@ AStar.prototype.generatePath = function(startVector){
   return path;
 }
 
+AStar.prototype.markNodeAsClosed = function(node){
+  node.closedTag = this.searchID;
+}
+
+AStar.prototype.isNodeClosed = function(node){
+  return node.closedTag === this.searchID;
+}
+
 AStar.prototype.getShortestPath = function(fromVector, toVector){
+
+  this.searchID ++;
 
   var graph = this.graph;
   if (!graph.hasVertex(fromVector) || !graph.hasVertex(toVector)){
