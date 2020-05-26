@@ -18,9 +18,9 @@ describe("AStar", function(){
     var aStar = new Kompute.AStar(graph);
 
     var zeroVector = new Kompute.Vector3D();
-    var heapNode1 = { priority: 0, parent: null, next: null, x: 100, y: 200, z: 300, closedTag: null };
-    var heapNode2 = { priority: 0, parent: null, next: null, x: 400, y: 500, z: 600, closedTag: null };
-    var heapNode3 = { priority: 0, parent: null, next: null, x: 700, y: 800, z: 900, closedTag: null };
+    var heapNode1 = { priority: 0, parent: null, x: 100, y: 200, z: 300, closedTag: null };
+    var heapNode2 = { priority: 0, parent: null, x: 400, y: 500, z: 600, closedTag: null };
+    var heapNode3 = { priority: 0, parent: null, x: 700, y: 800, z: 900, closedTag: null };
 
     expect(aStar.path.waypoints).to.eql([zeroVector, zeroVector, zeroVector]);
 
@@ -51,9 +51,9 @@ describe("AStar", function(){
 
     var aStar = new Kompute.AStar(graph);
 
-    expect(aStar.getHeapNode(v1.x, v1.y, v1.z)).to.eql({ priority: 0, parent: null, next: null, x: 100, y: 200, z: 300, closedTag: null });
-    expect(aStar.getHeapNode(v2.x, v2.y, v2.z)).to.eql({ priority: 0, parent: null, next: null, x: 400, y: 500, z: 600, closedTag: null });
-    expect(aStar.getHeapNode(v3.x, v3.y, v3.z)).to.eql({ priority: 0, parent: null, next: null, x: 700, y: 800, z: 900, closedTag: null });
+    expect(aStar.getHeapNode(v1.x, v1.y, v1.z)).to.eql({ priority: 0, parent: null, x: 100, y: 200, z: 300, closedTag: null });
+    expect(aStar.getHeapNode(v2.x, v2.y, v2.z)).to.eql({ priority: 0, parent: null, x: 400, y: 500, z: 600, closedTag: null });
+    expect(aStar.getHeapNode(v3.x, v3.y, v3.z)).to.eql({ priority: 0, parent: null, x: 700, y: 800, z: 900, closedTag: null });
     expect(aStar.getHeapNode(600, 700, 100)).to.eql(null);
   });
 
@@ -99,19 +99,37 @@ describe("AStar", function(){
 
     var aStar = new Kompute.AStar(graph);
 
-    aStar.getHeapNode(v1.x, v1.y, v1.z).next = aStar.getHeapNode(v3.x, v3.y, v3.z);
+    aStar.getHeapNode(v1.x, v1.y, v1.z).parent = aStar.getHeapNode(v3.x, v3.y, v3.z);
 
     var path = aStar.generatePath(v1);
 
     expect(path.waypoints).to.eql([v1, v3, new Kompute.Vector3D()]);
     expect(path.length).to.eql(2);
+    expect(path.isRewinding).to.eql(true);
+    expect(path.index).to.eql(1);
 
-    aStar.getHeapNode(v3.x, v3.y, v3.z).next = aStar.getHeapNode(v2.x, v2.y, v2.z);
+    expect(path.getCurrentWaypoint()).to.eql(v3);
+    path.next();
+    expect(path.getCurrentWaypoint()).to.eql(v1);
+    path.next();
+    expect(path.getCurrentWaypoint()).to.eql(false);
+
+    aStar.getHeapNode(v3.x, v3.y, v3.z).parent = aStar.getHeapNode(v2.x, v2.y, v2.z);
 
     path = aStar.generatePath(v1);
 
     expect(path.waypoints).to.eql([v1, v3, v2]);
     expect(path.length).to.eql(3);
+    expect(path.isRewinding).to.eql(true);
+    expect(path.index).to.eql(2);
+
+    expect(path.getCurrentWaypoint()).to.eql(v2);
+    path.next();
+    expect(path.getCurrentWaypoint()).to.eql(v3);
+    path.next();
+    expect(path.getCurrentWaypoint()).to.eql(v1);
+    path.next();
+    expect(path.getCurrentWaypoint()).to.eql(false);
   });
 
   it("should mark node as closed", function(){

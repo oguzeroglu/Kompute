@@ -22,7 +22,7 @@ var AStar = function(graph){
     }
 
     if (!heapNodes[x][y][z]){
-      heapNodes[x][y][z] = { priority: 0, parent: null, next: null, x: x, y: y, z: z, closedTag: null };
+      heapNodes[x][y][z] = { priority: 0, parent: null, x: x, y: y, z: z, closedTag: null };
     }
   });
 
@@ -50,23 +50,27 @@ AStar.prototype.isNodeBelongToVector = function(node, vector){
   return node === this.getHeapNode(vector.x, vector.y, vector.z);
 }
 
-AStar.prototype.generatePath = function(startVector){
+AStar.prototype.generatePath = function(endVector){
 
   var path = this.path;
   path.length = 0;
 
-  var vec = startVector;
-  var heapNode = this.getHeapNode(startVector.x, startVector.y, startVector.z);
+  var vec = endVector;
+  var heapNode = this.getHeapNode(vec.x, vec.y, vec.z);
 
   while (heapNode){
     path.insertWaypoint(vec);
 
-    heapNode = heapNode.next;
+    heapNode = heapNode.parent;
 
     if (heapNode){
       vec = vectorPool.get().set(heapNode.x, heapNode.y, heapNode.z);
     }
   }
+
+  path.isRewinding = true;
+  path.index = path.length - 1;
+  path.isFinished = false;
 
   return path;
 }
@@ -94,7 +98,7 @@ AStar.prototype.getShortestPath = function(fromVector, toVector){
 
   while (heapNode){
     if (this.isNodeBelongToVector(heapNode, toVector)){
-      return this.generatePath(fromVector);
+      return this.generatePath(toVector);
     }
 
     heapNode = this.heap.pop();
