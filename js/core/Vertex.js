@@ -3,7 +3,7 @@ import { Vector3D } from "./Vector3D";
 
 var VERTEX_ENTITY_SIZE = new Vector3D(1, 1, 1);
 
-var Vertex = function(positionVector){
+var Vertex = function(positionVector, graph){
 
   var position = positionVector.clone();
 
@@ -15,6 +15,7 @@ var Vertex = function(positionVector){
   Entity.call(this, 'vertex#' + uuid, position, VERTEX_ENTITY_SIZE);
 
   this.position = position;
+  this.graph = graph;
 }
 
 Vertex.prototype = Object.create(Entity.prototype);

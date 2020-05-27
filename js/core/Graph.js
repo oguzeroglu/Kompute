@@ -1,6 +1,9 @@
 import { Edge } from "./Edge";
 
 var Graph = function(){
+
+  this.world = null
+
   this.connections = {};
 
   this.totalVertexCount = 0;
@@ -29,6 +32,8 @@ Graph.prototype.addVertex = function(vertex){
   }
 
   this.totalVertexCount ++;
+
+
 
   return true;
 }

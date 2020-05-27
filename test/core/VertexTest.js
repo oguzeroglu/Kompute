@@ -7,7 +7,9 @@ describe("Vertex", function(){
 
     var position = new Kompute.Vector3D(100, 200, 300);
 
-    var vertex = new Kompute.Vertex(position);
+    var graph = new Kompute.Graph();
+
+    var vertex = new Kompute.Vertex(position, graph);
 
     var box = new Kompute.Box(position, new Kompute.Vector3D(1, 1, 1));
 
@@ -16,5 +18,6 @@ describe("Vertex", function(){
     expect(vertex.position).to.eql(position);
     expect(vertex.box).to.eql(box);
     expect(vertex.nearbyObject).to.eql(null);
+    expect(vertex.graph).to.equal(graph);
   });
 });

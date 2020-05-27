@@ -1,5 +1,6 @@
 import Nearby from "../third-party/Nearby";
 import { Vector3D } from "./Vector3D";
+import { Vertex } from "./Vertex";
 
 var World = function(width, height, depth, binSize){
   this.nearby = new Nearby(width, height, depth, binSize);
@@ -15,6 +16,16 @@ World.prototype.setGravity = function(gravity){
 
 World.prototype.getEntityByID = function(entityID){
   return this.entititesByID[entityID] || null;
+}
+
+World.prototype.insertGraph = function(graph){
+  var self = this;
+
+  graph.forEachVertex(function(x, y, z){
+    self.insertEntity(new Vertex(new Vector3D(x, y, z), graph));
+  });
+
+  graph.world = this;
 }
 
 World.prototype.insertEntity = function(entity){

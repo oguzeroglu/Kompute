@@ -32,6 +32,38 @@ describe("World", function(){
     }
   });
 
+  it("should insert graph", function(){
+
+    var graph = new Kompute.Graph();
+
+    graph.addVertex(new Kompute.Vector3D(100, 200, 300));
+    graph.addVertex(new Kompute.Vector3D(400, 500, 600));
+    graph.addVertex(new Kompute.Vector3D(2000, 2000, 2000));
+
+    var world = new Kompute.World(1000, 1000, 1000, 10);
+
+    world.insertGraph(graph);
+
+    expect(graph.world).to.equal(world);
+
+    var entities = [];
+    world.forEachEntity(function(entity){
+      entities.push(entity);
+    });
+
+    expect(entities.length).to.eql(3);
+
+    var nearbyObjects = world.getNearbyObjects(new Kompute.Vector3D(100, 200, 300));
+    var array = Array.from(nearbyObjects);
+
+    expect(array.length).to.eql(1);
+
+    var vertex = world.getEntityByID(array[0].id);
+
+    expect(vertex.graph).to.equal(graph);
+    expect(vertex.position).to.eql(new Kompute.Vector3D(100, 200, 300));
+  });
+
   it("should update entity", function(){
 
     var center = new Kompute.Vector3D(10, 10, 10);
