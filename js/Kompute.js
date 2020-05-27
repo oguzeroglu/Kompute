@@ -10,6 +10,7 @@ export { Edge } from "./core/Edge";
 export { Graph } from "./core/Graph";
 export { MinHeap } from "./core/MinHeap";
 export { AStar } from "./core/AStar";
+export { Vertex } from "./core/Vertex";
 export { Steerable } from "./steering/Steerable";
 export { SteerResult } from "./steering/SteerResult";
 export { JumpDescriptor } from "./steering/JumpDescriptor";
