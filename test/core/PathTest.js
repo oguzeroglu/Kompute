@@ -218,4 +218,40 @@ describe("Path", function(){
     var path = new Kompute.Path({});
     expect(path.getRandomWaypoint()).to.eql(null);
   });
+
+  it("should execute finishCallback when finished", function(){
+    var path = new Kompute.Path({});
+
+    path.addWaypoint(new Kompute.Vector3D(Math.random(), Math.random(), Math.random()));
+    path.addWaypoint(new Kompute.Vector3D(Math.random(), Math.random(), Math.random()));
+    path.addWaypoint(new Kompute.Vector3D(Math.random(), Math.random(), Math.random()));
+
+    var called = false;
+    path.finishCallback = function(){
+      called = true;
+    };
+
+    path.next();
+    expect(called).to.eql(false);
+    path.next();
+    expect(called).to.eql(false);
+    path.next();
+    expect(called).to.eql(true);
+    called = false;
+    path.next();
+    expect(called).to.eql(false);
+
+    path = new Kompute.Path({ loop: true });
+
+    path.addWaypoint(new Kompute.Vector3D(Math.random(), Math.random(), Math.random()));
+    path.addWaypoint(new Kompute.Vector3D(Math.random(), Math.random(), Math.random()));
+    path.addWaypoint(new Kompute.Vector3D(Math.random(), Math.random(), Math.random()));
+
+    path.next();
+    expect(called).to.eql(false);
+    path.next();
+    expect(called).to.eql(false);
+    path.next();
+    expect(called).to.eql(false);
+  });
 });

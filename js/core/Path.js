@@ -36,6 +36,12 @@ Path.prototype.getCurrentWaypoint = function(){
   return this.isFinished ? false : (this.waypoints[this.index] || false);
 }
 
+Path.prototype.onFinished = function(){
+  if (this.finishCallback) {
+    this.finishCallback();
+  }
+}
+
 Path.prototype.next = function(){
   if (this.isFinished){
     return;
@@ -55,6 +61,7 @@ Path.prototype.next = function(){
         this.index = 0;
       }else{
         this.isFinished = true;
+        this.onFinished();
       }
     }
   }else{
@@ -67,6 +74,7 @@ Path.prototype.next = function(){
         this.isRewinding = false;
       }else{
         this.isFinished = true;
+        this.onFinished();
       }
     }
   }
