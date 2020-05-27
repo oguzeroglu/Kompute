@@ -1,4 +1,5 @@
 import { Edge } from "./Edge";
+import { Vertex } from "./Vertex";
 
 var Graph = function(){
 
@@ -7,6 +8,36 @@ var Graph = function(){
   this.connections = {};
 
   this.totalVertexCount = 0;
+}
+
+Graph.prototype.findClosestVertexToPoint = function(pointVector){
+
+  var world = this.world;
+
+  if (!world){
+    return null;
+  }
+
+  var dist = Infinity, closest = null;
+
+  var res = this.world.getNearbyObjects(pointVector);
+  for (var obj of res){
+    var entity = world.getEntityByID(obj.id);
+
+    if ((entity instanceof Vertex) && entity.graph === this){
+
+      var curDist = pointVector.getDistanceSq(entity.position);
+      if (curDist < dist){
+        closest = entity;
+      }
+    }
+  }
+
+  if (closest){
+    return closest.position;
+  }
+
+  return null;
 }
 
 Graph.prototype.addVertex = function(vertex){

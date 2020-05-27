@@ -230,4 +230,29 @@ describe("Graph", function(){
     expect(totY).to.eql(1100);
     expect(totZ).to.eql(1400);
   });
+
+  it("should find closest vertex to point", function(){
+
+    var graph = new Kompute.Graph();
+
+    var v1 = new Kompute.Vector3D(0, 0, 0);
+    var v2 = new Kompute.Vector3D(50, 50, 50);
+    var v3 = new Kompute.Vector3D(-50, -50, -50);
+
+    graph.addVertex(v1);
+    graph.addVertex(v2);
+    graph.addVertex(v3);
+
+    var world = new Kompute.World(1000, 1000, 1000, 10);
+
+    expect(graph.findClosestVertexToPoint(new Kompute.Vector3D())).to.eql(null);
+
+    world.insertGraph(graph);
+
+    expect(graph.findClosestVertexToPoint(new Kompute.Vector3D(5, 5, 5))).to.eql(v1);
+    expect(graph.findClosestVertexToPoint(new Kompute.Vector3D(60, 60, 60))).to.eql(v2);
+    expect(graph.findClosestVertexToPoint(new Kompute.Vector3D(-60, -60, -60))).to.eql(v3);
+
+    expect(graph.findClosestVertexToPoint(new Kompute.Vector3D(500, 500, 500))).to.eql(null);
+  });
 });
