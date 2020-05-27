@@ -19,13 +19,34 @@ World.prototype.getEntityByID = function(entityID){
 }
 
 World.prototype.insertGraph = function(graph){
+  if (graph.world){
+    return;
+  }
+
   var self = this;
 
   graph.forEachVertex(function(x, y, z){
-    self.insertEntity(new Vertex(new Vector3D(x, y, z), graph));
+    var vertex = new Vertex(new Vector3D(x, y, z), graph);
+    self.insertEntity(vertex);
+    graph.vertexIDs.push(vertex.id);
   });
 
   graph.world = this;
+}
+
+World.prototype.removeGraph = function(graph){
+  if (!graph.world){
+    return;
+  }
+
+  for (var i = 0; i < graph.vertexIDs.length; i ++){
+    var vertexID = graph.vertexIDs[i];
+    var entity = this.getEntityByID(vertexID);
+    this.removeEntity(entity);
+  }
+
+  graph.world = null;
+  graph.vertexIDs = [];
 }
 
 World.prototype.insertEntity = function(entity){

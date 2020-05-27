@@ -45,6 +45,14 @@ describe("World", function(){
     world.insertGraph(graph);
 
     expect(graph.world).to.equal(world);
+    expect(graph.vertexIDs.length).to.eql(3);
+
+    expect(graph.vertexIDs[0].startsWith("vertex#")).to.eql(true);
+    expect(graph.vertexIDs[1].startsWith("vertex#")).to.eql(true);
+    expect(graph.vertexIDs[2].startsWith("vertex#")).to.eql(true);
+
+    world.insertGraph(graph);
+    expect(graph.vertexIDs.length).to.eql(3);
 
     var entities = [];
     world.forEachEntity(function(entity){
@@ -62,6 +70,32 @@ describe("World", function(){
 
     expect(vertex.graph).to.equal(graph);
     expect(vertex.position).to.eql(new Kompute.Vector3D(100, 200, 300));
+  });
+
+  it("should remove graph", function(){
+    var graph = new Kompute.Graph();
+
+    graph.addVertex(new Kompute.Vector3D(100, 200, 300));
+    graph.addVertex(new Kompute.Vector3D(400, 500, 600));
+    graph.addVertex(new Kompute.Vector3D(2000, 2000, 2000));
+
+    var world = new Kompute.World(1000, 1000, 1000, 10);
+
+    world.insertGraph(graph);
+    world.removeGraph(graph);
+
+    expect(graph.vertexIDs.length).to.eql(0);
+
+    var entities = [];
+    world.forEachEntity(function(entity){
+      entities.push(entity);
+    });
+
+    expect(entities.length).to.eql(0);
+    var nearbyObjects = world.getNearbyObjects(new Kompute.Vector3D(100, 200, 300));
+    var array = Array.from(nearbyObjects);
+
+    expect(array.length).to.eql(0);
   });
 
   it("should update entity", function(){

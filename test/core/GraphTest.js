@@ -10,6 +10,7 @@ describe("Graph", function(){
     expect(graph.connections).to.eql({});
     expect(graph.totalVertexCount).to.eql(0);
     expect(graph.world).to.eql(null);
+    expect(graph.vertexIDs).to.eql([]);
   });
 
   it("should add vertex", function(){

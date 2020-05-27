@@ -8,6 +8,8 @@ var Graph = function(){
   this.connections = {};
 
   this.totalVertexCount = 0;
+
+  this.vertexIDs = [];
 }
 
 Graph.prototype.findClosestVertexToPoint = function(pointVector){
