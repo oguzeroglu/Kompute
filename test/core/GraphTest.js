@@ -283,3 +283,51 @@ describe("Graph", function(){
     expect(edges[2]).to.eql(new Kompute.Edge(v3, v1));
   });
 });
+
+describe("Graph - Integration", function(){
+
+  it("should find closest vertex to point", function(){
+    var aVec = new Kompute.Vector3D(200, 150, -200);
+    var bVec = new Kompute.Vector3D(100, 150, -200);
+    var cVec = new Kompute.Vector3D(100, 150, -100);
+    var dVec = new Kompute.Vector3D(100, 150, 0);
+    var eVec = new Kompute.Vector3D(200, 150, 0);
+    var fVec = new Kompute.Vector3D(200, 150, 200);
+    var gVec = new Kompute.Vector3D(0, 150, 200);
+    var hVec = new Kompute.Vector3D(0, 150, 100);
+    var jVec = new Kompute.Vector3D(0, 150, 0);
+    var xVec = new Kompute.Vector3D(-200, 150, 0);
+    var yVec = new Kompute.Vector3D(-200, 150, -200);
+    var zVec = new Kompute.Vector3D(-200, 150, 200);
+    var wVec = new Kompute.Vector3D(-100, 150, -200);
+
+    var graph = new Kompute.Graph();
+
+    graph.addVertex(aVec);
+    graph.addVertex(bVec);
+    graph.addVertex(cVec);
+    graph.addVertex(dVec);
+    graph.addVertex(eVec);
+    graph.addVertex(fVec);
+    graph.addVertex(gVec);
+    graph.addVertex(hVec);
+    graph.addVertex(jVec);
+    graph.addVertex(xVec);
+    graph.addVertex(yVec);
+    graph.addVertex(zVec);
+    graph.addVertex(wVec);
+
+    var world = new Kompute.World(5000, 5000, 5000, 100);
+    world.insertGraph(graph);
+
+    var executedLen = 0;
+
+    graph.forEachVertex(function(x, y, z){
+      var vec = new Kompute.Vector3D(x, y, z);
+      expect(graph.findClosestVertexToPoint(vec)).to.eql(vec);
+      executedLen ++;
+    });
+
+    expect(executedLen).to.eql(13);
+  });
+});

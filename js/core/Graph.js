@@ -31,6 +31,7 @@ Graph.prototype.findClosestVertexToPoint = function(pointVector){
       var curDist = pointVector.getDistanceSq(entity.position);
       if (curDist < dist){
         closest = entity;
+        dist = curDist;
       }
     }
   }
