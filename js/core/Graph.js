@@ -195,4 +195,17 @@ Graph.prototype.forEachVertex = function(fn){
   }
 }
 
+Graph.prototype.forEachEdge = function(fn){
+  for (var x in this.connections){
+    for (var y in this.connections[x]){
+      for (var z in this.connections[x][y]){
+        var edges = this.connections[x][y][z];
+        for (var i = 0; i < edges.length; i ++){
+          fn(edges[i]);
+        }
+      }
+    }
+  }
+}
+
 export { Graph };

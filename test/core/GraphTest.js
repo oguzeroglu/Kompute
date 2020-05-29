@@ -256,4 +256,30 @@ describe("Graph", function(){
 
     expect(graph.findClosestVertexToPoint(new Kompute.Vector3D(500, 500, 500))).to.eql(null);
   });
+
+  it("should run for each edge", function(){
+    var graph = new Kompute.Graph();
+
+    var v1 = new Kompute.Vector3D(0, 0, 0);
+    var v2 = new Kompute.Vector3D(50, 50, 50);
+    var v3 = new Kompute.Vector3D(-50, -50, -50);
+
+    graph.addVertex(v1);
+    graph.addVertex(v2);
+    graph.addVertex(v3);
+
+    graph.addEdge(v1, v2);
+    graph.addEdge(v2, v3);
+    graph.addEdge(v3, v1);
+
+    var edges = [];
+    graph.forEachEdge(function(edge){
+      edges.push(edge);
+    });
+
+    expect(edges.length).to.eql(3);
+    expect(edges[0]).to.eql(new Kompute.Edge(v1, v2));
+    expect(edges[1]).to.eql(new Kompute.Edge(v2, v3));
+    expect(edges[2]).to.eql(new Kompute.Edge(v3, v1));
+  });
 });
