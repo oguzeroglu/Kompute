@@ -18,10 +18,12 @@ describe("DebugHelper", function(){
     expect(debugHelper.magentaMaterial).to.be.an(MockMeshBasicMaterial);
     expect(debugHelper.redMaterial).to.be.an(MockMeshBasicMaterial);
     expect(debugHelper.orangeMaterial).to.be.an(MockMeshBasicMaterial);
+    expect(debugHelper.lineMaterial).to.be.an(MockLineBasicMaterial);
     expect(debugHelper.meshesByEntityID).to.eql({});
     expect(debugHelper.velocityMeshesByEntityID).to.eql({});
     expect(debugHelper.lookMeshesByEntityID).to.eql({});
     expect(debugHelper.pathMeshes).to.eql([]);
+    expect(debugHelper.edgeMeshes).to.eql([]);
     expect(world.onEntityInserted).to.exist;
     expect(world.onEntityRemoved).to.exist;
     expect(world.onEntityUpdated).to.exist;
@@ -242,16 +244,32 @@ describe("DebugHelper", function(){
     var path = new Kompute.Path();
     path.addWaypoint(new Kompute.Vector3D());
 
+    var graph = new Kompute.Graph();
+
+    var v1 = new Kompute.Vector3D(10, 20, 30);
+    var v2 = new Kompute.Vector3D(30, 40, 50);
+    var v3 = new Kompute.Vector3D(50, 60, 70);
+
+    graph.addVertex(v1);
+    graph.addVertex(v2);
+    graph.addVertex(v3);
+
+    graph.addEdge(v1, v2);
+    graph.addEdge(v2, v3);
+    graph.addEdge(v3, v1);
+
     world.insertEntity(entity1);
     world.insertEntity(entity2);
 
     debugHelper.activate();
     debugHelper.visualisePath(path);
+    debugHelper.visualiseGraph(graph);
 
     debugHelper.deactivate();
 
     expect(Object.keys(debugHelper.meshesByEntityID)).to.have.length(0);
     expect(debugHelper.pathMeshes).to.have.length(0);
+    expect(debugHelper.edgeMeshes).to.have.length(0);
     expect(scene.children).to.have.length(0);
   });
 
@@ -282,14 +300,80 @@ describe("DebugHelper", function(){
     expect(debugHelper.pathMeshes).to.have.length(0);
     expect(scene.children).to.have.length(0);
   });
+
+  it("should visualise graph", function(){
+
+    var graph = new Kompute.Graph();
+
+    var v1 = new Kompute.Vector3D(10, 20, 30);
+    var v2 = new Kompute.Vector3D(30, 40, 50);
+    var v3 = new Kompute.Vector3D(50, 60, 70);
+
+    graph.addVertex(v1);
+    graph.addVertex(v2);
+    graph.addVertex(v3);
+
+    graph.addEdge(v1, v2);
+    graph.addEdge(v2, v3);
+    graph.addEdge(v3, v1);
+
+    var threeInstance = mockThreeInstance();
+    var scene = new MockScene();
+    var world = new Kompute.World(1000, 1000, 1000, 10);
+
+    var debugHelper = new Kompute.DebugHelper(world, threeInstance, scene);
+
+    debugHelper.visualiseGraph(graph);
+
+    var geom1 = new MockGeometry();
+    geom1.vertices.push(v1);
+    geom1.vertices.push(v2);
+
+    var geom2 = new MockGeometry();
+    geom2.vertices.push(v2);
+    geom2.vertices.push(v3);
+
+    var geom3 = new MockGeometry();
+    geom3.vertices.push(v3);
+    geom3.vertices.push(v1);
+
+    var line1 = new MockLine(geom1);
+    var line2 = new MockLine(geom2);
+    var line3 = new MockLine(geom3);
+
+    expect(scene.children.length).to.eql(3);
+    expect(scene.children[0]).to.eql(line1);
+    expect(scene.children[1]).to.eql(line2);
+    expect(scene.children[2]).to.eql(line3);
+
+    expect(debugHelper.edgeMeshes).to.eql([line1, line2, line3]);
+
+    debugHelper.deactivate();
+
+    expect(scene.children.length).to.eql(0);
+    expect(debugHelper.edgeMeshes).to.eql([]);
+  });
 });
 
 function mockThreeInstance(){
   return {
     MeshBasicMaterial: MockMeshBasicMaterial,
+    LineBasicMaterial: MockLineBasicMaterial,
     BoxBufferGeometry: MockBoxBufferGeometry,
-    Mesh: MockMesh
+    Mesh: MockMesh,
+    Line: MockLine,
+    Geometry: MockGeometry
   };
+}
+
+class MockGeometry{
+  constructor(){
+    this.vertices = [];
+  }
+}
+
+class MockLineBasicMaterial{
+  constructor(){}
 }
 
 class MockMeshBasicMaterial {
@@ -301,6 +385,12 @@ class MockBoxBufferGeometry {
     this.size = new Kompute.Vector3D(width, height, depth);
   }
 };
+
+class MockLine {
+  constructor(geometry){
+    this.geometry = geometry;
+  }
+}
 
 class MockMesh {
   constructor(geometry){
