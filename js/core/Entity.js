@@ -89,4 +89,17 @@ Entity.prototype.unsetLookTarget = function(){
   this.hasLookTarget = false;
 }
 
+Entity.prototype.isNearTo = function(entity){
+  var result = false;
+
+  this.executeForEachCloseEntity(function(candidate){
+    if (candidate === entity){
+      result = true;
+      return true;
+    }
+  });
+
+  return result;
+}
+
 export { Entity };
