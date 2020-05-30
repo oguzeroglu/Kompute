@@ -73,7 +73,9 @@ Entity.prototype.executeForEachCloseEntity = function(func){
   var res = this.world.getNearbyObjects(this.position);
   for (var obj of res){
     if (obj.id != this.id){
-      func(this.world.getEntityByID(obj.id));
+      if (func(this.world.getEntityByID(obj.id))){
+        return;
+      }
     }
   }
 }

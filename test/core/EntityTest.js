@@ -149,6 +149,39 @@ describe("Entity", function(){
     expect(obj).to.eql(expected);
   });
 
+  it("should stop executing for each close entity when function returns true", function(){
+    var entitySize = new Kompute.Vector3D(5, 5, 5);
+
+    var center1 = new Kompute.Vector3D(10, 10, 10);
+    var center2 = new Kompute.Vector3D(-10, -10, -10);
+    var center3 = new Kompute.Vector3D(0, 0, 0);
+    var center4 = new Kompute.Vector3D(500, 500, 500);
+
+    var world = new Kompute.World(5000, 5000, 5000, 50);
+
+    var entity1 = new Kompute.Entity("entity1", center1, entitySize);
+    var entity2 = new Kompute.Entity("entity2", center2, entitySize);
+    var entity3 = new Kompute.Entity("entity3", center3, entitySize);
+    var entity4 = new Kompute.Entity("entity4", center4, entitySize);
+
+    world.insertEntity(entity1);
+    world.insertEntity(entity2);
+    world.insertEntity(entity3);
+    world.insertEntity(entity4);
+
+    var expected = {entity2: entity2};
+
+    var obj = {};
+    var callback = function(entity){
+      obj[entity.id] = entity;
+      return true;
+    };
+
+    entity3.executeForEachCloseEntity(callback);
+
+    expect(obj).to.eql(expected);
+  });
+
   it("should update position based on velocity", function(){
 
     var entitySize = new Kompute.Vector3D(5, 5, 5);
