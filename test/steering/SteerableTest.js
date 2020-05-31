@@ -400,6 +400,8 @@ describe("Steerable", function(){
     var world = new Kompute.World(1000, 1000, 1000, 10);
     world.insertEntity(entity);
 
+    world.setGravity(-900);
+
     var toRunupBehavior = new MockSteeringBehavior();
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(100, 200, 300),
@@ -409,10 +411,9 @@ describe("Steerable", function(){
       takeoffVelocitySatisfactionRadius: 20
     });
 
+    jumpDescriptor.setCache(entity, { vx: 100, vz: -100, time: (1/60) * 5 });
+
     entity.jump(toRunupBehavior, jumpDescriptor);
-    jumpDescriptor.equationResult.vx = 100;
-    jumpDescriptor.equationResult.vz = -100;
-    jumpDescriptor.equationResult.time = (1/60) * 5;
 
     entity.isJumpTakenOff = true;
 
@@ -596,7 +597,11 @@ describe("Steerable", function(){
     world.insertEntity(entity);
 
     entity.setBehavior(new MockSteeringBehavior());
-    entity.jumpDescriptor = {equationResult: {time: 999}};
+    entity.jumpDescriptor = {
+      getEquationResult: function(){
+        return { time: 999 };
+      }
+    };
 
     entity.isJumpTakenOff = true;
 

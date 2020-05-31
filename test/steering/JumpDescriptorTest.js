@@ -17,7 +17,6 @@ describe("JumpDescriptor", function(){
     expect(jumpDescriptor.landingPosition).to.eql(new Kompute.Vector3D(150, 100, 0));
     expect(jumpDescriptor.runupSatisfactionRadius).to.eql(50);
     expect(jumpDescriptor.delta).to.eql(new Kompute.Vector3D(50, 100, 0));
-    expect(jumpDescriptor.equationResult).to.eql({time: 0, vx: 0, vz: 0, isAchievable: false});
     expect(jumpDescriptor.checkTimeResult).to.eql({ vx: 0, vz: 0, isAchievable: false });
     expect(jumpDescriptor.takeoffPositionSatisfactionRadius).to.eql(35);
     expect(jumpDescriptor.takeoffVelocitySatisfactionRadius).to.eql(20);

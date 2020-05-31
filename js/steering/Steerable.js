@@ -46,7 +46,7 @@ Steerable.prototype.update = function(){
   if (this.isJumpTakenOff){
     this.linearAcceleration.y += this.world.gravity;
     this.jumpTime += delta;
-    if (this.jumpTime >= this.jumpDescriptor.equationResult.time){
+    if (this.jumpTime >= this.jumpDescriptor.getEquationResult(this).time){
       this.onJumpCompleted();
     }
   }
@@ -171,7 +171,7 @@ Steerable.prototype.onJumpTakeOff = function(){
   this.isJumpTakenOff = true;
 
   var jumpDescriptor = this.jumpDescriptor;
-  var equationResult = jumpDescriptor.equationResult;
+  var equationResult = jumpDescriptor.getEquationResult(this);
 
   this.velocity.set(equationResult.vx, this.jumpSpeed, equationResult.vz);
 }

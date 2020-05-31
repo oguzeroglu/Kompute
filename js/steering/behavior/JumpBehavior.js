@@ -21,7 +21,7 @@ JumpBehavior.prototype.compute = function(){
   }
 
   var jumpDescriptor = steerable.jumpDescriptor;
-  var equationResult = jumpDescriptor.equationResult;
+  var equationResult = jumpDescriptor.getEquationResult(steerable);
 
   if (equationResult.time == 0){
     return this.result;
