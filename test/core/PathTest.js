@@ -285,4 +285,41 @@ describe("Path", function(){
     expect(path.hasWaypoint(wp3)).to.eql(true);
     expect(path.hasWaypoint(new Kompute.Vector3D())).to.eql(false);
   });
+
+  it("should add jump jumpDescriptor", function(){
+
+    var path = new Kompute.Path({});
+
+    var wp1 = new Kompute.Vector3D(100, 200, 300);
+    var wp2 = new Kompute.Vector3D(300, 400, 500);
+    var wp3 = new Kompute.Vector3D(600, 700, 800);
+
+    path.addWaypoint(wp1);
+    path.addWaypoint(wp2);
+    path.addWaypoint(wp3);
+
+    var jumpDescriptor1 = new Kompute.JumpDescriptor({
+      takeoffPosition: wp1, landingPosition: wp2,
+      runupSatisfactionRadius: 100, takeoffPositionSatisfactionRadius: 100,
+      takeoffVelocitySatisfactionRadius: 100
+    });
+
+    var jumpDescriptor2 = new Kompute.JumpDescriptor({
+      takeoffPosition: new Kompute.Vector3D(500, 500, 500), landingPosition: wp2,
+      runupSatisfactionRadius: 100, takeoffPositionSatisfactionRadius: 100,
+      takeoffVelocitySatisfactionRadius: 100
+    });
+
+    var jumpDescriptor3 = new Kompute.JumpDescriptor({
+      takeoffPosition: wp1, landingPosition: new Kompute.Vector3D(500, 500, 500),
+      runupSatisfactionRadius: 100, takeoffPositionSatisfactionRadius: 100,
+      takeoffVelocitySatisfactionRadius: 100
+    });
+
+    expect(path.addJumpDescriptor(jumpDescriptor1)).to.eql(true);
+    expect(path.addJumpDescriptor(jumpDescriptor2)).to.eql(false);
+    expect(path.addJumpDescriptor(jumpDescriptor3)).to.eql(false);
+
+    expect(path.jumpDescriptors).to.eql([jumpDescriptor1]);
+  });
 });

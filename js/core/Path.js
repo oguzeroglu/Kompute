@@ -25,6 +25,19 @@ var Path = function(options){
   this.jumpDescriptors = [];
 }
 
+Path.prototype.addJumpDescriptor = function(jumpDescriptor){
+  var takeoffPosition = jumpDescriptor.takeoffPosition;
+  var landingPosition = jumpDescriptor.landingPosition;
+
+  if (!this.hasWaypoint(takeoffPosition) || !this.hasWaypoint(landingPosition)){
+    return false;
+  }
+
+  this.jumpDescriptors.push(jumpDescriptor);
+
+  return true;
+}
+
 Path.prototype.hasWaypoint = function(waypoint){
   var length = this.length;
   return !!this.waypoints.find(function(wp, index){
