@@ -21,6 +21,14 @@ var Path = function(options){
       this.waypoints.push(new Vector3D());
     }
   }
+
+  this.jumpDescriptors = [];
+}
+
+Path.prototype.hasWaypoint = function(waypoint){
+  return !!this.waypoints.find(function(wp){
+    return wp.eql(waypoint);
+  });
 }
 
 Path.prototype.insertWaypoint = function(waypoint){

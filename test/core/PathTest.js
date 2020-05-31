@@ -16,6 +16,7 @@ describe("Path", function(){
     expect(path1.isRewinding).to.eql(false);
     expect(path1.isFinished).to.eql(false);
     expect(path1.waypoints).to.eql([]);
+    expect(path1.jumpDescriptors).to.eql([]);
     expect(path1.length).to.eql(0);
 
     expect(path2.index).to.eql(0);
@@ -24,6 +25,7 @@ describe("Path", function(){
     expect(path2.isRewinding).to.eql(false);
     expect(path2.isFinished).to.eql(false);
     expect(path2.waypoints).to.eql([]);
+    expect(path2.jumpDescriptors).to.eql([]);
     expect(path2.length).to.eql(0);
 
     expect(path3.index).to.eql(0);
@@ -32,6 +34,7 @@ describe("Path", function(){
     expect(path3.isRewinding).to.eql(false);
     expect(path3.isFinished).to.eql(false);
     expect(path3.waypoints).to.eql([]);
+    expect(path3.jumpDescriptors).to.eql([]);
     expect(path3.length).to.eql(0);
 
     expect(path4.index).to.eql(0);
@@ -40,6 +43,7 @@ describe("Path", function(){
     expect(path4.isRewinding).to.eql(false);
     expect(path4.isFinished).to.eql(false);
     expect(path4.waypoints).to.eql([new Kompute.Vector3D(), new Kompute.Vector3D(), new Kompute.Vector3D()]);
+    expect(path4.jumpDescriptors).to.eql([]);
     expect(path4.length).to.eql(0);
   });
 
@@ -253,5 +257,21 @@ describe("Path", function(){
     expect(called).to.eql(false);
     path.next();
     expect(called).to.eql(false);
+  });
+
+  it("should check if contains given waypoint", function(){
+
+    var path = new Kompute.Path({});
+
+    var wp1 = new Kompute.Vector3D(100, 200, 300);
+    var wp2 = new Kompute.Vector3D(300, 400, 500);
+    var wp3 = new Kompute.Vector3D(600, 700, 800);
+
+    path.addWaypoint(wp1);
+    path.addWaypoint(wp3);
+
+    expect(path.hasWaypoint(wp1)).to.eql(true);
+    expect(path.hasWaypoint(wp3)).to.eql(true);
+    expect(path.hasWaypoint(wp2)).to.eql(false);
   });
 });
