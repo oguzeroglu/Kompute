@@ -26,8 +26,9 @@ var Path = function(options){
 }
 
 Path.prototype.hasWaypoint = function(waypoint){
-  return !!this.waypoints.find(function(wp){
-    return wp.eql(waypoint);
+  var length = this.length;
+  return !!this.waypoints.find(function(wp, index){
+    return (index < length) && wp.eql(waypoint);
   });
 }
 

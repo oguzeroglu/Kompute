@@ -273,5 +273,16 @@ describe("Path", function(){
     expect(path.hasWaypoint(wp1)).to.eql(true);
     expect(path.hasWaypoint(wp3)).to.eql(true);
     expect(path.hasWaypoint(wp2)).to.eql(false);
+
+    path = new Kompute.Path({ fixedLength: 10 });
+
+    path.insertWaypoint(wp1);
+    path.insertWaypoint(wp2);
+    path.insertWaypoint(wp3);
+
+    expect(path.hasWaypoint(wp1)).to.eql(true);
+    expect(path.hasWaypoint(wp2)).to.eql(true);
+    expect(path.hasWaypoint(wp3)).to.eql(true);
+    expect(path.hasWaypoint(new Kompute.Vector3D())).to.eql(false);
   });
 });
