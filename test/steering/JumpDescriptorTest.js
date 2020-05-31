@@ -83,4 +83,37 @@ describe("JumpDescriptor", function(){
 
     expect(result).to.eql(false);
   });
+
+  it("should cache equation result", function(){
+
+    var center = new Kompute.Vector3D(50, 60, 70);
+    var size = new Kompute.Vector3D(50, 60, 70);
+
+    var steerable = new Kompute.Steerable("steerable1", center, size);
+
+    var world = new Kompute.World(1000, 1000, 1000, 10);
+    world.insertEntity(steerable);
+    world.setGravity(-10);
+
+    steerable.maxSpeed = 100;
+    steerable.jumpSpeed = 200;
+
+    var jumpDescriptor = new Kompute.JumpDescriptor({
+      takeoffPosition: new Kompute.Vector3D(),
+      landingPosition: new Kompute.Vector3D(10, 20, 30),
+      runupSatisfactionRadius: 0,
+      takeoffPositionSatisfactionRadius: 0,
+      takeoffVelocitySatisfactionRadius: 0
+    });
+
+    var cached = jumpDescriptor.getEquationResult(steerable);
+    expect(cached).to.eql(null);
+
+    var obj = { test: true };
+    jumpDescriptor.setCache(steerable, obj);
+
+    cached = jumpDescriptor.getEquationResult(steerable);
+
+    expect(cached).to.equal(obj);
+  });
 });
