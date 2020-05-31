@@ -646,6 +646,7 @@ describe("Steerable", function(){
     expect(entity.position.y).to.eql(jumpDescriptor.landingPosition.y);
     expect(entity.linearAcceleration).to.eql(new Kompute.Vector3D());
     expect(entity.velocity).to.eql(new Kompute.Vector3D());
+    expect(entity.jumpTime).to.eql(0);
   });
 
   it("should set jump completion listener", function(){

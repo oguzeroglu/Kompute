@@ -177,6 +177,7 @@ Steerable.prototype.onJumpTakeOff = function(){
 }
 
 Steerable.prototype.onJumpCompleted = function(){
+  this.jumpTime = 0;
   this.isJumpInitiated = false;
   this.isJumpReady = false;
   this.isJumpTakenOff = false;
