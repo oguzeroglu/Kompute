@@ -8,6 +8,8 @@ var PathFollowingBehavior = function(options){
 
   this.path = options.path;
   this.satisfactionRadius = options.satisfactionRadius || 0;
+
+  this.onJumpCompletionCallback = this.onJumpCompleted.bind(this);
 }
 
 PathFollowingBehavior.prototype = Object.create(SeekBehavior.prototype);
@@ -34,8 +36,10 @@ PathFollowingBehavior.prototype.compute = function(){
 
   var jumpDescriptor = this.isJumpNeeded();
   if (jumpDescriptor){
+    this.beforeJumpBehavior = steerable.behavior;
     steerable.jumpDescriptor = jumpDescriptor;
     steerable.onJumpReady();
+    steerable.setJumpCompletionListener(this.onJumpCompletionCallback);
     return this.result;
   }
 
@@ -71,6 +75,21 @@ PathFollowingBehavior.prototype.isJumpNeeded = function(){
   }
 
   return false;
+}
+
+PathFollowingBehavior.prototype.onJumpCompleted = function(){
+  var steerable = this.steerable;
+  var jumpDescriptor = steerable.jumpDescriptor;
+  var landingPosition = jumpDescriptor.landingPosition;
+  var path = this.path;
+
+  var landingPositionIndex = path.getWaypointIndex(landingPosition);
+
+  while(path.index != landingPositionIndex){
+    path.next();
+  }
+
+  steerable.setBehavior(this.beforeJumpBehavior);
 }
 
 Object.defineProperty(PathFollowingBehavior.prototype, 'constructor', { value: PathFollowingBehavior,  enumerable: false, writable: true });
