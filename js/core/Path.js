@@ -29,7 +29,18 @@ Path.prototype.addJumpDescriptor = function(jumpDescriptor){
   var takeoffPosition = jumpDescriptor.takeoffPosition;
   var landingPosition = jumpDescriptor.landingPosition;
 
-  if (!this.hasWaypoint(takeoffPosition) || !this.hasWaypoint(landingPosition)){
+  var takeoffIndex = this.getWaypointIndex(takeoffPosition);
+
+  if (takeoffIndex == null){
+    return false;
+  }
+
+  var landingIndex = this.getWaypointIndex(landingPosition);
+  if (landingIndex == null){
+    return false;
+  }
+
+  if (takeoffIndex >= landingIndex){
     return false;
   }
 
@@ -38,11 +49,17 @@ Path.prototype.addJumpDescriptor = function(jumpDescriptor){
   return true;
 }
 
-Path.prototype.hasWaypoint = function(waypoint){
+Path.prototype.getWaypointIndex = function(waypoint){
   var length = this.length;
-  return !!this.waypoints.find(function(wp, index){
+  var index = this.waypoints.findIndex(function(wp, index){
     return (index < length) && wp.eql(waypoint);
   });
+
+  if (index == -1){
+    return null;
+  }
+
+  return index;
 }
 
 Path.prototype.insertWaypoint = function(waypoint){

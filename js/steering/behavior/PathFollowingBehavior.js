@@ -32,6 +32,13 @@ PathFollowingBehavior.prototype.compute = function(){
     return this.result;
   }
 
+  var jumpDescriptor = this.isJumpNeeded();
+  if (jumpDescriptor){
+    steerable.jumpDescriptor = jumpDescriptor;
+    steerable.onJumpReady();
+    return this.result;
+  }
+
   var distance = vectorPool.get().copy(currentWayPoint).sub(steerable.position).getLength();
 
   if (distance <= this.satisfactionRadius){
@@ -44,6 +51,26 @@ PathFollowingBehavior.prototype.compute = function(){
 
   steerable.setTargetPosition(currentWayPoint);
   return SeekBehavior.prototype.compute.call(this);
+}
+
+PathFollowingBehavior.prototype.isJumpNeeded = function(){
+
+  var path = this.path;
+  var jumpDescriptors = path.jumpDescriptors;
+  var steerable = this.steerable;
+
+  for (var i = 0; i < jumpDescriptors.length; i ++){
+    var jumpDescriptor = jumpDescriptors[i];
+    var distToTakeoffPosition = vectorPool.get().copy(steerable.position).sub(jumpDescriptor.takeoffPosition).getLength();
+    if (distToTakeoffPosition < jumpDescriptor.runupSatisfactionRadius){
+      var quadraticEquationResult = jumpDescriptor.solveQuadraticEquation(steerable);
+      if (quadraticEquationResult){
+        return jumpDescriptor;
+      }
+    }
+  }
+
+  return false;
 }
 
 Object.defineProperty(PathFollowingBehavior.prototype, 'constructor', { value: PathFollowingBehavior,  enumerable: false, writable: true });

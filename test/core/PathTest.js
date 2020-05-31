@@ -259,7 +259,7 @@ describe("Path", function(){
     expect(called).to.eql(false);
   });
 
-  it("should check if contains given waypoint", function(){
+  it("should get index of waypoint", function(){
 
     var path = new Kompute.Path({});
 
@@ -270,9 +270,9 @@ describe("Path", function(){
     path.addWaypoint(wp1);
     path.addWaypoint(wp3);
 
-    expect(path.hasWaypoint(wp1)).to.eql(true);
-    expect(path.hasWaypoint(wp3)).to.eql(true);
-    expect(path.hasWaypoint(wp2)).to.eql(false);
+    expect(path.getWaypointIndex(wp1)).to.eql(0);
+    expect(path.getWaypointIndex(wp3)).to.eql(1);
+    expect(path.getWaypointIndex(wp2)).to.eql(null);
 
     path = new Kompute.Path({ fixedLength: 10 });
 
@@ -280,10 +280,10 @@ describe("Path", function(){
     path.insertWaypoint(wp2);
     path.insertWaypoint(wp3);
 
-    expect(path.hasWaypoint(wp1)).to.eql(true);
-    expect(path.hasWaypoint(wp2)).to.eql(true);
-    expect(path.hasWaypoint(wp3)).to.eql(true);
-    expect(path.hasWaypoint(new Kompute.Vector3D())).to.eql(false);
+    expect(path.getWaypointIndex(wp1)).to.eql(0);
+    expect(path.getWaypointIndex(wp2)).to.eql(1);
+    expect(path.getWaypointIndex(wp3)).to.eql(2);
+    expect(path.getWaypointIndex(new Kompute.Vector3D())).to.eql(null);
   });
 
   it("should add jump jumpDescriptor", function(){
@@ -316,9 +316,16 @@ describe("Path", function(){
       takeoffVelocitySatisfactionRadius: 100
     });
 
+    var jumpDescriptor4 = new Kompute.JumpDescriptor({
+      takeoffPosition: wp2, landingPosition: wp1,
+      runupSatisfactionRadius: 100, takeoffPositionSatisfactionRadius: 100,
+      takeoffVelocitySatisfactionRadius: 100
+    });
+
     expect(path.addJumpDescriptor(jumpDescriptor1)).to.eql(true);
     expect(path.addJumpDescriptor(jumpDescriptor2)).to.eql(false);
     expect(path.addJumpDescriptor(jumpDescriptor3)).to.eql(false);
+    expect(path.addJumpDescriptor(jumpDescriptor4)).to.eql(false);
 
     expect(path.jumpDescriptors).to.eql([jumpDescriptor1]);
   });
