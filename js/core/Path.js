@@ -25,6 +25,12 @@ var Path = function(options){
   this.jumpDescriptors = [];
 }
 
+Path.prototype.restart = function(){
+  this.isRewinding = false;
+  this.isFinished = false;
+  this.index = 0;
+}
+
 Path.prototype.addJumpDescriptor = function(jumpDescriptor){
   var takeoffPosition = jumpDescriptor.takeoffPosition;
   var landingPosition = jumpDescriptor.landingPosition;

@@ -329,4 +329,33 @@ describe("Path", function(){
 
     expect(path.jumpDescriptors).to.eql([jumpDescriptor1]);
   });
+
+  it("should restart", function(){
+
+    var path = new Kompute.Path();
+
+    for (var i = 0; i < 5; i ++){
+      path.addWaypoint(new Kompute.Vector3D(Math.random(), Math.random(), Math.random()));
+    }
+
+    while (!path.isFinished){
+      path.next();
+    }
+
+    expect(path.isFinished).to.eql(true);
+
+    expect(path.index).not.to.eql(0);
+
+    path.restart();
+
+    expect(path.index).to.eql(0);
+
+    for (var i = 0; i < 5; i ++){
+      expect(path.isFinished).to.eql(false);
+      path.next();
+    }
+
+    expect(path.isFinished).to.eql(true);
+    expect(path.index).to.eql(5);
+  });
 });
