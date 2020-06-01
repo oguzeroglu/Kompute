@@ -82,7 +82,7 @@ PathFollowingBehavior.prototype.onJumpCompleted = function(steerable){
 
   var landingPositionIndex = path.getWaypointIndex(landingPosition);
 
-  while(path.index != landingPositionIndex){
+  while(path.index != landingPositionIndex && !path.isFinished){
     path.next();
   }
 
