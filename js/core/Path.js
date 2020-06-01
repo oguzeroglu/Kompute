@@ -23,6 +23,28 @@ var Path = function(options){
   }
 
   this.jumpDescriptors = [];
+
+  this.options = JSON.parse(JSON.stringify(options));
+}
+
+Path.prototype.clone = function(){
+  var cloned = new Path(this.options);
+
+  if (!this.options.fixedLength){
+    for (var i = 0; i < this.waypoints.length ; i ++){
+      cloned.addWaypoint(this.waypoints[i]);
+    }
+  }else{
+    for (var i = 0; i < this.length; i ++){
+      cloned.insertWaypoint(this.waypoints[i]);
+    }
+  }
+
+  for (var i = 0; i < this.jumpDescriptors.length; i ++){
+    cloned.addJumpDescriptor(this.jumpDescriptors[i]);
+  }
+
+  return cloned;
 }
 
 Path.prototype.restart = function(){

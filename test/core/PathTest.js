@@ -18,6 +18,7 @@ describe("Path", function(){
     expect(path1.waypoints).to.eql([]);
     expect(path1.jumpDescriptors).to.eql([]);
     expect(path1.length).to.eql(0);
+    expect(path1.options).to.eql({ loop: true });
 
     expect(path2.index).to.eql(0);
     expect(path2.loop).to.eql(false);
@@ -27,6 +28,7 @@ describe("Path", function(){
     expect(path2.waypoints).to.eql([]);
     expect(path2.jumpDescriptors).to.eql([]);
     expect(path2.length).to.eql(0);
+    expect(path2.options).to.eql({ rewind: true });
 
     expect(path3.index).to.eql(0);
     expect(path3.loop).to.eql(false);
@@ -36,6 +38,7 @@ describe("Path", function(){
     expect(path3.waypoints).to.eql([]);
     expect(path3.jumpDescriptors).to.eql([]);
     expect(path3.length).to.eql(0);
+    expect(path3.options).to.eql({});
 
     expect(path4.index).to.eql(0);
     expect(path4.loop).to.eql(false);
@@ -45,6 +48,7 @@ describe("Path", function(){
     expect(path4.waypoints).to.eql([new Kompute.Vector3D(), new Kompute.Vector3D(), new Kompute.Vector3D()]);
     expect(path4.jumpDescriptors).to.eql([]);
     expect(path4.length).to.eql(0);
+    expect(path4.options).to.eql({ fixedLength: 3 });
   });
 
   it("should add waypoint", function(){
@@ -357,5 +361,44 @@ describe("Path", function(){
 
     expect(path.isFinished).to.eql(true);
     expect(path.index).to.eql(5);
+  });
+
+  it("should clone", function(){
+
+    var path = new Kompute.Path();
+
+    for (var i = 0; i < 5; i ++){
+      path.addWaypoint(new Kompute.Vector3D(Math.random(), Math.random(), Math.random()));
+    }
+
+    var cloned = path.clone();
+
+    expect(cloned).to.eql(path);
+    expect(cloned).not.to.equal(path);
+
+    path = new Kompute.Path({ fixedLength: 10 });
+    path.insertWaypoint(new Kompute.Vector3D());
+
+    cloned = path.clone();
+
+    expect(cloned).to.eql(path);
+    expect(cloned).not.to.equal(path);
+
+    path = new Kompute.Path();
+    path.addWaypoint(new Kompute.Vector3D(0, 10, 20));
+    path.addWaypoint(new Kompute.Vector3D(20, 40, 50));
+
+    var jumpDescriptor = new Kompute.JumpDescriptor({
+      takeoffPosition: new Kompute.Vector3D(0, 10, 20), landingPosition: new Kompute.Vector3D(20, 40, 50),
+      runupSatisfactionRadius: 100, takeoffPositionSatisfactionRadius: 100,
+      takeoffVelocitySatisfactionRadius: 100
+    });
+
+    path.addJumpDescriptor(jumpDescriptor);
+
+    cloned = path.clone();
+
+    expect(cloned).to.eql(path);
+    expect(cloned).not.to.equal(path);
   });
 });
