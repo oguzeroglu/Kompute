@@ -13,6 +13,7 @@ describe("Edge", function(){
     expect(edge.fromVertex).to.eql(fromVertex);
     expect(edge.toVertex).to.eql(toVertex);
     expect(edge.cost).to.eql(fromVertex.clone().sub(toVertex).getLength());
+    expect(edge.jumpDescriptor).to.eql(null);
   });
 
   it("should clone", function(){

@@ -161,6 +161,35 @@ Graph.prototype.addEdge = function(fromVertex, toVertex){
   return true;
 }
 
+Graph.prototype.addJumpDescriptor = function(jumpDescriptor){
+  var fromVertex = jumpDescriptor.takeoffPosition;
+  var toVertex = jumpDescriptor.landingPosition;
+  if (!this.hasVertex(fromVertex) || !this.hasVertex(toVertex)){
+    return false;
+  }
+
+  var edges = this.connections[fromVertex.x][fromVertex.y][fromVertex.z];
+  var edge = null;
+
+  for (var i = 0; i < edges.length; i ++){
+    var to = edges[i].toVertex;
+    if (to.x == toVertex.x && to.y == toVertex.y && to.z == toVertex.z){
+      edge = edges[i];
+      break;
+    }
+  }
+
+  if (edge){
+    edge.jumpDescriptor = jumpDescriptor;
+  }else{
+    edge = new Edge(fromVertex, toVertex);
+    edge.jumpDescriptor = jumpDescriptor;
+    edges.push(edge);
+  }
+
+  return true;
+}
+
 Graph.prototype.removeEdge = function(fromVertex, toVertex){
   if (!this.hasVertex(fromVertex) || !this.hasVertex(toVertex)){
     return false;

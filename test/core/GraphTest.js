@@ -132,6 +132,49 @@ describe("Graph", function(){
     });
   });
 
+  it("should add jump descriptor", function(){
+    var graph = new Kompute.Graph();
+
+    var vertex = new Kompute.Vector3D(10, 20, 30);
+    var vertex2 = new Kompute.Vector3D(40, 50, 60);
+
+    var jumpDescriptor = new Kompute.JumpDescriptor({
+      takeoffPosition: vertex, landingPosition: vertex2,
+      runupSatisfactionRadius: 100, takeoffPositionSatisfactionRadius: 100,
+      takeoffVelocitySatisfactionRadius: 100
+    });
+
+    expect(graph.addJumpDescriptor(jumpDescriptor)).to.eql(false);
+
+    graph.addVertex(vertex);
+
+    expect(graph.addJumpDescriptor(jumpDescriptor)).to.eql(false);
+
+    graph.addVertex(vertex2);
+
+    expect(graph.addJumpDescriptor(jumpDescriptor)).to.eql(true);
+
+    var edge = new Kompute.Edge(vertex, vertex2);
+    edge.jumpDescriptor = jumpDescriptor;
+
+    expect(graph.connections[10][20][30]).to.eql([edge]);
+
+    graph = new Kompute.Graph();
+
+    graph.addVertex(vertex);
+    graph.addVertex(vertex2);
+
+    graph.addEdge(vertex, vertex2);
+
+    edge = graph.connections[10][20][30][0];
+
+    expect(edge.jumpDescriptor).to.eql(null);
+
+    expect(graph.addJumpDescriptor(jumpDescriptor)).to.eql(true);
+
+    expect(edge.jumpDescriptor).to.equal(jumpDescriptor);
+  });
+
   it("should remove edge", function(){
     var graph = new Kompute.Graph();
 
