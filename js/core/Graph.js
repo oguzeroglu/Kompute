@@ -1,5 +1,6 @@
 import { Edge } from "./Edge";
 import { Vertex } from "./Vertex";
+import { Vector3D } from "./Vector3D";
 
 var Graph = function(){
 
@@ -10,6 +11,20 @@ var Graph = function(){
   this.totalVertexCount = 0;
 
   this.vertexIDs = [];
+}
+
+Graph.prototype.clone = function(){
+  var cloned = new Graph();
+
+  this.forEachVertex(function(x, y, z){
+    cloned.addVertex(new Vector3D(x, y, z));
+  });
+
+  this.forEachEdge(function(edge){
+    cloned.addEdge(edge.fromVertex, edge.toVertex);
+  });
+
+  return cloned;
 }
 
 Graph.prototype.findClosestVertexToPoint = function(pointVector){

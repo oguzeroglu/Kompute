@@ -282,6 +282,28 @@ describe("Graph", function(){
     expect(edges[1]).to.eql(new Kompute.Edge(v2, v3));
     expect(edges[2]).to.eql(new Kompute.Edge(v3, v1));
   });
+
+  it("should clone", function(){
+
+    var graph = new Kompute.Graph();
+
+    var vec1 = new Kompute.Vector3D(100, 200, 300);
+    var vec2 = new Kompute.Vector3D(300, 400, 500);
+    var vec3 = new Kompute.Vector3D(500, 600, 700);
+
+    graph.addVertex(vec1);
+    graph.addVertex(vec2);
+    graph.addVertex(vec3);
+
+    graph.addEdge(vec1, vec3);
+    graph.addEdge(vec3, vec2);
+    graph.addEdge(vec1, vec2);
+
+    var cloned = graph.clone();
+
+    expect(graph).to.eql(cloned);
+    expect(graph).not.to.equal(cloned);
+  });
 });
 
 describe("Graph - Integration", function(){
