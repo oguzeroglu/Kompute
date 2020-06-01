@@ -222,11 +222,12 @@ describe("Graph", function(){
 
     graph.addEdge(vertex, vertex2);
 
-    var param1 = null, param2 = null, count = 0;
+    var param1 = null, param2 = null, param3 = null, count = 0;
 
-    var fn = function(neighborVertex, cost){
+    var fn = function(neighborVertex, cost, jumpDescriptor){
       param1 = neighborVertex;
       param2 = cost;
+      param3 = jumpDescriptor;
       count ++;
     };
 
@@ -235,6 +236,7 @@ describe("Graph", function(){
     expect(count).to.eql(1);
     expect(param1).to.eql(vertex2);
     expect(param2).to.eql(vertex2.clone().sub(vertex).getLength());
+    expect(param3).to.eql(null);
 
     var called = false;
     var fn2 = function(){
@@ -243,6 +245,19 @@ describe("Graph", function(){
 
     graph.forEachNeighbor(vertex2, fn2);
     expect(called).to.eql(false);
+
+    var jumpDescriptor = new Kompute.JumpDescriptor({
+      takeoffPosition: vertex,
+      landingPosition: vertex2,
+      runupSatisfactionRadius: 100,
+      takeoffPositionSatisfactionRadius: 100,
+      takeoffVelocitySatisfactionRadius: 100
+    });
+
+    graph.addJumpDescriptor(jumpDescriptor);
+
+    graph.forEachNeighbor(vertex, fn);
+    expect(param3).to.equal(jumpDescriptor);
   });
 
   it("should run for each vertex", function(){

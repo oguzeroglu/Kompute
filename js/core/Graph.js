@@ -226,7 +226,7 @@ Graph.prototype.forEachNeighbor = function(vertex, fn){
 
   for (var i = 0; i < ary.length; i ++){
     var edge = ary[i];
-    fn(edge.toVertex, edge.cost);
+    fn(edge.toVertex, edge.cost, edge.jumpDescriptor);
   }
 }
 
