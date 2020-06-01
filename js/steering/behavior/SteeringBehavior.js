@@ -9,8 +9,4 @@ SteeringBehavior.prototype.compute = function(){
   return this.result;
 }
 
-SteeringBehavior.prototype.setSteerable = function(steerable){
-  this.steerable = steerable;
-}
-
 export { SteeringBehavior }

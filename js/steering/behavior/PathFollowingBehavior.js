@@ -24,9 +24,8 @@ PathFollowingBehavior.prototype.getCurrentWaypoint = function(){
   return this.path.getCurrentWaypoint();
 }
 
-PathFollowingBehavior.prototype.compute = function(){
+PathFollowingBehavior.prototype.compute = function(steerable){
   this.result.linear.set(0, 0, 0);
-  var steerable = this.steerable;
   var path = this.path;
 
   var currentWayPoint = this.getCurrentWaypoint();
@@ -34,7 +33,7 @@ PathFollowingBehavior.prototype.compute = function(){
     return this.result;
   }
 
-  var jumpDescriptor = this.isJumpNeeded();
+  var jumpDescriptor = this.isJumpNeeded(steerable);
   if (jumpDescriptor){
     this.beforeJumpBehavior = steerable.behavior;
     steerable.jumpDescriptor = jumpDescriptor;
@@ -54,14 +53,13 @@ PathFollowingBehavior.prototype.compute = function(){
   }
 
   steerable.setTargetPosition(currentWayPoint);
-  return SeekBehavior.prototype.compute.call(this);
+  return SeekBehavior.prototype.compute.call(this, steerable);
 }
 
-PathFollowingBehavior.prototype.isJumpNeeded = function(){
+PathFollowingBehavior.prototype.isJumpNeeded = function(steerable){
 
   var path = this.path;
   var jumpDescriptors = path.jumpDescriptors;
-  var steerable = this.steerable;
 
   for (var i = 0; i < jumpDescriptors.length; i ++){
     var jumpDescriptor = jumpDescriptors[i];
@@ -77,8 +75,7 @@ PathFollowingBehavior.prototype.isJumpNeeded = function(){
   return false;
 }
 
-PathFollowingBehavior.prototype.onJumpCompleted = function(){
-  var steerable = this.steerable;
+PathFollowingBehavior.prototype.onJumpCompleted = function(steerable){
   var jumpDescriptor = steerable.jumpDescriptor;
   var landingPosition = jumpDescriptor.landingPosition;
   var path = this.path;

@@ -5,13 +5,9 @@ describe("PursueBehavior", function(){
 
   it("should initialize", function(){
 
-    var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
     var pursueBehavior = new Kompute.PursueBehavior({maxPredictionTime: 100});
 
-    steerable.setBehavior(pursueBehavior);
-
     expect(pursueBehavior.result).to.eql(new Kompute.SteerResult());
-    expect(pursueBehavior.steerable).to.equal(steerable);
     expect(pursueBehavior.maxPredictionTime).to.eql(100);
   });
 
@@ -19,9 +15,7 @@ describe("PursueBehavior", function(){
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
     var pursueBehavior = new Kompute.PursueBehavior({maxPredictionTime: 100});
 
-    steerable.setBehavior(pursueBehavior);
-
-    expect(pursueBehavior.compute().linear).to.eql(new Kompute.Vector3D());
+    expect(pursueBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D());
   });
 
   it("should compute based on maxPredictionTime if steerable is far away", function(){
@@ -35,19 +29,16 @@ describe("PursueBehavior", function(){
     var pursueBehavior = new Kompute.PursueBehavior({maxPredictionTime: 10});
     var seekBehavior = new Kompute.SeekBehavior();
 
-    steerable.setBehavior(pursueBehavior);
-    seekBehavior.setSteerable(steerable);
-
     steerable.maxAcceleration = 100;
 
     steerable.velocity.set(10, 10, 10);
 
     var targetFinalPosition = targetSteerable.position.clone().add(targetSteerable.velocity.clone().multiplyScalar(10));
 
-    var pursueResult = pursueBehavior.compute().linear;
+    var pursueResult = pursueBehavior.compute(steerable).linear;
 
     steerable.setTargetPosition(new Kompute.Vector3D(targetFinalPosition.x, targetFinalPosition.y, targetFinalPosition.z));
-    var seekResult = seekBehavior.compute().linear;
+    var seekResult = seekBehavior.compute(steerable).linear;
 
     expect(pursueResult).to.eql(seekResult);
   });
@@ -63,9 +54,6 @@ describe("PursueBehavior", function(){
     var pursueBehavior = new Kompute.PursueBehavior({maxPredictionTime: 10});
     var seekBehavior = new Kompute.SeekBehavior();
 
-    steerable.setBehavior(pursueBehavior);
-    seekBehavior.setSteerable(steerable);
-
     steerable.maxAcceleration = 100;
 
     steerable.velocity.set(10, 10, 10);
@@ -74,9 +62,9 @@ describe("PursueBehavior", function(){
       new Kompute.Vector3D(5, 5, 5).getLength() / steerable.velocity.getLength()
     ));
 
-    var pursueResult = pursueBehavior.compute().linear;
+    var pursueResult = pursueBehavior.compute(steerable).linear;
     steerable.setTargetPosition(new Kompute.Vector3D(targetFinalPosition.x, targetFinalPosition.y, targetFinalPosition.z));
-    var seekResult = seekBehavior.compute().linear;
+    var seekResult = seekBehavior.compute(steerable).linear;
 
     expect(pursueResult).to.eql(seekResult);
   });
@@ -100,7 +88,7 @@ describe("PursueBehavior", function(){
       new Kompute.Vector3D(5, 5, 5).getLength() / steerable.velocity.getLength()
     ));
 
-    pursueBehavior.compute();
+    pursueBehavior.compute(steerable);
 
     expect(steerable.targetPosition).to.eql(targetFinalPosition);
   });

@@ -34,7 +34,7 @@ Steerable.prototype.update = function(){
     return;
   }
 
-  var steerResult = this.behavior.compute();
+  var steerResult = this.behavior.compute(this);
 
   this.linearAcceleration.copy(steerResult.linear);
 
@@ -68,7 +68,6 @@ Steerable.prototype.setJumpBehavior = function(behavior){
     return;
   }
 
-  behavior.setSteerable(this);
   this.jumpBehavior = behavior;
 }
 
@@ -77,7 +76,6 @@ Steerable.prototype.setBehavior = function(behavior){
     return;
   }
 
-  behavior.setSteerable(this);
   this.behavior = behavior;
 }
 
@@ -187,7 +185,7 @@ Steerable.prototype.onJumpCompleted = function(){
   this.linearAcceleration.set(0, 0, 0);
 
   if (this.jumpCompletionCallback){
-    this.jumpCompletionCallback();
+    this.jumpCompletionCallback(this);
   }
 }
 

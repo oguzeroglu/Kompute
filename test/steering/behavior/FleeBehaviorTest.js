@@ -4,14 +4,9 @@ var Kompute = require("../../../build/Kompute");
 describe("FleeBehavior", function(){
 
   it("should initialize", function(){
-
-    var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
     var fleeBehavior = new Kompute.FleeBehavior();
 
-    steerable.setBehavior(fleeBehavior);
-
     expect(fleeBehavior.result).to.eql(new Kompute.SteerResult());
-    expect(fleeBehavior.steerable).to.equal(steerable);
   });
 
   it("should not request acceleration if steerable has no target position", function(){
@@ -19,9 +14,7 @@ describe("FleeBehavior", function(){
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
     var fleeBehavior = new Kompute.FleeBehavior();
 
-    steerable.setBehavior(fleeBehavior);
-
-    expect(fleeBehavior.compute().linear).to.eql(new Kompute.Vector3D());
+    expect(fleeBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D());
   });
 
   it("should compute the inverse of seek behavior", function(){
@@ -30,14 +23,11 @@ describe("FleeBehavior", function(){
     var seekBehavior = new Kompute.SeekBehavior();
     var fleeBehavior = new Kompute.FleeBehavior();
 
-    steerable.setBehavior(fleeBehavior);
-    seekBehavior.setSteerable(steerable);
-
     steerable.setTargetPosition(new Kompute.Vector3D(100, 200, 300));
     steerable.maxAcceleration = 100;
 
-    var seekResult = seekBehavior.compute().linear;
-    var fleeResult = fleeBehavior.compute().linear;
+    var seekResult = seekBehavior.compute(steerable).linear;
+    var fleeResult = fleeBehavior.compute(steerable).linear;
 
     expect(fleeResult).to.eql(seekResult.multiplyScalar(-1));
   });

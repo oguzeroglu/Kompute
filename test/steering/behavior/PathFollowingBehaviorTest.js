@@ -4,15 +4,11 @@ var Kompute = require("../../../build/Kompute");
 describe("PathFollowingBehavior", function(){
 
   it("should initialize", function(){
-    var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
     var path = new Kompute.Path();
 
     var pathFollowingBehavior = new Kompute.PathFollowingBehavior({ path: path, satisfactionRadius: 50 });
 
-    steerable.setBehavior(pathFollowingBehavior);
-
     expect(pathFollowingBehavior.result).to.eql(new Kompute.SteerResult());
-    expect(pathFollowingBehavior.steerable).to.equal(steerable);
     expect(pathFollowingBehavior.path).to.equal(path);
     expect(pathFollowingBehavior.satisfactionRadius).to.eql(50);
   });
@@ -23,9 +19,7 @@ describe("PathFollowingBehavior", function(){
 
     var pathFollowingBehavior = new Kompute.PathFollowingBehavior({ path: path, satisfactionRadius: 50 });
 
-    steerable.setBehavior(pathFollowingBehavior);
-
-    expect(pathFollowingBehavior.compute().linear).to.eql(new Kompute.Vector3D());
+    expect(pathFollowingBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D());
   });
 
   it("should go to next target if within satisfaction radius", function(){
@@ -37,9 +31,7 @@ describe("PathFollowingBehavior", function(){
 
     var pathFollowingBehavior = new Kompute.PathFollowingBehavior({ path: path, satisfactionRadius: 50 });
 
-    steerable.setBehavior(pathFollowingBehavior);
-
-    pathFollowingBehavior.compute();
+    pathFollowingBehavior.compute(steerable);
 
     expect(steerable.targetPosition).to.eql(new Kompute.Vector3D(100, 200, 300));
   });
@@ -63,11 +55,8 @@ describe("PathFollowingBehavior", function(){
     var pathFollowingBehavior = new Kompute.PathFollowingBehavior({ path: path, satisfactionRadius: 50 });
     var seekBehavior = new Kompute.SeekBehavior();
 
-    steerable.setBehavior(pathFollowingBehavior);
-    steerable2.setBehavior(seekBehavior);
-
-    var pathResult = pathFollowingBehavior.compute();
-    var seekResult = seekBehavior.compute();
+    var pathResult = pathFollowingBehavior.compute(steerable);
+    var seekResult = seekBehavior.compute(steerable2);
 
     expect(pathResult.linear).to.eql(seekResult.linear);
   });

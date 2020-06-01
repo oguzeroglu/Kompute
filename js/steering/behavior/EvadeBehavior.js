@@ -6,8 +6,8 @@ var EvadeBehavior = function(options){
 
 EvadeBehavior.prototype = Object.create(PursueBehavior.prototype);
 
-EvadeBehavior.prototype.compute = function(){
-  PursueBehavior.prototype.compute.call(this);
+EvadeBehavior.prototype.compute = function(steerable){
+  PursueBehavior.prototype.compute.call(this, steerable);
   this.result.linear.negate();
   return this.result;
 }

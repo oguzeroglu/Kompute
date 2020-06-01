@@ -4,18 +4,13 @@ var Kompute = require("../../../build/Kompute");
 describe("RandomPathBehavior", function(){
 
   it("should initialize", function(){
-    var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
-
     var graph = new Kompute.Graph();
     graph.addVertex(new Kompute.Vector3D(100, 200, 300));
     graph.addVertex(new Kompute.Vector3D(400, 500, 600));
 
     var randomPathBehavior = new Kompute.RandomPathBehavior({ graph: graph, satisfactionRadius: 50 });
 
-    steerable.setBehavior(randomPathBehavior);
-
     expect(randomPathBehavior.result).to.eql(new Kompute.SteerResult());
-    expect(randomPathBehavior.steerable).to.equal(steerable);
     expect(randomPathBehavior.path).to.equal(randomPathBehavior.aStar.path);
     expect(randomPathBehavior.satisfactionRadius).to.eql(50);
     expect(randomPathBehavior.allVertices).to.eql([new Kompute.Vector3D(100, 200, 300), new Kompute.Vector3D(400, 500, 600)]);
@@ -63,12 +58,10 @@ describe("RandomPathBehavior", function(){
 
     var randomPathBehavior = new Kompute.RandomPathBehavior({ graph: graph, satisfactionRadius: 50 });
 
-    randomPathBehavior.steerable = { position: new Kompute.Vector3D() };
-
     expect(randomPathBehavior.aStar.path.length > 0).to.eql(false);
     expect(randomPathBehavior.isPathConstructed).to.eql(false);
 
-    randomPathBehavior.constructPath();
+    randomPathBehavior.constructPath({ position: new Kompute.Vector3D() });
 
     expect(randomPathBehavior.aStar.path.length > 0).to.eql(true);
     expect(randomPathBehavior.isPathConstructed).to.eql(true);
@@ -84,9 +77,7 @@ describe("RandomPathBehavior", function(){
 
     var randomPathBehavior = new Kompute.RandomPathBehavior({ graph: graph, satisfactionRadius: 50 });
 
-    randomPathBehavior.steerable = { position: new Kompute.Vector3D() };
-
-    randomPathBehavior.constructPath();
+    randomPathBehavior.constructPath({ position: new Kompute.Vector3D() });
 
     expect(randomPathBehavior.isPathConstructed).to.eql(true);
 
@@ -112,13 +103,11 @@ describe("RandomPathBehavior", function(){
 
     var randomPathBehavior = new Kompute.RandomPathBehavior({ graph: graph, satisfactionRadius: 50 });
 
-    steerable.setBehavior(randomPathBehavior);
-
     var path = randomPathBehavior.aStar.path;
 
     expect(path.length > 0).to.eql(false);
 
-    randomPathBehavior.compute();
+    randomPathBehavior.compute(steerable);
 
     expect(path.length > 0).to.eql(true);
   });
@@ -140,14 +129,10 @@ describe("RandomPathBehavior", function(){
 
     var randomPathBehavior = new Kompute.RandomPathBehavior({ graph: graph, satisfactionRadius: 50 });
 
-    steerable.setBehavior(randomPathBehavior);
-
-    randomPathBehavior.constructPath();
+    randomPathBehavior.constructPath(steerable);
 
     var pathFollowingBehavior = new Kompute.PathFollowingBehavior({ path: randomPathBehavior.aStar.path, satisfactionRadius: 50 });
 
-    steerable2.setBehavior(pathFollowingBehavior);
-
-    expect(randomPathBehavior.compute()).to.eql(pathFollowingBehavior.compute());
+    expect(randomPathBehavior.compute(steerable)).to.eql(pathFollowingBehavior.compute(steerable2));
   });
 });

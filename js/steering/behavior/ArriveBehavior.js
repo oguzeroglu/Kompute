@@ -12,11 +12,10 @@ var ArriveBehavior = function(options){
 
 ArriveBehavior.prototype = Object.create(SteeringBehavior.prototype);
 
-ArriveBehavior.prototype.compute = function(){
+ArriveBehavior.prototype.compute = function(steerable){
 
   this.result.linear.set(0, 0, 0);
 
-  var steerable = this.steerable;
   if (!steerable.hasTargetPosition){
     return this.result;
   }

@@ -221,7 +221,6 @@ describe("Steerable", function(){
     entity.setBehavior(behavior);
 
     expect(entity.behavior).to.equal(behavior);
-    expect(behavior.steerable).to.equal(entity);
   });
 
   it ("should set jump behavior", function(){
@@ -234,7 +233,6 @@ describe("Steerable", function(){
     entity.setJumpBehavior(behavior);
 
     expect(entity.jumpBehavior).to.equal(behavior);
-    expect(behavior.steerable).to.equal(entity);
   });
 
   it("should not set behavior if a jump is initiated", function(){
@@ -585,7 +583,6 @@ describe("Steerable", function(){
     expect(entity.isJumpInitiated).to.eql(true);
     expect(entity.isJumpTakenOff).to.eql(false);
     expect(entity.behavior).to.equal(mockBehavior);
-    expect(mockBehavior.steerable).to.equal(entity);
   });
 
   it("should consider gravity when updating if jump took off", function(){
@@ -697,8 +694,8 @@ class MockSteeringBehavior extends Kompute.SteeringBehavior{
     super(params);
   }
 
-  compute(){
-    this.result.linear.copy(this.steerable.linearAcceleration);
+  compute(steerable){
+    this.result.linear.copy(steerable.linearAcceleration);
     return this.result;
   }
 }

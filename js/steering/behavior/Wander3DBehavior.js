@@ -18,8 +18,8 @@ var Wander3DBehavior = function(options){
 
 Wander3DBehavior.prototype = Object.create(Wander2DBehavior.prototype);
 
-Wander3DBehavior.prototype.compute = function(){
-  var circleCenter = this.getCircleCenter();
+Wander3DBehavior.prototype.compute = function(steerable){
+  var circleCenter = this.getCircleCenter(steerable);
   var displacementForce = this.getDisplacementForce();
 
   this.result.linear.copy(circleCenter).add(displacementForce);

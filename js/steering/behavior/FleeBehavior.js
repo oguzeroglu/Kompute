@@ -6,8 +6,8 @@ var FleeBehavior = function(){
 
 FleeBehavior.prototype = Object.create(SeekBehavior.prototype);
 
-FleeBehavior.prototype.compute = function(){
-  SeekBehavior.prototype.compute.call(this);
+FleeBehavior.prototype.compute = function(steerable){
+  SeekBehavior.prototype.compute.call(this, steerable);
   this.result.linear.negate();
   return this.result;
 }

@@ -4,15 +4,11 @@ var Kompute = require("../../../build/Kompute");
 describe("RandomWaypointBehavior", function(){
 
   it("should initialize", function(){
-    var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
     var path = new Kompute.Path();
 
     var randomWaypointBehavior = new Kompute.RandomWaypointBehavior({ path: path, satisfactionRadius: 50 });
 
-    steerable.setBehavior(randomWaypointBehavior);
-
     expect(randomWaypointBehavior.result).to.eql(new Kompute.SteerResult());
-    expect(randomWaypointBehavior.steerable).to.equal(steerable);
     expect(randomWaypointBehavior.path).to.equal(path);
     expect(randomWaypointBehavior.satisfactionRadius).to.eql(50);
   });
@@ -30,8 +26,6 @@ describe("RandomWaypointBehavior", function(){
     path.addWaypoint(vp3);
 
     var randomWaypointBehavior = new Kompute.RandomWaypointBehavior({ path: path, satisfactionRadius: 50 });
-
-    steerable.setBehavior(randomWaypointBehavior);
 
     for (var i = 0; i < 1000; i ++){
       var vp = randomWaypointBehavior.getNext();
@@ -56,10 +50,7 @@ describe("RandomWaypointBehavior", function(){
     var pathFollowingBehavior = new Kompute.PathFollowingBehavior({ path: path, satisfactionRadius: 50 });
     var randomWaypointBehavior = new Kompute.RandomWaypointBehavior({ path: path, satisfactionRadius: 50 });
 
-    steerable.setBehavior(randomWaypointBehavior);
-    pathFollowingBehavior.setSteerable(steerable);
-
     randomWaypointBehavior.currentWayPoint = vp1;
-    expect(pathFollowingBehavior.compute().linear).to.eql(randomWaypointBehavior.compute().linear);
+    expect(pathFollowingBehavior.compute(steerable).linear).to.eql(randomWaypointBehavior.compute(steerable).linear);
   });
 });

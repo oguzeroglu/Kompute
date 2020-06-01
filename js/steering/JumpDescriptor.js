@@ -57,7 +57,6 @@ JumpDescriptor.prototype.setCache = function(steerable, equationResult){
 JumpDescriptor.prototype.solveQuadraticEquation = function(steerable){
 
   var equationResult = this.getEquationResult(steerable);
-  console.log(equationResult);
   if (equationResult){
     return equationResult;
   }

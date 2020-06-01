@@ -4,8 +4,6 @@ var Kompute = require("../../../build/Kompute");
 describe("HideBehavior", function(){
 
   it("should initialize", function(){
-
-    var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
     var hideBehavior = new Kompute.HideBehavior({
       arriveSatisfactionRadius: 50,
       arriveSlowDownRadius: 100,
@@ -13,10 +11,7 @@ describe("HideBehavior", function(){
       threatDistance: 2000
     });
 
-    steerable.setBehavior(hideBehavior);
-
     expect(hideBehavior.result).to.eql(new Kompute.SteerResult());
-    expect(hideBehavior.steerable).to.equal(steerable);
     expect(hideBehavior.satisfactionRadius).to.eql(50);
     expect(hideBehavior.slowDownRadius).to.eql(100);
     expect(hideBehavior.hideDistance).to.eql(150);
@@ -34,9 +29,7 @@ describe("HideBehavior", function(){
       threatDistance: 2000
     });
 
-    steerable.setBehavior(hideBehavior);
-
-    expect(hideBehavior.compute().linear).to.eql(new Kompute.Vector3D());
+    expect(hideBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D());
   });
 
   it("should get hiding position", function(){
@@ -50,13 +43,11 @@ describe("HideBehavior", function(){
       threatDistance: 2000
     });
 
-    steerable.setBehavior(hideBehavior);
-
     steerable.setHideTargetEntity(hideTarget);
 
     var hideableEntity = new Kompute.Entity("hideable", new Kompute.Vector3D(-100, 200, -450), new Kompute.Vector3D(100, 100, 100));
 
-    var hidingPosition = hideBehavior.getHidingPosition(hideableEntity);
+    var hidingPosition = hideBehavior.getHidingPosition(hideableEntity, steerable);
 
     var testBox = new Kompute.Box(new Kompute.Vector3D(), new Kompute.Vector3D()).setFromTwoVectors(hideTarget.position, hidingPosition, 0.001);
 
@@ -87,10 +78,8 @@ describe("HideBehavior", function(){
       threatDistance: 2000
     });
 
-    steerable.setBehavior(hideBehavior);
-
     expect(hideBehavior.hidingSpotFound).to.eql(false);
-    expect(hideBehavior.compute().linear).to.eql(new Kompute.Vector3D());
+    expect(hideBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D());
   });
 
   it("should find best hiding spot", function(){
@@ -116,24 +105,22 @@ describe("HideBehavior", function(){
       threatDistance: 2000
     });
 
-    steerable.setBehavior(hideBehavior);
-
-    hideBehavior.findHidingSpot();
+    hideBehavior.findHidingSpot(steerable);
 
     expect(hideBehavior.hidingSpotFound).to.eql(true);
-    expect(hideBehavior.bestHidingSpot).to.eql(hideBehavior.getHidingPosition(obstacle2));
+    expect(hideBehavior.bestHidingSpot).to.eql(hideBehavior.getHidingPosition(obstacle2, steerable));
 
     obstacle.setPosition(new Kompute.Vector3D(6, 6, 6));
 
-    hideBehavior.findHidingSpot();
+    hideBehavior.findHidingSpot(steerable);
 
     expect(hideBehavior.hidingSpotFound).to.eql(true);
-    expect(hideBehavior.bestHidingSpot).to.eql(hideBehavior.getHidingPosition(obstacle));
+    expect(hideBehavior.bestHidingSpot).to.eql(hideBehavior.getHidingPosition(obstacle, steerable));
 
     obstacle.setPosition(new Kompute.Vector3D(600, 600, 600));
     obstacle2.setPosition(new Kompute.Vector3D(600, 600, 600));
 
-    hideBehavior.findHidingSpot();
+    hideBehavior.findHidingSpot(steerable);
 
     expect(hideBehavior.hidingSpotFound).to.eql(false);
   });
@@ -156,9 +143,7 @@ describe("HideBehavior", function(){
       threatDistance: 2000
     });
 
-    steerable.setBehavior(hideBehavior);
-
-    var result = hideBehavior.compute();
+    var result = hideBehavior.compute(steerable);
 
     expect(result.linear).not.to.eql(new Kompute.Vector3D());
     expect(steerable.targetPosition).to.eql(hideBehavior.bestHidingSpot);
@@ -185,15 +170,11 @@ describe("HideBehavior", function(){
       threatDistance: 2000
     });
 
-    steerable.setBehavior(hideBehavior);
-
-    var result = hideBehavior.compute();
+    var result = hideBehavior.compute(steerable);
 
     var arriveBehavior = new Kompute.ArriveBehavior({ satisfactionRadius: 50, slowDownRadius: 100 });
 
-    arriveBehavior.setSteerable(steerable);
-
-    var result2 = arriveBehavior.compute();
+    var result2 = arriveBehavior.compute(steerable);
 
     expect(result.linear).to.eql(result2.linear);
   });
@@ -219,9 +200,7 @@ describe("HideBehavior", function(){
       threatDistance: 20
     });
 
-    steerable.setBehavior(hideBehavior);
-
-    var result = hideBehavior.compute();
+    var result = hideBehavior.compute(steerable);
 
     expect(result.linear).to.eql(new Kompute.Vector3D());
   });
