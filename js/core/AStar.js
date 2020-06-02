@@ -61,6 +61,11 @@ AStar.prototype.generatePath = function(endVector){
   while (heapNode){
     path.insertWaypoint(vec);
 
+    var jumpDescriptor = heapNode.jumpDescriptor;
+    if (jumpDescriptor){
+      path.insertJumpDescriptor(jumpDescriptor);
+    }
+
     var parentTag = heapNode.parentTag;
     heapNode = heapNode.parent;
     if (heapNode && parentTag != this.searchID){

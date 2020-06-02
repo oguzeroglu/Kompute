@@ -255,6 +255,36 @@ describe("AStar", function(){
     path.next();
     expect(path.getCurrentWaypoint()).to.eql(false);
   });
+
+  it("should consider jump descriptors when constructing path", function(){
+    var graph = new Kompute.Graph();
+
+    var vertex1 = new Kompute.Vector3D(0, 0, 0);
+    var vertex2 = new Kompute.Vector3D(100, 0, 0);
+    var vertex3 = new Kompute.Vector3D(300, 0, 0);
+
+    var jumpDescriptor = new Kompute.JumpDescriptor({
+      takeoffPosition: vertex2, landingPosition: vertex3,
+      runupSatisfactionRadius: 100, takeoffPositionSatisfactionRadius: 100,
+      takeoffVelocitySatisfactionRadius: 100
+    });
+
+    graph.addVertex(vertex1);
+    graph.addVertex(vertex2);
+    graph.addVertex(vertex3);
+
+    graph.addEdge(vertex1, vertex2);
+    graph.addEdge(vertex2, vertex3);
+
+    graph.addJumpDescriptor(jumpDescriptor);
+
+    var aStar = new Kompute.AStar(graph);
+
+    var path = aStar.findShortestPath(vertex1, vertex3);
+
+    expect(path.jumpDescriptorLength).to.eql(1);
+    expect(path.jumpDescriptors).to.eql([jumpDescriptor, null, null]);
+  });
 });
 
 describe("AStar - Integration", function(){
