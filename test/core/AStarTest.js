@@ -18,9 +18,9 @@ describe("AStar", function(){
     var aStar = new Kompute.AStar(graph);
 
     var zeroVector = new Kompute.Vector3D();
-    var heapNode1 = { priority: 0, parent: null, x: 100, y: 200, z: 300, closedTag: null, parentTag: null };
-    var heapNode2 = { priority: 0, parent: null, x: 400, y: 500, z: 600, closedTag: null, parentTag: null };
-    var heapNode3 = { priority: 0, parent: null, x: 700, y: 800, z: 900, closedTag: null, parentTag: null };
+    var heapNode1 = { priority: 0, parent: null, x: 100, y: 200, z: 300, closedTag: null, parentTag: null, jumpDescriptor: null };
+    var heapNode2 = { priority: 0, parent: null, x: 400, y: 500, z: 600, closedTag: null, parentTag: null, jumpDescriptor: null };
+    var heapNode3 = { priority: 0, parent: null, x: 700, y: 800, z: 900, closedTag: null, parentTag: null, jumpDescriptor: null };
 
     expect(aStar.path.waypoints).to.eql([zeroVector, zeroVector, zeroVector]);
 
@@ -51,9 +51,9 @@ describe("AStar", function(){
 
     var aStar = new Kompute.AStar(graph);
 
-    expect(aStar.getHeapNode(v1.x, v1.y, v1.z)).to.eql({ priority: 0, parent: null, x: 100, y: 200, z: 300, closedTag: null, parentTag: null });
-    expect(aStar.getHeapNode(v2.x, v2.y, v2.z)).to.eql({ priority: 0, parent: null, x: 400, y: 500, z: 600, closedTag: null, parentTag: null });
-    expect(aStar.getHeapNode(v3.x, v3.y, v3.z)).to.eql({ priority: 0, parent: null, x: 700, y: 800, z: 900, closedTag: null, parentTag: null });
+    expect(aStar.getHeapNode(v1.x, v1.y, v1.z)).to.eql({ priority: 0, parent: null, x: 100, y: 200, z: 300, closedTag: null, parentTag: null, jumpDescriptor: null });
+    expect(aStar.getHeapNode(v2.x, v2.y, v2.z)).to.eql({ priority: 0, parent: null, x: 400, y: 500, z: 600, closedTag: null, parentTag: null, jumpDescriptor: null });
+    expect(aStar.getHeapNode(v3.x, v3.y, v3.z)).to.eql({ priority: 0, parent: null, x: 700, y: 800, z: 900, closedTag: null, parentTag: null, jumpDescriptor: null });
     expect(aStar.getHeapNode(600, 700, 100)).to.eql(null);
   });
 
