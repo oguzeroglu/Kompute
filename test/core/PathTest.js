@@ -46,7 +46,7 @@ describe("Path", function(){
     expect(path4.isRewinding).to.eql(false);
     expect(path4.isFinished).to.eql(false);
     expect(path4.waypoints).to.eql([new Kompute.Vector3D(), new Kompute.Vector3D(), new Kompute.Vector3D()]);
-    expect(path4.jumpDescriptors).to.eql([]);
+    expect(path4.jumpDescriptors).to.eql([null, null, null]);
     expect(path4.length).to.eql(0);
     expect(path4.options).to.eql({ fixedLength: 3 });
   });
@@ -75,11 +75,49 @@ describe("Path", function(){
     var path = new Kompute.Path({ fixedLength: 3 });
 
     path.insertWaypoint(vp1);
+    expect(path.length).to.eql(1);
+    expect(path.waypoints).to.eql([vp1, new Kompute.Vector3D(), new Kompute.Vector3D()]);
+
+    path.insertWaypoint(vp2);
+    expect(path.length).to.eql(2);
+    expect(path.waypoints).to.eql([vp1, vp2, new Kompute.Vector3D()]);
+
+    path.insertWaypoint(vp3);
+    expect(path.length).to.eql(3);
+    expect(path.waypoints).to.eql([vp1, vp2, vp3]);
+  });
+
+  it("should insert jump descriptor", function(){
+
+    var vp1 = new Kompute.Vector3D(Math.random(), Math.random(), Math.random());
+    var vp2 = new Kompute.Vector3D(Math.random(), Math.random(), Math.random());
+    var vp3 = new Kompute.Vector3D(Math.random(), Math.random(), Math.random());
+
+    var path = new Kompute.Path({ fixedLength: 3 });
+
+    path.insertWaypoint(vp1);
     path.insertWaypoint(vp2);
     path.insertWaypoint(vp3);
 
-    expect(path.waypoints).to.eql([vp1, vp2, vp3]);
-    expect(path.length).to.eql(3);
+    var jd1 = new Kompute.JumpDescriptor({
+      takeoffPosition: vp1, landingPosition: vp2,
+      runupSatisfactionRadius: 100, takeoffPositionSatisfactionRadius: 100,
+      takeoffVelocitySatisfactionRadius: 100
+    });
+
+    var jd2 = new Kompute.JumpDescriptor({
+      takeoffPosition: vp2, landingPosition: vp3,
+      runupSatisfactionRadius: 100, takeoffPositionSatisfactionRadius: 100,
+      takeoffVelocitySatisfactionRadius: 100
+    });
+
+    path.insertJumpDescriptor(jd1);
+    expect(path.jumpDescriptorLength).to.eql(1);
+    expect(path.jumpDescriptors).to.eql([jd1, null, null]);
+
+    path.insertJumpDescriptor(jd2);
+    expect(path.jumpDescriptorLength).to.eql(2);
+    expect(path.jumpDescriptors).to.eql([jd1, jd2, null]);
   });
 
   it("should get current waypoint", function(){
