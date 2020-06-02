@@ -45,7 +45,7 @@ Path.prototype.clone = function(){
     }
 
     for (var i = 0; i < this.jumpDescriptorLength; i ++){
-      cloned.addJumpDescriptor(this.jumpDescriptors[i]);
+      cloned.insertJumpDescriptor(this.jumpDescriptors[i]);
     }
   }
 

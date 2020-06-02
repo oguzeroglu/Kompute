@@ -432,11 +432,37 @@ describe("Path", function(){
       takeoffVelocitySatisfactionRadius: 100
     });
 
-    path.addJumpDescriptor(jumpDescriptor);
+    path.insertJumpDescriptor(jumpDescriptor);
 
     cloned = path.clone();
 
     expect(cloned).to.eql(path);
     expect(cloned).not.to.equal(path);
+
+    path = new Kompute.Path();
+    path.addWaypoint(new Kompute.Vector3D(0, 10, 20));
+    path.addWaypoint(new Kompute.Vector3D(20, 40, 50));
+
+    jumpDescriptor = new Kompute.JumpDescriptor({
+      takeoffPosition: new Kompute.Vector3D(0, 10, 20), landingPosition: new Kompute.Vector3D(20, 40, 50),
+      runupSatisfactionRadius: 100, takeoffPositionSatisfactionRadius: 100,
+      takeoffVelocitySatisfactionRadius: 100
+    });
+
+    path.addJumpDescriptor(jumpDescriptor);
+
+    cloned = path.clone();
+    expect(cloned.jumpDescriptorLength).to.eql(1);
+    expect(cloned.jumpDescriptors).to.eql([jumpDescriptor]);
+
+    path = new Kompute.Path({ fixedLength: 3 });
+    path.insertWaypoint(new Kompute.Vector3D(0, 10, 20));
+    path.insertWaypoint(new Kompute.Vector3D(20, 40, 50));
+
+    path.insertJumpDescriptor(jumpDescriptor);
+
+    cloned = path.clone();
+    expect(cloned.jumpDescriptorLength).to.eql(1);
+    expect(cloned.jumpDescriptors).to.eql([jumpDescriptor, null, null]);
   });
 });
