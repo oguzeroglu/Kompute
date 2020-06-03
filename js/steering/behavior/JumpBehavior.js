@@ -9,19 +9,17 @@ var JumpBehavior = function(){
 
 JumpBehavior.prototype = Object.create(SteeringBehavior.prototype);
 
-JumpBehavior.prototype.compute = function(){
+JumpBehavior.prototype.compute = function(steerable){
   var linear = this.result.linear;
 
   linear.set(0, 0, 0);
-
-  var steerable = this.steerable;
 
   if (!steerable.isJumpReady || steerable.isJumpTakenOff){
     return this.result;
   }
 
   var jumpDescriptor = steerable.jumpDescriptor;
-  var equationResult = jumpDescriptor.equationResult;
+  var equationResult = jumpDescriptor.getEquationResult(steerable);
 
   if (equationResult.time == 0){
     return this.result;
@@ -38,12 +36,11 @@ JumpBehavior.prototype.compute = function(){
     }
   }
 
-  return this.matchVelocity(equationResult.time, targetVelocity);
+  return this.matchVelocity(equationResult.time, targetVelocity, steerable);
 }
 
-JumpBehavior.prototype.matchVelocity = function(time, targetVelocity){
+JumpBehavior.prototype.matchVelocity = function(time, targetVelocity, steerable){
   var linear = this.result.linear;
-  var steerable = this.steerable;
   targetVelocity.sub(steerable.velocity).multiplyScalar(1 / time);
   linear.copy(targetVelocity);
   return this.result;

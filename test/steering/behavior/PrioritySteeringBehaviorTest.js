@@ -10,17 +10,11 @@ describe("PrioritySteeringBehavior", function(){
 
     var list = [arriveBehavior, avoidBehavior];
 
-    var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
     var prioritySteeringBehavior = new Kompute.PrioritySteeringBehavior({ threshold: 10, list: list});
 
-    steerable.setBehavior(prioritySteeringBehavior);
-
     expect(prioritySteeringBehavior.result).to.eql(new Kompute.SteerResult());
-    expect(prioritySteeringBehavior.steerable).to.equal(steerable);
     expect(prioritySteeringBehavior.threshold).to.equal(10);
     expect(prioritySteeringBehavior.list).to.eql([arriveBehavior, avoidBehavior]);
-    expect(arriveBehavior.steerable).to.equal(steerable);
-    expect(avoidBehavior.steerable).to.equal(steerable);
   });
 
   it("should request 0 acceleration if no behavior added", function(){
@@ -28,9 +22,7 @@ describe("PrioritySteeringBehavior", function(){
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
     var prioritySteeringBehavior = new Kompute.PrioritySteeringBehavior({ threshold: 10, list: []});
 
-    steerable.setBehavior(prioritySteeringBehavior);
-
-    expect(prioritySteeringBehavior.compute().linear).to.eql(new Kompute.Vector3D());
+    expect(prioritySteeringBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D());
   });
 
   it("should compute", function(){
@@ -46,13 +38,9 @@ describe("PrioritySteeringBehavior", function(){
     var prioritySteeringBehavior2 = new Kompute.PrioritySteeringBehavior({ threshold: 0, list: list});
     var prioritySteeringBehavior3 = new Kompute.PrioritySteeringBehavior({ threshold: 100000, list: list});
 
-    prioritySteeringBehavior.setSteerable(steerable);
-    prioritySteeringBehavior2.setSteerable(steerable);
-    prioritySteeringBehavior3.setSteerable(steerable);
-
-    expect(prioritySteeringBehavior.compute().linear).to.eql(new Kompute.Vector3D(100, 100, 100));
-    expect(prioritySteeringBehavior2.compute().linear).to.eql(new Kompute.Vector3D(1, 1, 1));
-    expect(prioritySteeringBehavior3.compute().linear).to.eql(new Kompute.Vector3D());
+    expect(prioritySteeringBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D(100, 100, 100));
+    expect(prioritySteeringBehavior2.compute(steerable).linear).to.eql(new Kompute.Vector3D(1, 1, 1));
+    expect(prioritySteeringBehavior3.compute(steerable).linear).to.eql(new Kompute.Vector3D());
   });
 });
 

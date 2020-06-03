@@ -12,13 +12,10 @@ var SeparationBehavior = function(options){
 
 SeparationBehavior.prototype = Object.create(SteeringBehavior.prototype);
 
-SeparationBehavior.prototype.compute = function(){
+SeparationBehavior.prototype.compute = function(steerable){
   var linear = this.result.linear;
-  var steerable = this.steerable;
 
   linear.set(0, 0, 0);
-
-  var steerable = this.steerable;
 
   var strength = this.strength;
   steerable.executeForEachCloseEntity(function(entity){

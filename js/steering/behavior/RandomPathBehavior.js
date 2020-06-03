@@ -33,14 +33,14 @@ RandomPathBehavior.prototype.getRandomWaypoint = function(){
   return allVertices[Math.floor(Math.random() * allVertices.length)] || null;
 }
 
-RandomPathBehavior.prototype.constructPath = function(){
+RandomPathBehavior.prototype.constructPath = function(steerable){
 
   var iterate = true;
   var aStar = this.aStar;
   var graph = aStar.graph;
 
   while (iterate){
-    var startPoint = graph.findClosestVertexToPoint(this.steerable.position);
+    var startPoint = graph.findClosestVertexToPoint(steerable.position);
     if (!startPoint){
       startPoint = this.getRandomWaypoint();
     }
@@ -54,12 +54,12 @@ RandomPathBehavior.prototype.constructPath = function(){
   this.isPathConstructed = true;
 }
 
-RandomPathBehavior.prototype.compute = function(){
+RandomPathBehavior.prototype.compute = function(steerable){
   if (!this.isPathConstructed){
-    this.constructPath();
+    this.constructPath(steerable);
   }
 
-  return PathFollowingBehavior.prototype.compute.call(this);
+  return PathFollowingBehavior.prototype.compute.call(this, steerable);
 }
 
 Object.defineProperty(RandomPathBehavior.prototype, 'constructor', { value: RandomPathBehavior,  enumerable: false, writable: true });

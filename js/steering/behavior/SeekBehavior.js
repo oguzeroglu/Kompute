@@ -6,11 +6,10 @@ var SeekBehavior = function(){
 
 SeekBehavior.prototype = Object.create(SteeringBehavior.prototype);
 
-SeekBehavior.prototype.compute = function(){
+SeekBehavior.prototype.compute = function(steerable){
 
   this.result.linear.set(0, 0, 0);
 
-  var steerable = this.steerable;
   if (!steerable.hasTargetPosition){
     return this.result;
   }

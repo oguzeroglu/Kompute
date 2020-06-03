@@ -11,7 +11,6 @@ describe("ArriveBehavior", function(){
     steerable.setBehavior(arriveBehavior);
 
     expect(arriveBehavior.result).to.eql(new Kompute.SteerResult());
-    expect(arriveBehavior.steerable).to.equal(steerable);
     expect(arriveBehavior.satisfactionRadius).to.eql(50);
     expect(arriveBehavior.slowDownRadius).to.eql(100);
   });
@@ -21,9 +20,7 @@ describe("ArriveBehavior", function(){
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
     var arriveBehavior = new Kompute.ArriveBehavior({ satisfactionRadius: 50, slowDownRadius: 100 });
 
-    steerable.setBehavior(arriveBehavior);
-
-    expect(arriveBehavior.compute().linear).to.eql(new Kompute.Vector3D(0, 0, 0));
+    expect(arriveBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D(0, 0, 0));
   });
 
   it("should not request acceleration if steerable in satisfactionRadius", function(){
@@ -33,11 +30,9 @@ describe("ArriveBehavior", function(){
       slowDownRadius: 100
     });
 
-    steerable.setBehavior(arriveBehavior);
-
     steerable.setTargetPosition(new Kompute.Vector3D(10, 10, 10));
 
-    expect(arriveBehavior.compute().linear).to.eql(new Kompute.Vector3D());
+    expect(arriveBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D());
   });
 
   it("should slow down if steerable in slowDownRadius", function(){

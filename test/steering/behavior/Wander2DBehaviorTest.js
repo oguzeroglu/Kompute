@@ -4,7 +4,6 @@ var Kompute = require("../../../build/Kompute");
 describe("Wander2DBehavior", function(){
 
   it("should initialize", function(){
-    var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
     var wanderBehavior = new Kompute.Wander2DBehavior({
       angleChange: Math.PI / 100,
       normal: new Kompute.Vector3D(0, 1, 0),
@@ -12,10 +11,7 @@ describe("Wander2DBehavior", function(){
       wanderCircleRadius: 50
     });
 
-    steerable.setBehavior(wanderBehavior);
-
     expect(wanderBehavior.result).to.eql(new Kompute.SteerResult());
-    expect(wanderBehavior.steerable).to.equal(steerable);
     expect(wanderBehavior.angle).to.eql(0);
     expect(wanderBehavior.normal).to.eql(new Kompute.Vector3D(0, 1, 0));
     expect(wanderBehavior.wanderCircleDistance).to.eql(100);
@@ -32,12 +28,10 @@ describe("Wander2DBehavior", function(){
       wanderCircleRadius: 50
     });
 
-    steerable.setBehavior(wanderBehavior);
-
     steerable.position.set(100, 200, 300);
     steerable.velocity.set(1000, 0, 0);
 
-    expect(wanderBehavior.getCircleCenter()).to.eql(new Kompute.Vector3D(10, 0, 0));
+    expect(wanderBehavior.getCircleCenter(steerable)).to.eql(new Kompute.Vector3D(10, 0, 0));
   });
 
   it("should get displacement force", function(){
@@ -51,8 +45,6 @@ describe("Wander2DBehavior", function(){
         wanderCircleDistance: 100 * Math.random(),
         wanderCircleRadius: 100 * Math.random()
       });
-
-      steerable.setBehavior(wanderBehavior);
 
       wanderBehavior.angle = Math.PI * (Math.random() - 0.5);
       steerable.position.set((Math.random() - 0.5) * 1000, (Math.random() - 0.5) * 1000, (Math.random() - 0.5) * 1000);
@@ -76,11 +68,9 @@ describe("Wander2DBehavior", function(){
         wanderCircleRadius: 100 * Math.random()
       });
 
-      steerable.setBehavior(wanderBehavior);
-
       steerable.position.set((Math.random() - 0.5) * 1000, (Math.random() - 0.5) * 1000, (Math.random() - 0.5) * 1000);
       steerable.velocity.set((Math.random() - 0.5) * 1000, (Math.random() - 0.5) * 1000, (Math.random() - 0.5) * 1000);
-      wanderBehavior.compute();
+      wanderBehavior.compute(steerable);
       var newAngle = wanderBehavior.angle;
       expect(Math.abs(newAngle - angle) <= Math.PI / 100).to.eql(true);
       angle = newAngle;
@@ -100,13 +90,11 @@ describe("Wander2DBehavior", function(){
       wanderCircleRadius: 50
     });
 
-    steerable.setBehavior(wanderBehavior);
-
     var angle = wanderBehavior.angle
-    var circleCenter = wanderBehavior.getCircleCenter();
+    var circleCenter = wanderBehavior.getCircleCenter(steerable);
     var dispForce = wanderBehavior.getDisplacementForce();
 
-    var result = wanderBehavior.compute();
+    var result = wanderBehavior.compute(steerable);
 
     expect(result.linear).to.eql(circleCenter.add(dispForce));
     expect(wanderBehavior.angle != angle).to.eql(true);

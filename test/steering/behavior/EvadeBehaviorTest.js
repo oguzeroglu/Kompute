@@ -5,13 +5,9 @@ describe("EvadeBehavior", function(){
 
   it("should initialize", function(){
 
-    var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
     var evadeBehavior = new Kompute.EvadeBehavior({maxPredictionTime: 100});
 
-    steerable.setBehavior(evadeBehavior);
-
     expect(evadeBehavior.result).to.eql(new Kompute.SteerResult());
-    expect(evadeBehavior.steerable).to.equal(steerable);
     expect(evadeBehavior.maxPredictionTime).to.eql(100);
   });
 
@@ -19,9 +15,7 @@ describe("EvadeBehavior", function(){
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
     var evadeBehavior = new Kompute.EvadeBehavior({maxPredictionTime: 100});
 
-    steerable.setBehavior(evadeBehavior);
-
-    expect(evadeBehavior.compute().linear).to.eql(new Kompute.Vector3D());
+    expect(evadeBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D());
   });
 
   it("should compute the inverse of pursue behavior", function(){
@@ -35,14 +29,11 @@ describe("EvadeBehavior", function(){
     var pursueBehavior = new Kompute.PursueBehavior({maxPredictionTime: 10});
     var evadeBehavior = new Kompute.EvadeBehavior({maxPredictionTime: 10});
 
-    steerable.setBehavior(evadeBehavior);
-    pursueBehavior.setSteerable(steerable);
-
     steerable.maxAcceleration = 100;
     steerable.velocity.set(10, 10, 10);
 
-    var pursueResult = pursueBehavior.compute();
-    var evadeResult = evadeBehavior.compute();
+    var pursueResult = pursueBehavior.compute(steerable);
+    var evadeResult = evadeBehavior.compute(steerable);
 
     expect(evadeResult.linear).to.eql(pursueResult.linear.multiplyScalar(-1));
   });

@@ -17,8 +17,8 @@ var Wander2DBehavior = function(options){
 
 Wander2DBehavior.prototype = Object.create(SteeringBehavior.prototype);
 
-Wander2DBehavior.prototype.compute = function(){
-  var circleCenter = this.getCircleCenter();
+Wander2DBehavior.prototype.compute = function(steerable){
+  var circleCenter = this.getCircleCenter(steerable);
   var displacementForce = this.getDisplacementForce();
 
   this.result.linear.copy(circleCenter).add(displacementForce);
@@ -28,8 +28,7 @@ Wander2DBehavior.prototype.compute = function(){
   return this.result;
 }
 
-Wander2DBehavior.prototype.getCircleCenter = function(){
-  var steerable = this.steerable;
+Wander2DBehavior.prototype.getCircleCenter = function(steerable){
   var dist = this.wanderCircleDistance;
   return vectorPool.get().copy(steerable.velocity).normalize().multiplyScalar(dist);
 }

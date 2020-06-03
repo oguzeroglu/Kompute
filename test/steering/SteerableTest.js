@@ -221,7 +221,6 @@ describe("Steerable", function(){
     entity.setBehavior(behavior);
 
     expect(entity.behavior).to.equal(behavior);
-    expect(behavior.steerable).to.equal(entity);
   });
 
   it ("should set jump behavior", function(){
@@ -234,7 +233,6 @@ describe("Steerable", function(){
     entity.setJumpBehavior(behavior);
 
     expect(entity.jumpBehavior).to.equal(behavior);
-    expect(behavior.steerable).to.equal(entity);
   });
 
   it("should not set behavior if a jump is initiated", function(){
@@ -400,6 +398,8 @@ describe("Steerable", function(){
     var world = new Kompute.World(1000, 1000, 1000, 10);
     world.insertEntity(entity);
 
+    world.setGravity(-900);
+
     var toRunupBehavior = new MockSteeringBehavior();
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(100, 200, 300),
@@ -409,10 +409,9 @@ describe("Steerable", function(){
       takeoffVelocitySatisfactionRadius: 20
     });
 
+    jumpDescriptor.setCache(entity, { vx: 100, vz: -100, time: (1/60) * 5 });
+
     entity.jump(toRunupBehavior, jumpDescriptor);
-    jumpDescriptor.equationResult.vx = 100;
-    jumpDescriptor.equationResult.vz = -100;
-    jumpDescriptor.equationResult.time = (1/60) * 5;
 
     entity.isJumpTakenOff = true;
 
@@ -584,7 +583,6 @@ describe("Steerable", function(){
     expect(entity.isJumpInitiated).to.eql(true);
     expect(entity.isJumpTakenOff).to.eql(false);
     expect(entity.behavior).to.equal(mockBehavior);
-    expect(mockBehavior.steerable).to.equal(entity);
   });
 
   it("should consider gravity when updating if jump took off", function(){
@@ -596,7 +594,11 @@ describe("Steerable", function(){
     world.insertEntity(entity);
 
     entity.setBehavior(new MockSteeringBehavior());
-    entity.jumpDescriptor = {equationResult: {time: 999}};
+    entity.jumpDescriptor = {
+      getEquationResult: function(){
+        return { time: 999 };
+      }
+    };
 
     entity.isJumpTakenOff = true;
 
@@ -646,6 +648,7 @@ describe("Steerable", function(){
     expect(entity.position.y).to.eql(jumpDescriptor.landingPosition.y);
     expect(entity.linearAcceleration).to.eql(new Kompute.Vector3D());
     expect(entity.velocity).to.eql(new Kompute.Vector3D());
+    expect(entity.jumpTime).to.eql(0);
   });
 
   it("should set jump completion listener", function(){
@@ -691,8 +694,8 @@ class MockSteeringBehavior extends Kompute.SteeringBehavior{
     super(params);
   }
 
-  compute(){
-    this.result.linear.copy(this.steerable.linearAcceleration);
+  compute(steerable){
+    this.result.linear.copy(steerable.linearAcceleration);
     return this.result;
   }
 }

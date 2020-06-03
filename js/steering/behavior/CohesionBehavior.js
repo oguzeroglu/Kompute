@@ -7,9 +7,8 @@ var CohesionBehavior = function(){
 
 CohesionBehavior.prototype = Object.create(SeekBehavior.prototype);
 
-CohesionBehavior.prototype.compute = function(){
+CohesionBehavior.prototype.compute = function(steerable){
   var linear = this.result.linear;
-  var steerable = this.steerable;
 
   linear.set(0, 0, 0);
 
@@ -28,7 +27,7 @@ CohesionBehavior.prototype.compute = function(){
   if (count > 0){
     linear.multiplyScalar(1 / count);
     steerable.setTargetPosition(linear);
-    return SeekBehavior.prototype.compute.call(this);
+    return SeekBehavior.prototype.compute.call(this, steerable);
   }
 
   return this.result;

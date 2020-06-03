@@ -7,14 +7,64 @@ var JumpDescriptor = function(parameters){
 
   this.delta = this.landingPosition.clone().sub(this.takeoffPosition);
 
-  this.equationResult = { time: 0, vx: 0, vz: 0, isAchievable: false };
-
   this.checkTimeResult = { vx: 0, vz: 0, isAchievable: false };
+
+  this.cache = {};
+}
+
+JumpDescriptor.prototype.getEquationResult = function(steerable){
+  var jumpSpeed = steerable.jumpSpeed;
+  var maxSpeed = steerable.maxSpeed;
+  var gravity = steerable.world.gravity;
+
+  var cache = this.cache;
+
+  var obj;
+
+  if (cache[jumpSpeed]){
+    if (cache[jumpSpeed][maxSpeed]){
+      if (cache[jumpSpeed][maxSpeed][gravity]){
+        return cache[jumpSpeed][maxSpeed][gravity];
+      }
+    }
+  }
+
+  return null;
+}
+
+JumpDescriptor.prototype.setCache = function(steerable, equationResult){
+  var jumpSpeed = steerable.jumpSpeed;
+  var maxSpeed = steerable.maxSpeed;
+  var gravity = steerable.world.gravity;
+
+  var cache = this.cache;
+
+  if (!cache[jumpSpeed]){
+    cache[jumpSpeed] = {};
+  }
+
+  if (!cache[jumpSpeed][maxSpeed]){
+    cache[jumpSpeed][maxSpeed] = {};
+  }
+
+  if (!cache[jumpSpeed][maxSpeed][gravity]){
+    cache[jumpSpeed][maxSpeed] = {};
+  }
+
+  cache[jumpSpeed][maxSpeed][gravity] = equationResult;
 }
 
 JumpDescriptor.prototype.solveQuadraticEquation = function(steerable){
 
-  this.equationResult.isAchievable = false;
+  var equationResult = this.getEquationResult(steerable);
+  if (equationResult){
+    return equationResult;
+  }
+
+  equationResult = { time: 0, vx: 0, vz: 0, isAchievable: false };
+  this.setCache(steerable, equationResult);
+
+  equationResult.isAchievable = false;
 
   var jumpSpeed = steerable.jumpSpeed;
   var maxSpeed = steerable.maxSpeed;
@@ -29,26 +79,26 @@ JumpDescriptor.prototype.solveQuadraticEquation = function(steerable){
 
   var result = this.checkTime(jumpTimeCandidate, maxSpeed);
 
-  this.equationResult.time = jumpTimeCandidate;
-  this.equationResult.vx = result.vx;
-  this.equationResult.vz = result.vz;
-  this.equationResult.isAchievable = result.isAchievable;
+  equationResult.time = jumpTimeCandidate;
+  equationResult.vx = result.vx;
+  equationResult.vz = result.vz;
+  equationResult.isAchievable = result.isAchievable;
 
   if (!result.isAchievable){
     jumpTimeCandidate = (-jumpSpeed - discriminantSqrt) / gravity;
     result = this.checkTime(jumpTimeCandidate, maxSpeed);
 
-    this.equationResult.time = jumpTimeCandidate;
-    this.equationResult.vx = result.vx;
-    this.equationResult.vz = result.vz;
-    this.equationResult.isAchievable = result.isAchievable;
+    equationResult.time = jumpTimeCandidate;
+    equationResult.vx = result.vx;
+    equationResult.vz = result.vz;
+    equationResult.isAchievable = result.isAchievable;
   }
 
-  if (!this.equationResult.isAchievable){
+  if (!equationResult.isAchievable){
     return false;
   }
 
-  return this.equationResult;
+  return equationResult;
 }
 
 JumpDescriptor.prototype.checkTime = function(time, maxSpeed){

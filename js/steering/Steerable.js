@@ -34,7 +34,7 @@ Steerable.prototype.update = function(){
     return;
   }
 
-  var steerResult = this.behavior.compute();
+  var steerResult = this.behavior.compute(this);
 
   this.linearAcceleration.copy(steerResult.linear);
 
@@ -46,7 +46,7 @@ Steerable.prototype.update = function(){
   if (this.isJumpTakenOff){
     this.linearAcceleration.y += this.world.gravity;
     this.jumpTime += delta;
-    if (this.jumpTime >= this.jumpDescriptor.equationResult.time){
+    if (this.jumpTime >= this.jumpDescriptor.getEquationResult(this).time){
       this.onJumpCompleted();
     }
   }
@@ -68,7 +68,6 @@ Steerable.prototype.setJumpBehavior = function(behavior){
     return;
   }
 
-  behavior.setSteerable(this);
   this.jumpBehavior = behavior;
 }
 
@@ -77,7 +76,6 @@ Steerable.prototype.setBehavior = function(behavior){
     return;
   }
 
-  behavior.setSteerable(this);
   this.behavior = behavior;
 }
 
@@ -171,12 +169,13 @@ Steerable.prototype.onJumpTakeOff = function(){
   this.isJumpTakenOff = true;
 
   var jumpDescriptor = this.jumpDescriptor;
-  var equationResult = jumpDescriptor.equationResult;
+  var equationResult = jumpDescriptor.getEquationResult(this);
 
   this.velocity.set(equationResult.vx, this.jumpSpeed, equationResult.vz);
 }
 
 Steerable.prototype.onJumpCompleted = function(){
+  this.jumpTime = 0;
   this.isJumpInitiated = false;
   this.isJumpReady = false;
   this.isJumpTakenOff = false;
@@ -186,7 +185,7 @@ Steerable.prototype.onJumpCompleted = function(){
   this.linearAcceleration.set(0, 0, 0);
 
   if (this.jumpCompletionCallback){
-    this.jumpCompletionCallback();
+    this.jumpCompletionCallback(this);
   }
 }
 

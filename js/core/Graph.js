@@ -1,5 +1,6 @@
 import { Edge } from "./Edge";
 import { Vertex } from "./Vertex";
+import { Vector3D } from "./Vector3D";
 
 var Graph = function(){
 
@@ -10,6 +11,20 @@ var Graph = function(){
   this.totalVertexCount = 0;
 
   this.vertexIDs = [];
+}
+
+Graph.prototype.clone = function(){
+  var cloned = new Graph();
+
+  this.forEachVertex(function(x, y, z){
+    cloned.addVertex(new Vector3D(x, y, z));
+  });
+
+  this.forEachEdge(function(edge){
+    cloned.addEdge(edge.fromVertex, edge.toVertex);
+  });
+
+  return cloned;
 }
 
 Graph.prototype.findClosestVertexToPoint = function(pointVector){
@@ -146,6 +161,35 @@ Graph.prototype.addEdge = function(fromVertex, toVertex){
   return true;
 }
 
+Graph.prototype.addJumpDescriptor = function(jumpDescriptor){
+  var fromVertex = jumpDescriptor.takeoffPosition;
+  var toVertex = jumpDescriptor.landingPosition;
+  if (!this.hasVertex(fromVertex) || !this.hasVertex(toVertex)){
+    return false;
+  }
+
+  var edges = this.connections[fromVertex.x][fromVertex.y][fromVertex.z];
+  var edge = null;
+
+  for (var i = 0; i < edges.length; i ++){
+    var to = edges[i].toVertex;
+    if (to.x == toVertex.x && to.y == toVertex.y && to.z == toVertex.z){
+      edge = edges[i];
+      break;
+    }
+  }
+
+  if (edge){
+    edge.jumpDescriptor = jumpDescriptor;
+  }else{
+    edge = new Edge(fromVertex, toVertex);
+    edge.jumpDescriptor = jumpDescriptor;
+    edges.push(edge);
+  }
+
+  return true;
+}
+
 Graph.prototype.removeEdge = function(fromVertex, toVertex){
   if (!this.hasVertex(fromVertex) || !this.hasVertex(toVertex)){
     return false;
@@ -182,7 +226,7 @@ Graph.prototype.forEachNeighbor = function(vertex, fn){
 
   for (var i = 0; i < ary.length; i ++){
     var edge = ary[i];
-    fn(edge.toVertex, edge.cost);
+    fn(edge.toVertex, edge.cost, edge.jumpDescriptor);
   }
 }
 

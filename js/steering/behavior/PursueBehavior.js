@@ -11,11 +11,9 @@ var PursueBehavior = function(options){
 
 PursueBehavior.prototype = Object.create(SeekBehavior.prototype);
 
-PursueBehavior.prototype.compute = function(){
+PursueBehavior.prototype.compute = function(steerable){
 
   this.result.linear.set(0, 0, 0);
-
-  var steerable = this.steerable;
 
   if (!steerable.hasTargetEntity){
     return this.result;
@@ -38,7 +36,7 @@ PursueBehavior.prototype.compute = function(){
   var v = vectorPool.get().copy(targetEntity.velocity).multiplyScalar(predictionTime).add(targetPosition);
   steerable.setTargetPosition(v);
 
-  return SeekBehavior.prototype.compute.call(this);
+  return SeekBehavior.prototype.compute.call(this, steerable);
 }
 
 Object.defineProperty(PursueBehavior.prototype, 'constructor', { value: SeekBehavior,  enumerable: false, writable: true });

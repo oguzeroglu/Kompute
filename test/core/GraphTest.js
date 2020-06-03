@@ -132,6 +132,49 @@ describe("Graph", function(){
     });
   });
 
+  it("should add jump descriptor", function(){
+    var graph = new Kompute.Graph();
+
+    var vertex = new Kompute.Vector3D(10, 20, 30);
+    var vertex2 = new Kompute.Vector3D(40, 50, 60);
+
+    var jumpDescriptor = new Kompute.JumpDescriptor({
+      takeoffPosition: vertex, landingPosition: vertex2,
+      runupSatisfactionRadius: 100, takeoffPositionSatisfactionRadius: 100,
+      takeoffVelocitySatisfactionRadius: 100
+    });
+
+    expect(graph.addJumpDescriptor(jumpDescriptor)).to.eql(false);
+
+    graph.addVertex(vertex);
+
+    expect(graph.addJumpDescriptor(jumpDescriptor)).to.eql(false);
+
+    graph.addVertex(vertex2);
+
+    expect(graph.addJumpDescriptor(jumpDescriptor)).to.eql(true);
+
+    var edge = new Kompute.Edge(vertex, vertex2);
+    edge.jumpDescriptor = jumpDescriptor;
+
+    expect(graph.connections[10][20][30]).to.eql([edge]);
+
+    graph = new Kompute.Graph();
+
+    graph.addVertex(vertex);
+    graph.addVertex(vertex2);
+
+    graph.addEdge(vertex, vertex2);
+
+    edge = graph.connections[10][20][30][0];
+
+    expect(edge.jumpDescriptor).to.eql(null);
+
+    expect(graph.addJumpDescriptor(jumpDescriptor)).to.eql(true);
+
+    expect(edge.jumpDescriptor).to.equal(jumpDescriptor);
+  });
+
   it("should remove edge", function(){
     var graph = new Kompute.Graph();
 
@@ -179,11 +222,12 @@ describe("Graph", function(){
 
     graph.addEdge(vertex, vertex2);
 
-    var param1 = null, param2 = null, count = 0;
+    var param1 = null, param2 = null, param3 = null, count = 0;
 
-    var fn = function(neighborVertex, cost){
+    var fn = function(neighborVertex, cost, jumpDescriptor){
       param1 = neighborVertex;
       param2 = cost;
+      param3 = jumpDescriptor;
       count ++;
     };
 
@@ -192,6 +236,7 @@ describe("Graph", function(){
     expect(count).to.eql(1);
     expect(param1).to.eql(vertex2);
     expect(param2).to.eql(vertex2.clone().sub(vertex).getLength());
+    expect(param3).to.eql(null);
 
     var called = false;
     var fn2 = function(){
@@ -200,6 +245,19 @@ describe("Graph", function(){
 
     graph.forEachNeighbor(vertex2, fn2);
     expect(called).to.eql(false);
+
+    var jumpDescriptor = new Kompute.JumpDescriptor({
+      takeoffPosition: vertex,
+      landingPosition: vertex2,
+      runupSatisfactionRadius: 100,
+      takeoffPositionSatisfactionRadius: 100,
+      takeoffVelocitySatisfactionRadius: 100
+    });
+
+    graph.addJumpDescriptor(jumpDescriptor);
+
+    graph.forEachNeighbor(vertex, fn);
+    expect(param3).to.equal(jumpDescriptor);
   });
 
   it("should run for each vertex", function(){
@@ -281,6 +339,28 @@ describe("Graph", function(){
     expect(edges[0]).to.eql(new Kompute.Edge(v1, v2));
     expect(edges[1]).to.eql(new Kompute.Edge(v2, v3));
     expect(edges[2]).to.eql(new Kompute.Edge(v3, v1));
+  });
+
+  it("should clone", function(){
+
+    var graph = new Kompute.Graph();
+
+    var vec1 = new Kompute.Vector3D(100, 200, 300);
+    var vec2 = new Kompute.Vector3D(300, 400, 500);
+    var vec3 = new Kompute.Vector3D(500, 600, 700);
+
+    graph.addVertex(vec1);
+    graph.addVertex(vec2);
+    graph.addVertex(vec3);
+
+    graph.addEdge(vec1, vec3);
+    graph.addEdge(vec3, vec2);
+    graph.addEdge(vec1, vec2);
+
+    var cloned = graph.clone();
+
+    expect(graph).to.eql(cloned);
+    expect(graph).not.to.equal(cloned);
   });
 });
 

@@ -10,19 +10,11 @@ var PrioritySteeringBehavior = function(options){
 
 PrioritySteeringBehavior.prototype = Object.create(SteeringBehavior.prototype);
 
-PrioritySteeringBehavior.prototype.setSteerable = function(steerable){
-  for (var i = 0; i < this.list.length; i++){
-    this.list[i].setSteerable(steerable);
-  }
-
-  SteeringBehavior.prototype.setSteerable.call(this, steerable);
-}
-
-PrioritySteeringBehavior.prototype.compute = function(){
+PrioritySteeringBehavior.prototype.compute = function(steerable){
   this.result.linear.set(0, 0, 0);
 
   for (var i = 0; i < this.list.length; i ++){
-    var result = this.list[i].compute();
+    var result = this.list[i].compute(steerable);
     if (result.linear.getLength() > this.threshold){
       this.result.linear.copy(result.linear);
       return this.result;

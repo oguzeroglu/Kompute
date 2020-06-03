@@ -15,10 +15,9 @@ var AvoidBehavior = function(options){
 
 AvoidBehavior.prototype = Object.create(SteeringBehavior.prototype);
 
-AvoidBehavior.prototype.findMostThreateningObstacle = function(){
+AvoidBehavior.prototype.findMostThreateningObstacle = function(steerable){
   var mostThreatening = null;
 
-  var steerable = this.steerable;
   var maxSeeAhead = this.maxSeeAhead;
 
   var position = steerable.position;
@@ -46,16 +45,15 @@ AvoidBehavior.prototype.findMostThreateningObstacle = function(){
   return mostThreatening;
 }
 
-AvoidBehavior.prototype.compute = function(){
+AvoidBehavior.prototype.compute = function(steerable){
   this.result.linear.set(0, 0, 0);
 
-  var mostThreateningObstacle = this.findMostThreateningObstacle();
+  var mostThreateningObstacle = this.findMostThreateningObstacle(steerable);
 
   if (!mostThreateningObstacle){
     return this.result;
   }
 
-  var steerable = this.steerable;
   this.result.linear.copy(steerable.velocity).normalize().multiplyScalar(steerable.velocity.getLength() / steerable.maxSpeed).add(steerable.position).sub(mostThreateningObstacle.position).normalize().multiplyScalar(this.maxAvoidForce);;
   return this.result;
 }

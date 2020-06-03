@@ -293,7 +293,7 @@ describe("DebugHelper", function(){
     for (var i = 0; i < 100; i ++){
       var child = scene.children[i];
       expect(child.position).to.eql(path.waypoints[i]);
-      expect(child.geometry).to.eql(new MockBoxBufferGeometry(1, 1, 1));
+      expect(child.geometry).to.eql(new MockBoxBufferGeometry(5, 5, 5));
     }
 
     debugHelper.deactivate();

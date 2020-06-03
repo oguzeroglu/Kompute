@@ -8,6 +8,8 @@ var PathFollowingBehavior = function(options){
 
   this.path = options.path;
   this.satisfactionRadius = options.satisfactionRadius || 0;
+
+  this.onJumpCompletionCallback = this.onJumpCompleted.bind(this);
 }
 
 PathFollowingBehavior.prototype = Object.create(SeekBehavior.prototype);
@@ -22,13 +24,21 @@ PathFollowingBehavior.prototype.getCurrentWaypoint = function(){
   return this.path.getCurrentWaypoint();
 }
 
-PathFollowingBehavior.prototype.compute = function(){
+PathFollowingBehavior.prototype.compute = function(steerable){
   this.result.linear.set(0, 0, 0);
-  var steerable = this.steerable;
   var path = this.path;
 
   var currentWayPoint = this.getCurrentWaypoint();
   if (!currentWayPoint){
+    return this.result;
+  }
+
+  var jumpDescriptor = this.isJumpNeeded(steerable);
+  if (jumpDescriptor){
+    this.beforeJumpBehavior = steerable.behavior;
+    steerable.jumpDescriptor = jumpDescriptor;
+    steerable.onJumpReady();
+    steerable.setJumpCompletionListener(this.onJumpCompletionCallback);
     return this.result;
   }
 
@@ -43,7 +53,40 @@ PathFollowingBehavior.prototype.compute = function(){
   }
 
   steerable.setTargetPosition(currentWayPoint);
-  return SeekBehavior.prototype.compute.call(this);
+  return SeekBehavior.prototype.compute.call(this, steerable);
+}
+
+PathFollowingBehavior.prototype.isJumpNeeded = function(steerable){
+
+  var path = this.path;
+  var jumpDescriptors = path.jumpDescriptors;
+
+  for (var i = 0; i < path.jumpDescriptorLength; i ++){
+    var jumpDescriptor = jumpDescriptors[i];
+    var distToTakeoffPosition = vectorPool.get().copy(steerable.position).sub(jumpDescriptor.takeoffPosition).getLength();
+    if (distToTakeoffPosition < jumpDescriptor.runupSatisfactionRadius){
+      var quadraticEquationResult = jumpDescriptor.solveQuadraticEquation(steerable);
+      if (quadraticEquationResult){
+        return jumpDescriptor;
+      }
+    }
+  }
+
+  return false;
+}
+
+PathFollowingBehavior.prototype.onJumpCompleted = function(steerable){
+  var jumpDescriptor = steerable.jumpDescriptor;
+  var landingPosition = jumpDescriptor.landingPosition;
+  var path = this.path;
+
+  var landingPositionIndex = path.getWaypointIndex(landingPosition);
+
+  while(path.index != landingPositionIndex && !path.isFinished){
+    path.next();
+  }
+
+  steerable.setBehavior(this.beforeJumpBehavior);
 }
 
 Object.defineProperty(PathFollowingBehavior.prototype, 'constructor', { value: PathFollowingBehavior,  enumerable: false, writable: true });

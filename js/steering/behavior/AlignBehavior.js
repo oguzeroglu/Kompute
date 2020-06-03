@@ -7,9 +7,8 @@ var AlignBehavior = function(){
 
 AlignBehavior.prototype = Object.create(SteeringBehavior.prototype);
 
-AlignBehavior.prototype.compute = function(){
+AlignBehavior.prototype.compute = function(steerable){
   var linear = this.result.linear;
-  var steerable = this.steerable;
 
   linear.set(0, 0, 0);
 

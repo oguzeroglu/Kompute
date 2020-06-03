@@ -11,7 +11,6 @@ describe("AlignBehavior", function(){
     steerable.setBehavior(alignBehavior);
 
     expect(alignBehavior.result).to.eql(new Kompute.SteerResult());
-    expect(alignBehavior.steerable).to.equal(steerable);
   });
 
   it("should not request acceleration if no nearby steerables exist", function(){
@@ -23,7 +22,7 @@ describe("AlignBehavior", function(){
     var world = new Kompute.World(1000, 1000, 1000, 50);
     world.insertEntity(steerable);
 
-    expect(alignBehavior.compute().linear).to.eql(new Kompute.Vector3D());
+    expect(alignBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D());
   });
 
   it("should compute", function(){
@@ -33,8 +32,6 @@ describe("AlignBehavior", function(){
     var steerable4 = new Kompute.Steerable("steerable4", new Kompute.Vector3D(-300, -300, -300), new Kompute.Vector3D(10, 10, 10));
 
     var alignBehavior = new Kompute.AlignBehavior();
-
-    steerable.setBehavior(alignBehavior);
 
     steerable2.velocity.set(10, 20, 30);
     steerable3.velocity.set(40, 50, 60);
@@ -46,6 +43,6 @@ describe("AlignBehavior", function(){
     world.insertEntity(steerable3);
     world.insertEntity(steerable4);
 
-    expect(alignBehavior.compute().linear).to.eql(new Kompute.Vector3D(25, 35, 45));
+    expect(alignBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D(25, 35, 45));
   });
 });

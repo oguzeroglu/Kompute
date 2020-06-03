@@ -22,7 +22,7 @@ var AStar = function(graph){
     }
 
     if (!heapNodes[x][y][z]){
-      heapNodes[x][y][z] = { priority: 0, parent: null, x: parseFloat(x), y: parseFloat(y), z: parseFloat(z), closedTag: null, parentTag: null };
+      heapNodes[x][y][z] = { priority: 0, parent: null, x: parseFloat(x), y: parseFloat(y), z: parseFloat(z), closedTag: null, parentTag: null, jumpDescriptor: null };
     }
   });
 
@@ -60,6 +60,11 @@ AStar.prototype.generatePath = function(endVector){
 
   while (heapNode){
     path.insertWaypoint(vec);
+
+    var jumpDescriptor = heapNode.jumpDescriptor;
+    if (jumpDescriptor){
+      path.insertJumpDescriptor(jumpDescriptor);
+    }
 
     var parentTag = heapNode.parentTag;
     heapNode = heapNode.parent;
@@ -121,7 +126,7 @@ AStar.prototype.findShortestPath = function(fromVector, toVector){
     markNodeAsClosed(heapNode, searchID);
 
     vec.set(heapNode.x, heapNode.y, heapNode.z);
-    graph.forEachNeighbor(vec, function(neighborVec, cost){
+    graph.forEachNeighbor(vec, function(neighborVec, cost, jumpDescriptor){
 
       var neighborHeapNode = getHeapNode(neighborVec.x, neighborVec.y, neighborVec.z, heapNodes);
 
@@ -131,6 +136,7 @@ AStar.prototype.findShortestPath = function(fromVector, toVector){
         neighborHeapNode.priority = cost + heuristicCost;
         neighborHeapNode.parent = heapNode;
         neighborHeapNode.parentTag = searchID;
+        neighborHeapNode.jumpDescriptor = jumpDescriptor;
         markNodeAsClosed(neighborHeapNode, searchID);
         heap.insert(neighborHeapNode);
       }
@@ -142,6 +148,7 @@ AStar.prototype.findShortestPath = function(fromVector, toVector){
           neighborHeapNode.priority = currentPriority;
           neighborHeapNode.parent = heapNode;
           neighborHeapNode.parentTag = searchID;
+          neighborHeapNode.jumpDescriptor = jumpDescriptor;
           heap.remove(neighborHeapNode);
           heap.insert(neighborHeapNode);
         }

@@ -11,15 +11,7 @@ var BlendedSteeringBehavior = function(list){
 
 BlendedSteeringBehavior.prototype = Object.create(SteeringBehavior.prototype);
 
-BlendedSteeringBehavior.prototype.setSteerable = function(steerable){
-  for (var i = 0; i < this.definitions.length; i++){
-    this.definitions[i].behavior.setSteerable(steerable);
-  }
-
-  SteeringBehavior.prototype.setSteerable.call(this, steerable);
-}
-
-BlendedSteeringBehavior.prototype.compute = function(){
+BlendedSteeringBehavior.prototype.compute = function(steerable){
 
   this.result.linear.set(0, 0, 0);
 
@@ -28,7 +20,7 @@ BlendedSteeringBehavior.prototype.compute = function(){
     var behavior = elem.behavior;
     var weight = elem.weight;
 
-    var result = behavior.compute();
+    var result = behavior.compute(steerable);
     if (result){
       this.result.linear.add(vectorPool.get().copy(result.linear).multiplyScalar(weight));
     }

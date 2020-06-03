@@ -90,7 +90,7 @@ var DebugHelper = function(world, threeInstance, scene){
 DebugHelper.prototype.visualisePath = function(path){
   for (var i = 0; i < path.waypoints.length; i ++){
     var wp = path.waypoints[i];
-    var waypointMesh = new this.threeInstance.Mesh(new this.threeInstance.BoxBufferGeometry(1, 1, 1), this.orangeMaterial);
+    var waypointMesh = new this.threeInstance.Mesh(new this.threeInstance.BoxBufferGeometry(5, 5, 5), this.orangeMaterial);
     waypointMesh.position.set(wp.x, wp.y, wp.z);
     this.scene.add(waypointMesh);
     this.pathMeshes.push(waypointMesh);

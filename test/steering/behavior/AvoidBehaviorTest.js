@@ -8,10 +8,7 @@ describe("AvoidBehavior", function(){
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
     var avoidBehavior = new Kompute.AvoidBehavior({ maxSeeAhead: 50, maxAvoidForce: 100 });
 
-    steerable.setBehavior(avoidBehavior);
-
     expect(avoidBehavior.result).to.eql(new Kompute.SteerResult());
-    expect(avoidBehavior.steerable).to.equal(steerable);
     expect(avoidBehavior.maxSeeAhead).to.eql(50);
     expect(avoidBehavior.maxAvoidForce).to.eql(100);
   });
@@ -29,9 +26,7 @@ describe("AvoidBehavior", function(){
 
     var avoidBehavior = new Kompute.AvoidBehavior({ maxSeeAhead: 50, maxAvoidForce: 100 });
 
-    steerable.setBehavior(avoidBehavior);
-
-    expect(avoidBehavior.findMostThreateningObstacle()).to.eql(null);
+    expect(avoidBehavior.findMostThreateningObstacle(steerable)).to.eql(null);
   });
 
   it("should not find most mostThreatening if there's no nearby object", function(){
@@ -47,9 +42,7 @@ describe("AvoidBehavior", function(){
 
     var avoidBehavior = new Kompute.AvoidBehavior({ maxSeeAhead: 50000, maxAvoidForce: 100 });
 
-    steerable.setBehavior(avoidBehavior);
-
-    expect(avoidBehavior.findMostThreateningObstacle()).to.eql(null);
+    expect(avoidBehavior.findMostThreateningObstacle(steerable)).to.eql(null);
   });
 
   it("should find most mostThreatening if not going towards the obstacle [hits obstacle by size]", function(){
@@ -65,9 +58,7 @@ describe("AvoidBehavior", function(){
 
     var avoidBehavior = new Kompute.AvoidBehavior({ maxSeeAhead: 100, maxAvoidForce: 100 });
 
-    steerable.setBehavior(avoidBehavior);
-
-    expect(avoidBehavior.findMostThreateningObstacle()).to.eql(obstacle);
+    expect(avoidBehavior.findMostThreateningObstacle(steerable)).to.eql(obstacle);
   });
 
   it("should find most mostThreatening if not going towards the obstacle [hits obstacle by velocity]", function(){
@@ -83,9 +74,7 @@ describe("AvoidBehavior", function(){
 
     var avoidBehavior = new Kompute.AvoidBehavior({ maxSeeAhead: 100, maxAvoidForce: 100 });
 
-    steerable.setBehavior(avoidBehavior);
-
-    expect(avoidBehavior.findMostThreateningObstacle()).to.eql(obstacle);
+    expect(avoidBehavior.findMostThreateningObstacle(steerable)).to.eql(obstacle);
   });
 
   it("should find most mostThreatening for multiple obstacles", function(){
@@ -103,9 +92,7 @@ describe("AvoidBehavior", function(){
 
     var avoidBehavior = new Kompute.AvoidBehavior({ maxSeeAhead: 100000, maxAvoidForce: 100 });
 
-    steerable.setBehavior(avoidBehavior);
-
-    expect(avoidBehavior.findMostThreateningObstacle()).to.eql(obstacle1);
+    expect(avoidBehavior.findMostThreateningObstacle(steerable)).to.eql(obstacle1);
   });
 
   it("should return 0 acceleration if there are no threatening obstacles", function(){
@@ -121,9 +108,7 @@ describe("AvoidBehavior", function(){
 
     var avoidBehavior = new Kompute.AvoidBehavior({ maxSeeAhead: 50, maxAvoidForce: 100 });
 
-    steerable.setBehavior(avoidBehavior);
-
-    expect(avoidBehavior.compute().linear).to.eql(new Kompute.Vector3D());
+    expect(avoidBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D());
   });
 
   it("should go back if going towards an obstacle", function(){

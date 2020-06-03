@@ -10,16 +10,9 @@ describe("BlendedSteeringBehavior", function(){
 
     var list = [ { behavior: arriveBehavior, weight: 10 }, { behavior: avoidBehavior, weight: 30 } ];
 
-    var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
-
     var blendedSteeringBehavior = new Kompute.BlendedSteeringBehavior(list);
 
-    steerable.setBehavior(blendedSteeringBehavior);
-
     expect(blendedSteeringBehavior.result).to.eql(new Kompute.SteerResult());
-    expect(blendedSteeringBehavior.steerable).to.equal(steerable);
-    expect(arriveBehavior.steerable).to.equal(steerable);
-    expect(avoidBehavior.steerable).to.equal(steerable);
     expect(blendedSteeringBehavior.definitions).to.equal(list);
   });
 
@@ -28,9 +21,7 @@ describe("BlendedSteeringBehavior", function(){
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
     var blendedSteeringBehavior = new Kompute.BlendedSteeringBehavior([]);
 
-    steerable.setBehavior(blendedSteeringBehavior);
-
-    expect(blendedSteeringBehavior.compute().linear).to.eql(new Kompute.Vector3D());
+    expect(blendedSteeringBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D());
   });
 
   it("should request weighted sum of injected behaviors", function(){
@@ -44,9 +35,7 @@ describe("BlendedSteeringBehavior", function(){
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
     var blendedSteeringBehavior = new Kompute.BlendedSteeringBehavior(list);
 
-    steerable.setBehavior(blendedSteeringBehavior);
-
-    var result = blendedSteeringBehavior.compute();
+    var result = blendedSteeringBehavior.compute(steerable);
 
     expect(result.linear).to.eql(new Kompute.Vector3D((10 * 10 + 40 * 50 - 10), (20 * 10 - 20 * 50 + 100), (30 * 10 + 60 * 50 - 30)));
   });

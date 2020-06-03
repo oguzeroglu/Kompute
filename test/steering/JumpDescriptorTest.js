@@ -17,7 +17,6 @@ describe("JumpDescriptor", function(){
     expect(jumpDescriptor.landingPosition).to.eql(new Kompute.Vector3D(150, 100, 0));
     expect(jumpDescriptor.runupSatisfactionRadius).to.eql(50);
     expect(jumpDescriptor.delta).to.eql(new Kompute.Vector3D(50, 100, 0));
-    expect(jumpDescriptor.equationResult).to.eql({time: 0, vx: 0, vz: 0, isAchievable: false});
     expect(jumpDescriptor.checkTimeResult).to.eql({ vx: 0, vz: 0, isAchievable: false });
     expect(jumpDescriptor.takeoffPositionSatisfactionRadius).to.eql(35);
     expect(jumpDescriptor.takeoffVelocitySatisfactionRadius).to.eql(20);
@@ -83,5 +82,38 @@ describe("JumpDescriptor", function(){
     result = jumpDescriptor.solveQuadraticEquation(steerable);
 
     expect(result).to.eql(false);
+  });
+
+  it("should cache equation result", function(){
+
+    var center = new Kompute.Vector3D(50, 60, 70);
+    var size = new Kompute.Vector3D(50, 60, 70);
+
+    var steerable = new Kompute.Steerable("steerable1", center, size);
+
+    var world = new Kompute.World(1000, 1000, 1000, 10);
+    world.insertEntity(steerable);
+    world.setGravity(-10);
+
+    steerable.maxSpeed = 100;
+    steerable.jumpSpeed = 200;
+
+    var jumpDescriptor = new Kompute.JumpDescriptor({
+      takeoffPosition: new Kompute.Vector3D(),
+      landingPosition: new Kompute.Vector3D(10, 20, 30),
+      runupSatisfactionRadius: 0,
+      takeoffPositionSatisfactionRadius: 0,
+      takeoffVelocitySatisfactionRadius: 0
+    });
+
+    var cached = jumpDescriptor.getEquationResult(steerable);
+    expect(cached).to.eql(null);
+
+    var obj = { test: true };
+    jumpDescriptor.setCache(steerable, obj);
+
+    cached = jumpDescriptor.getEquationResult(steerable);
+
+    expect(cached).to.equal(obj);
   });
 });
