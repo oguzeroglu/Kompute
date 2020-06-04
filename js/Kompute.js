@@ -35,3 +35,4 @@ export { CohesionBehavior } from "./steering/behavior/CohesionBehavior";
 export { JumpBehavior } from "./steering/behavior/JumpBehavior";
 export { RandomPathBehavior } from "./steering/behavior/RandomPathBehavior";
 export { DebugHelper } from "./debug/DebugHelper";
+export { logger } from "./debug/Logger";
