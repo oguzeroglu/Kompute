@@ -2,8 +2,15 @@ import { ArriveBehavior } from "./ArriveBehavior";
 import { VectorPool } from "../../core/VectorPool";
 import { Vector3D } from "../../core/Vector3D";
 import { Steerable } from "../Steerable";
+import { logger } from "../../debug/Logger";
 
 var vectorPool = new VectorPool(10);
+
+var LOGGER_COMPONENT_NAME = "HideBehavior";
+var LOG_NO_HIDE_TARGET_ENTITY = "No hide target entity set.";
+var LOG_TARGET_ENTITY_OUT_OF_THREAT_DISTANCE = "Target entity is out of threat distance.";
+var LOG_NO_HIDING_SPOT_FOUND = "No hiding spot found.";
+var LOG_HIDING = "Hiding.";
 
 var HideBehavior = function(options){
   ArriveBehavior.call(this, {
@@ -24,18 +31,23 @@ HideBehavior.prototype.compute = function(steerable){
   this.result.linear.set(0, 0, 0);
 
   if (!steerable.hideTargetEntity){
+    logger.log(LOGGER_COMPONENT_NAME, LOG_NO_HIDE_TARGET_ENTITY);
     return this.result;
   }
 
   if (vectorPool.get().copy(steerable.position).sub(steerable.hideTargetEntity.position).getLength() > this.threatDistance){
+    logger.log(LOGGER_COMPONENT_NAME, LOG_TARGET_ENTITY_OUT_OF_THREAT_DISTANCE);
     return this.result;
   }
 
   this.findHidingSpot(steerable);
 
   if (!this.hidingSpotFound){
+    logger.log(LOGGER_COMPONENT_NAME, LOG_NO_HIDING_SPOT_FOUND);
     return this.result;
   }
+
+  logger.log(LOGGER_COMPONENT_NAME, LOG_HIDING);
 
   steerable.setTargetPosition(this.bestHidingSpot);
 
@@ -43,6 +55,7 @@ HideBehavior.prototype.compute = function(steerable){
 }
 
 HideBehavior.prototype.findHidingSpot = function(steerable){
+
   this.hidingSpotFound = false;
 
   var closest = null;

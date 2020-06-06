@@ -3,6 +3,23 @@ var Kompute = require("../../../build/Kompute");
 
 describe("HideBehavior", function(){
 
+  var loggedMsg;
+
+  beforeEach(function(){
+    loggedMsg = null;
+    Kompute.logger.logMethod = function(msg){
+      if (loggedMsg != null){
+        return;
+      }
+      loggedMsg = msg;
+    }
+  });
+
+  afterEach(function(){
+    Kompute.logger.logMethod = console.log;
+    Kompute.logger.disable();
+  });
+
   it("should initialize", function(){
     var hideBehavior = new Kompute.HideBehavior({
       arriveSatisfactionRadius: 50,
@@ -29,7 +46,10 @@ describe("HideBehavior", function(){
       threatDistance: 2000
     });
 
+    Kompute.logger.enable();
+
     expect(hideBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D());
+    expect(loggedMsg).to.eql("[HideBehavior]: No hide target entity set.");
   });
 
   it("should get hiding position", function(){
@@ -78,8 +98,11 @@ describe("HideBehavior", function(){
       threatDistance: 2000
     });
 
+    Kompute.logger.enable();
+
     expect(hideBehavior.hidingSpotFound).to.eql(false);
     expect(hideBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D());
+    expect(loggedMsg).to.eql("[HideBehavior]: No hiding spot found.");
   });
 
   it("should find best hiding spot", function(){
@@ -170,7 +193,10 @@ describe("HideBehavior", function(){
       threatDistance: 2000
     });
 
+    Kompute.logger.enable();
+
     var result = hideBehavior.compute(steerable);
+    expect(loggedMsg).to.eql("[HideBehavior]: Hiding.");
 
     var arriveBehavior = new Kompute.ArriveBehavior({ satisfactionRadius: 50, slowDownRadius: 100 });
 
@@ -200,8 +226,11 @@ describe("HideBehavior", function(){
       threatDistance: 20
     });
 
+    Kompute.logger.enable();
+
     var result = hideBehavior.compute(steerable);
 
     expect(result.linear).to.eql(new Kompute.Vector3D());
+    expect(loggedMsg).to.eql("[HideBehavior]: Target entity is out of threat distance.");
   });
 });
