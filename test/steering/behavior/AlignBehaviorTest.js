@@ -3,6 +3,20 @@ var Kompute = require("../../../build/Kompute");
 
 describe("AlignBehavior", function(){
 
+  var loggedMsg;
+
+  beforeEach(function(){
+    loggedMsg = null;
+    Kompute.logger.logMethod = function(msg){
+      loggedMsg = msg;
+    }
+  });
+
+  afterEach(function(){
+    Kompute.logger.logMethod = console.log;
+    Kompute.logger.disable();
+  });
+
   it("should initialize", function(){
 
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
@@ -22,7 +36,10 @@ describe("AlignBehavior", function(){
     var world = new Kompute.World(1000, 1000, 1000, 50);
     world.insertEntity(steerable);
 
+    Kompute.logger.enable();
+
     expect(alignBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D());
+    expect(loggedMsg).to.eql("[AlignBehavior]: No close entities exist.");
   });
 
   it("should compute", function(){
@@ -43,6 +60,9 @@ describe("AlignBehavior", function(){
     world.insertEntity(steerable3);
     world.insertEntity(steerable4);
 
+    Kompute.logger.enable();
+
     expect(alignBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D(25, 35, 45));
+    expect(loggedMsg).to.eql("[AlignBehavior]: Close entities exist.");
   });
 });
