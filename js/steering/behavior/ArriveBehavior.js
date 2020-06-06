@@ -7,6 +7,7 @@ var vectorPool = new VectorPool(10);
 var LOGGER_COMPONENT_NAME = "ArriveBehavior";
 var LOG_ARRIVED = "Arrived.";
 var LOG_SLOWING_DOWN = "Slowing down.";
+var LOG_SPEEDING_UP = "Speeding up.";
 var LOG_NO_TARGET_POSITION = "Steerable has no target position.";
 
 var ArriveBehavior = function(options){
@@ -35,13 +36,15 @@ ArriveBehavior.prototype.compute = function(steerable){
   if (distance <= this.satisfactionRadius){
     logger.log(LOGGER_COMPONENT_NAME, LOG_ARRIVED);
     return this.result;
-  }else{
-    targetVelocity.copy(toTarget).normalize().multiplyScalar(steerable.maxSpeed);
   }
+
+  targetVelocity.copy(toTarget).normalize().multiplyScalar(steerable.maxSpeed);
 
   if (distance <= this.slowDownRadius){
     logger.log(LOGGER_COMPONENT_NAME, LOG_SLOWING_DOWN);
     targetVelocity.multiplyScalar(distance / this.slowDownRadius);
+  }else{
+    logger.log(LOGGER_COMPONENT_NAME, LOG_SPEEDING_UP);
   }
 
   this.result.linear.copy(targetVelocity).sub(steerable.velocity);

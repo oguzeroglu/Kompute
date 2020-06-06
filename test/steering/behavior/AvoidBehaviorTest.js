@@ -3,6 +3,20 @@ var Kompute = require("../../../build/Kompute");
 
 describe("AvoidBehavior", function(){
 
+  var loggedMsg;
+
+  beforeEach(function(){
+    loggedMsg = null;
+    Kompute.logger.logMethod = function(msg){
+      loggedMsg = msg;
+    }
+  });
+
+  afterEach(function(){
+    Kompute.logger.logMethod = console.log;
+    Kompute.logger.disable();
+  });
+
   it("should initialize", function(){
 
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
@@ -108,7 +122,10 @@ describe("AvoidBehavior", function(){
 
     var avoidBehavior = new Kompute.AvoidBehavior({ maxSeeAhead: 50, maxAvoidForce: 100 });
 
+    Kompute.logger.enable();
+
     expect(avoidBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D());
+    expect(loggedMsg).to.eql("[AvoidBehavior]: No threatening entity found.");
   });
 
   it("should go back if going towards an obstacle", function(){
@@ -119,9 +136,12 @@ describe("AvoidBehavior", function(){
     world.insertEntity(steerable);
     world.insertEntity(obstacle);
 
+    Kompute.logger.enable();
+
     steerable.velocity = new Kompute.Vector3D(0, 0, 1);
     steerable.setBehavior(new Kompute.AvoidBehavior({ maxSeeAhead: 500, maxAvoidForce: 100 }));
     steerable.update();
     expect(steerable.velocity.normalize()).to.eql(new Kompute.Vector3D(0, 0, -1));
+    expect(loggedMsg).to.eql("[AvoidBehavior]: Threatening entity found.");
   });
 });
