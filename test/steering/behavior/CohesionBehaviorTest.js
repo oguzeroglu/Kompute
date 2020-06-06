@@ -3,6 +3,20 @@ var Kompute = require("../../../build/Kompute");
 
 describe("CohesionBehavior", function(){
 
+  var loggedMsg;
+
+  beforeEach(function(){
+    loggedMsg = null;
+    Kompute.logger.logMethod = function(msg){
+      loggedMsg = msg;
+    }
+  });
+
+  afterEach(function(){
+    Kompute.logger.logMethod = console.log;
+    Kompute.logger.disable();
+  });
+
   it("should initialize", function(){
     var cohesionBehavior = new Kompute.CohesionBehavior();
 
@@ -16,7 +30,10 @@ describe("CohesionBehavior", function(){
     var world = new Kompute.World(1000, 1000, 1000, 50);
     world.insertEntity(steerable);
 
+    Kompute.logger.enable();
+
     expect(cohesionBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D());
+    expect(loggedMsg).to.eql("[CohesionBehavior]: No close entities exist.");
   });
 
   it("should delegate to SeekBehavior", function(){
@@ -36,10 +53,13 @@ describe("CohesionBehavior", function(){
     world.insertEntity(steerable3);
     world.insertEntity(steerable4);
 
+    Kompute.logger.enable();
+
     var cohesionResult = cohesionBehavior.compute(steerable);
     var seekResult = seekBehavior.compute(steerable);
 
     expect(cohesionResult.linear).to.eql(seekResult.linear);
     expect(steerable.targetPosition.toFixed(8)).to.eql(new Kompute.Vector3D(10/3, 70/3, 50/3).toFixed(8));
+    expect(loggedMsg).to.eql("[CohesionBehavior]: Close entities exist.");
   });
 });
