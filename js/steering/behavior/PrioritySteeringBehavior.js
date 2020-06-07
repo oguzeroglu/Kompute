@@ -1,4 +1,9 @@
 import { SteeringBehavior } from "./SteeringBehavior";
+import { logger } from "../../debug/Logger";
+
+var LOGGER_COMPONENT_NAME = "PrioritySteeringBehavior";
+var LOG_COMPUTED = "Computed.";
+var LOG_NOT_COMPUTED = "Not computed.";
 
 var PrioritySteeringBehavior = function(options){
   SteeringBehavior.call(this);
@@ -17,10 +22,12 @@ PrioritySteeringBehavior.prototype.compute = function(steerable){
     var result = this.list[i].compute(steerable);
     if (result.linear.getLength() > this.threshold){
       this.result.linear.copy(result.linear);
+      logger.log(LOGGER_COMPONENT_NAME, LOG_COMPUTED);
       return this.result;
     }
   }
 
+  logger.log(LOGGER_COMPONENT_NAME, LOG_NOT_COMPUTED);
   return this.result;
 }
 
