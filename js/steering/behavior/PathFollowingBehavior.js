@@ -1,7 +1,14 @@
 import { SeekBehavior } from "./SeekBehavior";
 import { VectorPool } from "../../core/VectorPool";
+import { logger } from "../../debug/Logger";
 
 var vectorPool = new VectorPool(10);
+
+var LOGGER_COMPONENT_NAME = "PathFollowingBehavior";
+var LOG_NO_WAYPOINT = "No waypoint.";
+var LOG_JUMP_INITIATED = "Jump initiated.";
+var LOG_NEXT_WAYPOINT = "Next waypoint.";
+var LOG_PATH_COMPLETED = "Path completed.";
 
 var PathFollowingBehavior = function(options){
   SeekBehavior.call(this);
@@ -30,6 +37,7 @@ PathFollowingBehavior.prototype.compute = function(steerable){
 
   var currentWayPoint = this.getCurrentWaypoint();
   if (!currentWayPoint){
+    logger.log(LOGGER_COMPONENT_NAME, LOG_NO_WAYPOINT);
     return this.result;
   }
 
@@ -39,6 +47,7 @@ PathFollowingBehavior.prototype.compute = function(steerable){
     steerable.jumpDescriptor = jumpDescriptor;
     steerable.onJumpReady();
     steerable.setJumpCompletionListener(this.onJumpCompletionCallback);
+    logger.log(LOGGER_COMPONENT_NAME, LOG_JUMP_INITIATED);
     return this.result;
   }
 
@@ -47,7 +56,10 @@ PathFollowingBehavior.prototype.compute = function(steerable){
   if (distance <= this.satisfactionRadius){
     currentWayPoint = this.getNext();
 
+    logger.log(LOGGER_COMPONENT_NAME, LOG_NEXT_WAYPOINT);
+
     if (!currentWayPoint){
+      logger.log(LOGGER_COMPONENT_NAME, LOG_PATH_COMPLETED);
       return this.result;
     }
   }
