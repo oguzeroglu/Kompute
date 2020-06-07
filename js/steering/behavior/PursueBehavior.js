@@ -1,5 +1,10 @@
 import { SeekBehavior } from "./SeekBehavior";
 import { VectorPool } from "../../core/VectorPool";
+import { logger } from "../../debug/Logger";
+
+var LOGGER_COMPONENT_NAME = "PursueBehavior";
+var LOG_NO_TARGET_ENTITY = "Entity has no target entity.";
+var LOG_SEEKING = "Seeking.";
 
 var vectorPool = new VectorPool(10);
 
@@ -16,6 +21,7 @@ PursueBehavior.prototype.compute = function(steerable){
   this.result.linear.set(0, 0, 0);
 
   if (!steerable.hasTargetEntity){
+    logger.log(LOGGER_COMPONENT_NAME, LOG_NO_TARGET_ENTITY);
     return this.result;
   }
 
@@ -35,6 +41,8 @@ PursueBehavior.prototype.compute = function(steerable){
 
   var v = vectorPool.get().copy(targetEntity.velocity).multiplyScalar(predictionTime).add(targetPosition);
   steerable.setTargetPosition(v);
+
+  logger.log(LOGGER_COMPONENT_NAME, LOG_SEEKING);
 
   return SeekBehavior.prototype.compute.call(this, steerable);
 }

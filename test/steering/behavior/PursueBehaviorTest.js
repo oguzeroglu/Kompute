@@ -3,6 +3,20 @@ var Kompute = require("../../../build/Kompute");
 
 describe("PursueBehavior", function(){
 
+  var loggedMsg;
+
+  beforeEach(function(){
+    loggedMsg = null;
+    Kompute.logger.logMethod = function(msg){
+      loggedMsg = msg;
+    }
+  });
+
+  afterEach(function(){
+    Kompute.logger.logMethod = console.log;
+    Kompute.logger.disable();
+  });
+
   it("should initialize", function(){
 
     var pursueBehavior = new Kompute.PursueBehavior({maxPredictionTime: 100});
@@ -15,7 +29,10 @@ describe("PursueBehavior", function(){
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
     var pursueBehavior = new Kompute.PursueBehavior({maxPredictionTime: 100});
 
+    Kompute.logger.enable();
+
     expect(pursueBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D());
+    expect(loggedMsg).to.eql("[PursueBehavior]: Entity has no target entity.");
   });
 
   it("should compute based on maxPredictionTime if steerable is far away", function(){
@@ -88,8 +105,11 @@ describe("PursueBehavior", function(){
       new Kompute.Vector3D(5, 5, 5).getLength() / steerable.velocity.getLength()
     ));
 
+    Kompute.logger.enable();
+
     pursueBehavior.compute(steerable);
 
     expect(steerable.targetPosition).to.eql(targetFinalPosition);
+    expect(loggedMsg).to.eql("[PursueBehavior]: Seeking.");
   });
 });
