@@ -8,6 +8,9 @@ describe("CohesionBehavior", function(){
   beforeEach(function(){
     loggedMsg = null;
     Kompute.logger.logMethod = function(msg){
+      if (loggedMsg != null){
+        return;
+      }
       loggedMsg = msg;
     }
   });
