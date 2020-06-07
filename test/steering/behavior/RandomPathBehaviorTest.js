@@ -130,7 +130,7 @@ describe("RandomPathBehavior", function(){
     randomPathBehavior.compute(steerable);
 
     expect(path.length > 0).to.eql(true);
-    expect(loggedMsg).to.eql("[RandomPathBehavior]: Path constructed.");
+    expect(loggedMsg).to.eql("[RandomPathBehavior]: Path constructed. (steerable1)");
   });
 
   it("should compute", function(){
@@ -157,6 +157,6 @@ describe("RandomPathBehavior", function(){
     Kompute.logger.enable();
 
     expect(randomPathBehavior.compute(steerable)).to.eql(pathFollowingBehavior.compute(steerable2));
-    expect(loggedMsg).to.eql("[RandomPathBehavior]: Following path.");
+    expect(loggedMsg).to.eql("[RandomPathBehavior]: Following path. (steerable1)");
   });
 });

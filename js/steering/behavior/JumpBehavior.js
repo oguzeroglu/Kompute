@@ -23,12 +23,12 @@ JumpBehavior.prototype.compute = function(steerable){
   linear.set(0, 0, 0);
 
   if (!steerable.isJumpReady){
-    logger.log(LOGGER_COMPONENT_NAME, LOG_JUMP_NOT_READY);
+    logger.log(LOGGER_COMPONENT_NAME, LOG_JUMP_NOT_READY, steerable.id);
     return this.result;
   }
 
   if (steerable.isJumpTakenOff){
-    logger.log(LOGGER_COMPONENT_NAME, LOG_JUMP_ALREADY_TOOK_OFF);
+    logger.log(LOGGER_COMPONENT_NAME, LOG_JUMP_ALREADY_TOOK_OFF, steerable.id);
     return this.result;
   }
 
@@ -36,7 +36,7 @@ JumpBehavior.prototype.compute = function(steerable){
   var equationResult = jumpDescriptor.getEquationResult(steerable);
 
   if (equationResult.time == 0){
-    logger.log(LOGGER_COMPONENT_NAME, LOG_EQUATION_RESULT_TIME_ZERO);
+    logger.log(LOGGER_COMPONENT_NAME, LOG_EQUATION_RESULT_TIME_ZERO, steerable.id);
     return this.result;
   }
 
@@ -47,12 +47,12 @@ JumpBehavior.prototype.compute = function(steerable){
     var velocityDiff = vectorPool.get().copy(steerable.velocity).sub(targetVelocity).getLength();
     if (velocityDiff <= jumpDescriptor.takeoffVelocitySatisfactionRadius){
       steerable.onJumpTakeOff();
-      logger.log(LOGGER_COMPONENT_NAME, LOG_TAKING_OFF);
+      logger.log(LOGGER_COMPONENT_NAME, LOG_TAKING_OFF, steerable.id);
       return this.result;
     }
   }
 
-  logger.log(LOGGER_COMPONENT_NAME, LOG_MATCHING_VELOCITY);
+  logger.log(LOGGER_COMPONENT_NAME, LOG_MATCHING_VELOCITY, steerable.id);
 
   return this.matchVelocity(equationResult.time, targetVelocity, steerable);
 }

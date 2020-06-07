@@ -21,7 +21,7 @@ PursueBehavior.prototype.compute = function(steerable){
   this.result.linear.set(0, 0, 0);
 
   if (!steerable.hasTargetEntity){
-    logger.log(LOGGER_COMPONENT_NAME, LOG_NO_TARGET_ENTITY);
+    logger.log(LOGGER_COMPONENT_NAME, LOG_NO_TARGET_ENTITY, steerable.id);
     return this.result;
   }
 
@@ -42,7 +42,7 @@ PursueBehavior.prototype.compute = function(steerable){
   var v = vectorPool.get().copy(targetEntity.velocity).multiplyScalar(predictionTime).add(targetPosition);
   steerable.setTargetPosition(v);
 
-  logger.log(LOGGER_COMPONENT_NAME, LOG_SEEKING);
+  logger.log(LOGGER_COMPONENT_NAME, LOG_SEEKING, steerable.id);
 
   return SeekBehavior.prototype.compute.call(this, steerable);
 }

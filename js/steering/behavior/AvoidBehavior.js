@@ -56,11 +56,11 @@ AvoidBehavior.prototype.compute = function(steerable){
   var mostThreateningObstacle = this.findMostThreateningObstacle(steerable);
 
   if (!mostThreateningObstacle){
-    logger.log(LOGGER_COMPONENT_NAME, NO_THREATENING_ENTITY_FOUND);
+    logger.log(LOGGER_COMPONENT_NAME, NO_THREATENING_ENTITY_FOUND, steerable.id);
     return this.result;
   }
 
-  logger.log(LOGGER_COMPONENT_NAME, THREATENING_ENTITY_FOUND);
+  logger.log(LOGGER_COMPONENT_NAME, THREATENING_ENTITY_FOUND, steerable.id);
 
   this.result.linear.copy(steerable.velocity).normalize().multiplyScalar(steerable.velocity.getLength() / steerable.maxSpeed).add(steerable.position).sub(mostThreateningObstacle.position).normalize().multiplyScalar(this.maxAvoidForce);;
   return this.result;

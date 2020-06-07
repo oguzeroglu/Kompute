@@ -37,7 +37,7 @@ PathFollowingBehavior.prototype.compute = function(steerable){
 
   var currentWayPoint = this.getCurrentWaypoint();
   if (!currentWayPoint){
-    logger.log(LOGGER_COMPONENT_NAME, LOG_NO_WAYPOINT);
+    logger.log(LOGGER_COMPONENT_NAME, LOG_NO_WAYPOINT, steerable.id);
     return this.result;
   }
 
@@ -47,7 +47,7 @@ PathFollowingBehavior.prototype.compute = function(steerable){
     steerable.jumpDescriptor = jumpDescriptor;
     steerable.onJumpReady();
     steerable.setJumpCompletionListener(this.onJumpCompletionCallback);
-    logger.log(LOGGER_COMPONENT_NAME, LOG_JUMP_INITIATED);
+    logger.log(LOGGER_COMPONENT_NAME, LOG_JUMP_INITIATED, steerable.id);
     return this.result;
   }
 
@@ -56,10 +56,10 @@ PathFollowingBehavior.prototype.compute = function(steerable){
   if (distance <= this.satisfactionRadius){
     currentWayPoint = this.getNext();
 
-    logger.log(LOGGER_COMPONENT_NAME, LOG_NEXT_WAYPOINT);
+    logger.log(LOGGER_COMPONENT_NAME, LOG_NEXT_WAYPOINT, steerable.id);
 
     if (!currentWayPoint){
-      logger.log(LOGGER_COMPONENT_NAME, LOG_PATH_COMPLETED);
+      logger.log(LOGGER_COMPONENT_NAME, LOG_PATH_COMPLETED, steerable.id);
       return this.result;
     }
   }

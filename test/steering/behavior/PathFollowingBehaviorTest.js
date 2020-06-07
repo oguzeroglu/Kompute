@@ -8,11 +8,15 @@ describe("PathFollowingBehavior", function(){
   beforeEach(function(){
     loggedMsg = null;
     Kompute.logger.logMethod = function(msg){
+      if (!msg.startsWith("[PathFollowingBehavior]")){
+        return;
+      }
       loggedMsg = msg;
     }
   });
 
   afterEach(function(){
+    Kompute.logger.lastMessageMap = {};
     Kompute.logger.logMethod = console.log;
     Kompute.logger.disable();
   });
@@ -36,7 +40,7 @@ describe("PathFollowingBehavior", function(){
     Kompute.logger.enable();
 
     expect(pathFollowingBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D());
-    expect(loggedMsg).to.eql("[PathFollowingBehavior]: No waypoint.");
+    expect(loggedMsg).to.eql("[PathFollowingBehavior]: No waypoint. (steerable1)");
 
     path.addWaypoint(new Kompute.Vector3D(10, 10, 10));
     pathFollowingBehavior = new Kompute.PathFollowingBehavior({ path: path, satisfactionRadius: 50 });
@@ -46,7 +50,7 @@ describe("PathFollowingBehavior", function(){
 
     pathFollowingBehavior.compute(steerable);
 
-    expect(loggedMsg).to.eql("[PathFollowingBehavior]: Path completed.");
+    expect(loggedMsg).to.eql("[PathFollowingBehavior]: Path completed. (steerable1)");
   });
 
   it("should go to next target if within satisfaction radius", function(){
@@ -63,7 +67,7 @@ describe("PathFollowingBehavior", function(){
     pathFollowingBehavior.compute(steerable);
 
     expect(steerable.targetPosition).to.eql(new Kompute.Vector3D(100, 200, 300));
-    expect(loggedMsg).to.eql("[PathFollowingBehavior]: Next waypoint.");
+    expect(loggedMsg).to.eql("[PathFollowingBehavior]: Next waypoint. (steerable1)");
   });
 
   it("should delegate to seek behavior", function(){
@@ -141,7 +145,7 @@ describe("PathFollowingBehavior", function(){
     for (var i = 0; i < 1000; i++){
       steerable.update();
       if (called){
-        expect(loggedMsg).to.eql("[PathFollowingBehavior]: Jump initiated.");
+        expect(loggedMsg).to.eql("[PathFollowingBehavior]: Jump initiated. (steerable1)");
         steerable.behavior = null;
         break;
       }

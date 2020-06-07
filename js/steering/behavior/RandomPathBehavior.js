@@ -61,11 +61,11 @@ RandomPathBehavior.prototype.constructPath = function(steerable){
 
 RandomPathBehavior.prototype.compute = function(steerable){
   if (!this.isPathConstructed){
-    logger.log(LOGGER_COMPONENT_NAME, LOG_PATH_CONSTRUCTED);
+    logger.log(LOGGER_COMPONENT_NAME, LOG_PATH_CONSTRUCTED, steerable.id);
     this.constructPath(steerable);
   }
 
-  logger.log(LOGGER_COMPONENT_NAME, LOG_FOLLOWING_PATH);
+  logger.log(LOGGER_COMPONENT_NAME, LOG_FOLLOWING_PATH, steerable.id);
 
   return PathFollowingBehavior.prototype.compute.call(this, steerable);
 }

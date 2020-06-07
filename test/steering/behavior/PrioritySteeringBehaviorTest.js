@@ -39,7 +39,7 @@ describe("PrioritySteeringBehavior", function(){
     Kompute.logger.enable();
 
     expect(prioritySteeringBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D());
-    expect(loggedMsg).to.eql("[PrioritySteeringBehavior]: Not computed.");
+    expect(loggedMsg).to.eql("[PrioritySteeringBehavior]: Not computed. (steerable1)");
   });
 
   it("should compute", function(){
@@ -58,13 +58,13 @@ describe("PrioritySteeringBehavior", function(){
     Kompute.logger.enable();
 
     expect(prioritySteeringBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D(100, 100, 100));
-    expect(loggedMsg).to.eql("[PrioritySteeringBehavior]: Computed.");
+    expect(loggedMsg).to.eql("[PrioritySteeringBehavior]: Computed. (steerable1)");
 
     expect(prioritySteeringBehavior2.compute(steerable).linear).to.eql(new Kompute.Vector3D(1, 1, 1));
-    expect(loggedMsg).to.eql("[PrioritySteeringBehavior]: Computed.");
+    expect(loggedMsg).to.eql("[PrioritySteeringBehavior]: Computed. (steerable1)");
 
     expect(prioritySteeringBehavior3.compute(steerable).linear).to.eql(new Kompute.Vector3D());
-    expect(loggedMsg).to.eql("[PrioritySteeringBehavior]: Not computed.");
+    expect(loggedMsg).to.eql("[PrioritySteeringBehavior]: Not computed. (steerable1)");
   });
 });
 

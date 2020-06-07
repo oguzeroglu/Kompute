@@ -30,13 +30,13 @@ CohesionBehavior.prototype.compute = function(steerable){
   });
 
   if (count > 0){
-    logger.log(LOGGER_COMPONENT_NAME, LOG_CLOSE_ENTITIES_EXIST);
+    logger.log(LOGGER_COMPONENT_NAME, LOG_CLOSE_ENTITIES_EXIST, steerable.id);
     linear.multiplyScalar(1 / count);
     steerable.setTargetPosition(linear);
     return SeekBehavior.prototype.compute.call(this, steerable);
   }
 
-  logger.log(LOGGER_COMPONENT_NAME, LOG_NO_CLOSE_ENTITIES_EXIST);
+  logger.log(LOGGER_COMPONENT_NAME, LOG_NO_CLOSE_ENTITIES_EXIST, steerable.id);
 
   return this.result;
 }

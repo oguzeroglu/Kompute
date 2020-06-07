@@ -22,12 +22,12 @@ PrioritySteeringBehavior.prototype.compute = function(steerable){
     var result = this.list[i].compute(steerable);
     if (result.linear.getLength() > this.threshold){
       this.result.linear.copy(result.linear);
-      logger.log(LOGGER_COMPONENT_NAME, LOG_COMPUTED);
+      logger.log(LOGGER_COMPONENT_NAME, LOG_COMPUTED, steerable.id);
       return this.result;
     }
   }
 
-  logger.log(LOGGER_COMPONENT_NAME, LOG_NOT_COMPUTED);
+  logger.log(LOGGER_COMPONENT_NAME, LOG_NOT_COMPUTED, steerable.id);
   return this.result;
 }
 

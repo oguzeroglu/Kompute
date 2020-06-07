@@ -37,7 +37,7 @@ describe("ArriveBehavior", function(){
     Kompute.logger.enable();
 
     expect(arriveBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D(0, 0, 0));
-    expect(loggedMsgs[0]).to.eql("[ArriveBehavior]: Steerable has no target position.");
+    expect(loggedMsgs[0]).to.eql("[ArriveBehavior]: Steerable has no target position. (steerable1)");
   });
 
   it("should not request acceleration if steerable in satisfactionRadius", function(){
@@ -52,7 +52,7 @@ describe("ArriveBehavior", function(){
     Kompute.logger.enable();
 
     expect(arriveBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D());
-    expect(loggedMsgs[0]).to.eql("[ArriveBehavior]: Arrived.");
+    expect(loggedMsgs[0]).to.eql("[ArriveBehavior]: Arrived. (steerable1)");
   });
 
   it("should slow down if steerable in slowDownRadius", function(){
@@ -82,7 +82,7 @@ describe("ArriveBehavior", function(){
     expect(vel1.getLength() > vel2.getLength()).to.eql(true);
     expect(vel1.getLength() > vel3.getLength()).to.eql(true);
     expect(vel2.getLength() > vel3.getLength()).to.eql(true);
-    expect(loggedMsgs[0]).to.eql("[ArriveBehavior]: Slowing down.")
+    expect(loggedMsgs[0]).to.eql("[ArriveBehavior]: Slowing down. (steerable1)")
   });
 
   it("should arrive", function(){
@@ -103,8 +103,8 @@ describe("ArriveBehavior", function(){
     }
 
     expect(new Kompute.Vector3D(100, 100, 100).sub(steerable.position).getLength() <= 0.001).to.eql(true);
-    expect(loggedMsgs[0]).to.eql('[ArriveBehavior]: Speeding up.');
-    expect(loggedMsgs[1]).to.eql('[ArriveBehavior]: Slowing down.');
-    expect(loggedMsgs[2]).to.eql('[ArriveBehavior]: Arrived.');
+    expect(loggedMsgs[0]).to.eql('[ArriveBehavior]: Speeding up. (steerable1)');
+    expect(loggedMsgs[1]).to.eql('[ArriveBehavior]: Slowing down. (steerable1)');
+    expect(loggedMsgs[2]).to.eql('[ArriveBehavior]: Arrived. (steerable1)');
   });
 });

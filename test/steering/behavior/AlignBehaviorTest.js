@@ -39,7 +39,7 @@ describe("AlignBehavior", function(){
     Kompute.logger.enable();
 
     expect(alignBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D());
-    expect(loggedMsg).to.eql("[AlignBehavior]: No close entities exist.");
+    expect(loggedMsg).to.eql("[AlignBehavior]: No close entities exist. (steerable1)");
   });
 
   it("should compute", function(){
@@ -63,6 +63,6 @@ describe("AlignBehavior", function(){
     Kompute.logger.enable();
 
     expect(alignBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D(25, 35, 45));
-    expect(loggedMsg).to.eql("[AlignBehavior]: Close entities exist.");
+    expect(loggedMsg).to.eql("[AlignBehavior]: Close entities exist. (steerable1)");
   });
 });

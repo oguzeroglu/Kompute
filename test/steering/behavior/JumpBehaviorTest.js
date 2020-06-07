@@ -33,7 +33,7 @@ describe("JumpBehavior", function(){
     Kompute.logger.enable();
 
     expect(jumpBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D());
-    expect(loggedMsg).to.eql("[JumpBehavior]: Jump not ready.");
+    expect(loggedMsg).to.eql("[JumpBehavior]: Jump not ready. (steerable1)");
   });
 
   it("should not request acceleration if jump taken off", function(){
@@ -46,7 +46,7 @@ describe("JumpBehavior", function(){
     Kompute.logger.enable();
 
     expect(jumpBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D());
-    expect(loggedMsg).to.eql("[JumpBehavior]: Jump already took off.");
+    expect(loggedMsg).to.eql("[JumpBehavior]: Jump already took off. (steerable1)");
   });
 
   it("should not request acceleration if equation time is zero", function(){
@@ -64,7 +64,7 @@ describe("JumpBehavior", function(){
     Kompute.logger.enable();
 
     expect(jumpBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D());
-    expect(loggedMsg).to.eql("[JumpBehavior]: Equation result time is zero.");
+    expect(loggedMsg).to.eql("[JumpBehavior]: Equation result time is zero. (steerable1)");
   });
 
   it("should take off", function(){
@@ -99,7 +99,7 @@ describe("JumpBehavior", function(){
     expect(result.linear).to.eql(new Kompute.Vector3D());
     expect(steerable.isJumpTakenOff).to.eql(true);
     expect(steerable.velocity).to.eql(new Kompute.Vector3D(jumpDescriptor.getEquationResult(steerable).vx, 1000, jumpDescriptor.getEquationResult(steerable).vz));
-    expect(loggedMsg).to.eql("[JumpBehavior]: Taking off.");
+    expect(loggedMsg).to.eql("[JumpBehavior]: Taking off. (steerable1)");
   });
 
   it("should match velocity", function(){
@@ -124,6 +124,6 @@ describe("JumpBehavior", function(){
     var result = jumpBehavior.compute(steerable);
 
     expect(result.linear).to.eql(new Kompute.Vector3D(15, 0, 30));
-    expect(loggedMsg).to.eql("[JumpBehavior]: Matching velocity.");
+    expect(loggedMsg).to.eql("[JumpBehavior]: Matching velocity. (steerable1)");
   });
 });

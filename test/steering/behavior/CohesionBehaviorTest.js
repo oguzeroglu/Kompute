@@ -36,7 +36,7 @@ describe("CohesionBehavior", function(){
     Kompute.logger.enable();
 
     expect(cohesionBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D());
-    expect(loggedMsg).to.eql("[CohesionBehavior]: No close entities exist.");
+    expect(loggedMsg).to.eql("[CohesionBehavior]: No close entities exist. (steerable1)");
   });
 
   it("should delegate to SeekBehavior", function(){
@@ -63,6 +63,6 @@ describe("CohesionBehavior", function(){
 
     expect(cohesionResult.linear).to.eql(seekResult.linear);
     expect(steerable.targetPosition.toFixed(8)).to.eql(new Kompute.Vector3D(10/3, 70/3, 50/3).toFixed(8));
-    expect(loggedMsg).to.eql("[CohesionBehavior]: Close entities exist.");
+    expect(loggedMsg).to.eql("[CohesionBehavior]: Close entities exist. (steerable1)");
   });
 });

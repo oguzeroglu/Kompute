@@ -24,7 +24,7 @@ ArriveBehavior.prototype.compute = function(steerable){
   this.result.linear.set(0, 0, 0);
 
   if (!steerable.hasTargetPosition){
-    logger.log(LOGGER_COMPONENT_NAME, LOG_NO_TARGET_POSITION);
+    logger.log(LOGGER_COMPONENT_NAME, LOG_NO_TARGET_POSITION, steerable.id);
     return this.result;
   }
 
@@ -34,17 +34,17 @@ ArriveBehavior.prototype.compute = function(steerable){
   var targetVelocity = vectorPool.get().set(0, 0, 0);
 
   if (distance <= this.satisfactionRadius){
-    logger.log(LOGGER_COMPONENT_NAME, LOG_ARRIVED);
+    logger.log(LOGGER_COMPONENT_NAME, LOG_ARRIVED, steerable.id);
     return this.result;
   }
 
   targetVelocity.copy(toTarget).normalize().multiplyScalar(steerable.maxSpeed);
 
   if (distance <= this.slowDownRadius){
-    logger.log(LOGGER_COMPONENT_NAME, LOG_SLOWING_DOWN);
+    logger.log(LOGGER_COMPONENT_NAME, LOG_SLOWING_DOWN, steerable.id);
     targetVelocity.multiplyScalar(distance / this.slowDownRadius);
   }else{
-    logger.log(LOGGER_COMPONENT_NAME, LOG_SPEEDING_UP);
+    logger.log(LOGGER_COMPONENT_NAME, LOG_SPEEDING_UP, steerable.id);
   }
 
   this.result.linear.copy(targetVelocity).sub(steerable.velocity);

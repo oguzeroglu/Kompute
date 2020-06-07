@@ -15,14 +15,14 @@ Logger.prototype.disable = function(){
   this.isEnabled = false;
 }
 
-Logger.prototype.log = function(component, msg){
-  if (!this.isEnabled || this.lastMessageMap[component] == msg){
+Logger.prototype.log = function(component, msg , id){
+  if (!this.isEnabled || this.lastMessageMap[id] == msg){
     return;
   }
 
-  this.logMethod("[" + component + "]: " + msg);
+  this.logMethod("[" + component + "]: " + msg + " (" + id + ")");
 
-  this.lastMessageMap[component] = msg;
+  this.lastMessageMap[id] = msg;
 }
 
 export var logger = new Logger();

@@ -42,12 +42,12 @@ Steerable.prototype = Object.create(Entity.prototype);
 Steerable.prototype.update = function(){
 
   if (!this.world){
-    logger.log(LOGGER_COMPONENT_NAME, LOG_NOT_INSERTED_TO_WORLD);
+    logger.log(LOGGER_COMPONENT_NAME, LOG_NOT_INSERTED_TO_WORLD, this.id);
     return;
   }
 
   if (!this.behavior){
-    logger.log(LOGGER_COMPONENT_NAME, LOG_HAS_NO_BEHAVIOR);
+    logger.log(LOGGER_COMPONENT_NAME, LOG_HAS_NO_BEHAVIOR, this.id);
     return;
   }
 
@@ -64,7 +64,7 @@ Steerable.prototype.update = function(){
     this.linearAcceleration.y += this.world.gravity;
     this.jumpTime += delta;
     if (this.jumpTime >= this.jumpDescriptor.getEquationResult(this).time){
-      logger.log(LOGGER_COMPONENT_NAME, LOG_JUMP_COMPLETED);
+      logger.log(LOGGER_COMPONENT_NAME, LOG_JUMP_COMPLETED, this.id);
       this.onJumpCompleted();
     }
   }
@@ -76,7 +76,7 @@ Steerable.prototype.update = function(){
   if (this.isJumpInitiated && !this.isJumpTakenOff && !this.isJumpReady){
     var distToTakeoffPosition = vectorPool.get().copy(this.position).sub(this.jumpDescriptor.takeoffPosition).getLength();
     if (distToTakeoffPosition < this.jumpDescriptor.runupSatisfactionRadius){
-      logger.log(LOGGER_COMPONENT_NAME, LOG_JUMP_READY);
+      logger.log(LOGGER_COMPONENT_NAME, LOG_JUMP_READY, this.id);
       this.onJumpReady();
     }
   }
@@ -155,7 +155,7 @@ Steerable.prototype.jump = function(toRunupBehavior, jumpDescriptor){
 
   var result = jumpDescriptor.solveQuadraticEquation(this);
   if (!result){
-    logger.log(LOGGER_COMPONENT_NAME, LOG_EQUATION_CANNOT_BE_SOLVED);
+    logger.log(LOGGER_COMPONENT_NAME, LOG_EQUATION_CANNOT_BE_SOLVED, this.id);
     return false;
   }
 
@@ -175,7 +175,7 @@ Steerable.prototype.jump = function(toRunupBehavior, jumpDescriptor){
 
   this.jumpTime = 0;
 
-  logger.log(LOGGER_COMPONENT_NAME, LOG_JUMP_INITIATED);
+  logger.log(LOGGER_COMPONENT_NAME, LOG_JUMP_INITIATED, this.id);
 
   return true;
 }
@@ -187,7 +187,7 @@ Steerable.prototype.onJumpReady = function(){
   this.isJumpInitiated = true;
 
   if (!this.jumpBehavior){
-    logger.log(LOGGER_COMPONENT_NAME, LOG_NO_JUMP_BEHAVIOR_SET);
+    logger.log(LOGGER_COMPONENT_NAME, LOG_NO_JUMP_BEHAVIOR_SET, this.id);
   }
 }
 

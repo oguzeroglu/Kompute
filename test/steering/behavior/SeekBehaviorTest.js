@@ -35,7 +35,7 @@ describe("SeekBehavior", function(){
     Kompute.logger.enable();
 
     expect(seekBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D());
-    expect(loggedMsg).to.eql("[SeekBehavior]: No target position.");
+    expect(loggedMsg).to.eql("[SeekBehavior]: No target position. (steerable1)");
   });
 
   it("should compute", function(){
@@ -49,6 +49,6 @@ describe("SeekBehavior", function(){
     Kompute.logger.enable();
 
     expect(seekBehavior.compute(steerable).linear.getLength()).to.eql(steerable.maxAcceleration);
-    expect(loggedMsg).to.eql("[SeekBehavior]: Speeding up.");
+    expect(loggedMsg).to.eql("[SeekBehavior]: Speeding up. (steerable1)");
   });
 });

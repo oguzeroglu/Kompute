@@ -100,17 +100,17 @@ describe("Steerable", function(){
 
     entity.update();
     expect(entity.position).to.eql(center);
-    expect(loggedMsgs).to.eql(["[Steerable]: Not inserted to a world."]);
+    expect(loggedMsgs).to.eql(["[Steerable]: Not inserted to a world. (steerable1)"]);
     entity.linearAcceleration.set(10, 0, 0);
     entity.update();
     expect(entity.position).to.eql(new Kompute.Vector3D(0, 0, 0));
-    expect(loggedMsgs).to.eql(["[Steerable]: Not inserted to a world."]);
+    expect(loggedMsgs).to.eql(["[Steerable]: Not inserted to a world. (steerable1)"]);
     entity.update();
     expect(entity.position).to.eql(new Kompute.Vector3D(0, 0, 0));
-    expect(loggedMsgs).to.eql(["[Steerable]: Not inserted to a world."]);
+    expect(loggedMsgs).to.eql(["[Steerable]: Not inserted to a world. (steerable1)"]);
     entity.update();
     expect(entity.position).to.eql(new Kompute.Vector3D(0, 0, 0));
-    expect(loggedMsgs).to.eql(["[Steerable]: Not inserted to a world."]);
+    expect(loggedMsgs).to.eql(["[Steerable]: Not inserted to a world. (steerable1)"]);
   });
 
   it("should not update if does not have any behavior", function(){
@@ -128,16 +128,16 @@ describe("Steerable", function(){
     entity.update();
     expect(entity.position).to.eql(center);
     entity.linearAcceleration.set(10, 0, 0);
-    expect(loggedMsgs).to.eql(["[Steerable]: Has no behavior."]);
+    expect(loggedMsgs).to.eql(["[Steerable]: Has no behavior. (steerable1)"]);
     entity.update();
     expect(entity.position).to.eql(new Kompute.Vector3D(0, 0, 0));
-    expect(loggedMsgs).to.eql(["[Steerable]: Has no behavior."]);
+    expect(loggedMsgs).to.eql(["[Steerable]: Has no behavior. (steerable1)"]);
     entity.update();
     expect(entity.position).to.eql(new Kompute.Vector3D(0, 0, 0));
-    expect(loggedMsgs).to.eql(["[Steerable]: Has no behavior."]);
+    expect(loggedMsgs).to.eql(["[Steerable]: Has no behavior. (steerable1)"]);
     entity.update();
     expect(entity.position).to.eql(new Kompute.Vector3D(0, 0, 0));
-    expect(loggedMsgs).to.eql(["[Steerable]: Has no behavior."]);
+    expect(loggedMsgs).to.eql(["[Steerable]: Has no behavior. (steerable1)"]);
   });
 
   it("should not update if there is no movement request from behavior", function(){
@@ -448,7 +448,7 @@ describe("Steerable", function(){
     }
 
     expect(entity.isJumpTakenOff).to.eql(false);
-    expect(loggedMsgs).to.eql(['[Steerable]: Jump completed.']);
+    expect(loggedMsgs).to.eql(['[Steerable]: Jump completed. (steerable1)']);
   });
 
   it("should not jump if jump not isAchievable", function(){
@@ -479,7 +479,7 @@ describe("Steerable", function(){
 
     expect(result).to.eql(false);
     expect(entity.isJumpInitiated).to.eql(false);
-    expect(loggedMsgs).to.eql(['[Steerable]: Equation cannot be solved.']);
+    expect(loggedMsgs).to.eql(['[Steerable]: Equation cannot be solved. (steerable1)']);
   });
 
   it("should trigger onJumpReady if position within run-up radius", function(){
@@ -512,7 +512,7 @@ describe("Steerable", function(){
 
     expect(called).to.eql(true);
 
-    expect(loggedMsgs).to.eql(['[Steerable]: Jump initiated.', '[Steerable]: Jump ready.']);
+    expect(loggedMsgs).to.eql(['[Steerable]: Jump initiated. (steerable1)', '[Steerable]: Jump ready. (steerable1)']);
   });
 
   it("should not trigger onJumpReady if position out of run-up radius", function(){
@@ -625,7 +625,7 @@ describe("Steerable", function(){
     Kompute.logger.enable();
     entity.onJumpReady();
 
-    expect(loggedMsgs).to.eql(['[Steerable]: No jump behavior set.']);
+    expect(loggedMsgs).to.eql(['[Steerable]: No jump behavior set. (steerable1)']);
   });
 
   it("should consider gravity when updating if jump took off", function(){

@@ -31,23 +31,23 @@ HideBehavior.prototype.compute = function(steerable){
   this.result.linear.set(0, 0, 0);
 
   if (!steerable.hideTargetEntity){
-    logger.log(LOGGER_COMPONENT_NAME, LOG_NO_HIDE_TARGET_ENTITY);
+    logger.log(LOGGER_COMPONENT_NAME, LOG_NO_HIDE_TARGET_ENTITY, steerable.id);
     return this.result;
   }
 
   if (vectorPool.get().copy(steerable.position).sub(steerable.hideTargetEntity.position).getLength() > this.threatDistance){
-    logger.log(LOGGER_COMPONENT_NAME, LOG_TARGET_ENTITY_OUT_OF_THREAT_DISTANCE);
+    logger.log(LOGGER_COMPONENT_NAME, LOG_TARGET_ENTITY_OUT_OF_THREAT_DISTANCE, steerable.id);
     return this.result;
   }
 
   this.findHidingSpot(steerable);
 
   if (!this.hidingSpotFound){
-    logger.log(LOGGER_COMPONENT_NAME, LOG_NO_HIDING_SPOT_FOUND);
+    logger.log(LOGGER_COMPONENT_NAME, LOG_NO_HIDING_SPOT_FOUND, steerable.id);
     return this.result;
   }
 
-  logger.log(LOGGER_COMPONENT_NAME, LOG_HIDING);
+  logger.log(LOGGER_COMPONENT_NAME, LOG_HIDING, steerable.id);
 
   steerable.setTargetPosition(this.bestHidingSpot);
 

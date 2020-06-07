@@ -16,13 +16,13 @@ SeekBehavior.prototype.compute = function(steerable){
   this.result.linear.set(0, 0, 0);
 
   if (!steerable.hasTargetPosition){
-    logger.log(LOGGER_COMPONENT_NAME, LOG_NO_TARGET_POSITION);
+    logger.log(LOGGER_COMPONENT_NAME, LOG_NO_TARGET_POSITION, steerable.id);
     return this.result;
   }
 
   this.result.linear.copy(steerable.targetPosition).sub(steerable.position).normalize().multiplyScalar(steerable.maxAcceleration);
 
-  logger.log(LOGGER_COMPONENT_NAME, LOG_SPEEDING_UP);
+  logger.log(LOGGER_COMPONENT_NAME, LOG_SPEEDING_UP, steerable.id);
 
   return this.result;
 }

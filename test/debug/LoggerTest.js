@@ -44,7 +44,7 @@ describe("Logger", function(){
       called = true;
     };
 
-    logger.log("testComponent", "testMessage");
+    logger.log("testComponent", "testMessage", "testID");
 
     expect(called).to.eql(false);
   });
@@ -59,10 +59,10 @@ describe("Logger", function(){
 
     logger.enable();
     logger.lastMessageMap = {
-      testComponent: "testMessage"
+      testID: "testMessage"
     };
 
-    logger.log("testComponent", "testMessage");
+    logger.log("testComponent", "testMessage", "testID");
 
     expect(called).to.eql(false);
   });
@@ -77,9 +77,9 @@ describe("Logger", function(){
 
     logger.enable();
 
-    logger.log("testComponent", "testMessage");
+    logger.log("testComponent", "testMessage", "testID");
 
-    expect(param).to.eql("[testComponent]: testMessage");
-    expect(logger.lastMessageMap).to.eql({ testComponent: "testMessage" });
+    expect(param).to.eql("[testComponent]: testMessage (testID)");
+    expect(logger.lastMessageMap).to.eql({ testID: "testMessage" });
   });
 });

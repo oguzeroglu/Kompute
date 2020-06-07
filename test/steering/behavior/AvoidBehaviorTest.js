@@ -125,7 +125,7 @@ describe("AvoidBehavior", function(){
     Kompute.logger.enable();
 
     expect(avoidBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D());
-    expect(loggedMsg).to.eql("[AvoidBehavior]: No threatening entity found.");
+    expect(loggedMsg).to.eql("[AvoidBehavior]: No threatening entity found. (steerable1)");
   });
 
   it("should go back if going towards an obstacle", function(){
@@ -142,6 +142,6 @@ describe("AvoidBehavior", function(){
     steerable.setBehavior(new Kompute.AvoidBehavior({ maxSeeAhead: 500, maxAvoidForce: 100 }));
     steerable.update();
     expect(steerable.velocity.normalize()).to.eql(new Kompute.Vector3D(0, 0, -1));
-    expect(loggedMsg).to.eql("[AvoidBehavior]: Threatening entity found.");
+    expect(loggedMsg).to.eql("[AvoidBehavior]: Threatening entity found. (steerable1)");
   });
 });
