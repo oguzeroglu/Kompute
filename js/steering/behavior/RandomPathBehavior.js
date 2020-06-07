@@ -1,6 +1,11 @@
 import { PathFollowingBehavior } from "./PathFollowingBehavior";
 import { AStar } from "../../core/AStar";
 import { Vector3D } from "../../core/Vector3D";
+import { logger } from "../../debug/Logger";
+
+var LOGGER_COMPONENT_NAME = "RandomPathBehavior";
+var LOG_PATH_CONSTRUCTED = "Path constructed.";
+var LOG_FOLLOWING_PATH = "Following path.";
 
 var RandomPathBehavior = function(options){
 
@@ -56,8 +61,11 @@ RandomPathBehavior.prototype.constructPath = function(steerable){
 
 RandomPathBehavior.prototype.compute = function(steerable){
   if (!this.isPathConstructed){
+    logger.log(LOGGER_COMPONENT_NAME, LOG_PATH_CONSTRUCTED);
     this.constructPath(steerable);
   }
+
+  logger.log(LOGGER_COMPONENT_NAME, LOG_FOLLOWING_PATH);
 
   return PathFollowingBehavior.prototype.compute.call(this, steerable);
 }
