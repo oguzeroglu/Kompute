@@ -3,6 +3,23 @@ var Kompute = require("../../../build/Kompute");
 
 describe("JumpBehavior", function(){
 
+  var loggedMsg;
+
+  beforeEach(function(){
+    loggedMsg = null;
+    Kompute.logger.logMethod = function(msg){
+      if (loggedMsg != null){
+        return;
+      }
+      loggedMsg = msg;
+    }
+  });
+
+  afterEach(function(){
+    Kompute.logger.logMethod = console.log;
+    Kompute.logger.disable();
+  });
+
   it("should initialize", function(){
     var jumpBehavior = new Kompute.JumpBehavior();
 
@@ -13,7 +30,10 @@ describe("JumpBehavior", function(){
     var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
     var jumpBehavior = new Kompute.JumpBehavior();
 
+    Kompute.logger.enable();
+
     expect(jumpBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D());
+    expect(loggedMsg).to.eql("[JumpBehavior]: Jump not ready.");
   });
 
   it("should not request acceleration if jump taken off", function(){
@@ -23,7 +43,10 @@ describe("JumpBehavior", function(){
     steerable.isJumpReady = true;
     steerable.isJumpTakenOff = true;
 
+    Kompute.logger.enable();
+
     expect(jumpBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D());
+    expect(loggedMsg).to.eql("[JumpBehavior]: Jump already took off.");
   });
 
   it("should not request acceleration if equation time is zero", function(){
@@ -38,7 +61,10 @@ describe("JumpBehavior", function(){
 
     steerable.isJumpReady = true;
 
+    Kompute.logger.enable();
+
     expect(jumpBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D());
+    expect(loggedMsg).to.eql("[JumpBehavior]: Equation result time is zero.");
   });
 
   it("should take off", function(){
@@ -66,11 +92,14 @@ describe("JumpBehavior", function(){
 
     steerable.isJumpReady = true;
 
+    Kompute.logger.enable();
+
     expect(steerable.isJumpTakenOff).to.eql(false);
     var result = jumpBehavior.compute(steerable);
     expect(result.linear).to.eql(new Kompute.Vector3D());
     expect(steerable.isJumpTakenOff).to.eql(true);
     expect(steerable.velocity).to.eql(new Kompute.Vector3D(jumpDescriptor.getEquationResult(steerable).vx, 1000, jumpDescriptor.getEquationResult(steerable).vz));
+    expect(loggedMsg).to.eql("[JumpBehavior]: Taking off.");
   });
 
   it("should match velocity", function(){
@@ -90,8 +119,11 @@ describe("JumpBehavior", function(){
 
     steerable.isJumpReady = true;
 
+    Kompute.logger.enable();
+
     var result = jumpBehavior.compute(steerable);
 
     expect(result.linear).to.eql(new Kompute.Vector3D(15, 0, 30));
+    expect(loggedMsg).to.eql("[JumpBehavior]: Matching velocity.");
   });
 });

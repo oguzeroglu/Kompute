@@ -1,7 +1,15 @@
 import { SteeringBehavior } from "./SteeringBehavior";
 import { VectorPool } from "../../core/VectorPool";
+import { logger } from "../../debug/Logger";
 
 var vectorPool = new VectorPool(10);
+
+var LOGGER_COMPONENT_NAME = "JumpBehavior";
+var LOG_JUMP_NOT_READY = "Jump not ready.";
+var LOG_JUMP_ALREADY_TOOK_OFF = "Jump already took off.";
+var LOG_EQUATION_RESULT_TIME_ZERO = "Equation result time is zero.";
+var LOG_TAKING_OFF = "Taking off.";
+var LOG_MATCHING_VELOCITY = "Matching velocity.";
 
 var JumpBehavior = function(){
   SteeringBehavior.call(this);
@@ -14,7 +22,13 @@ JumpBehavior.prototype.compute = function(steerable){
 
   linear.set(0, 0, 0);
 
-  if (!steerable.isJumpReady || steerable.isJumpTakenOff){
+  if (!steerable.isJumpReady){
+    logger.log(LOGGER_COMPONENT_NAME, LOG_JUMP_NOT_READY);
+    return this.result;
+  }
+
+  if (steerable.isJumpTakenOff){
+    logger.log(LOGGER_COMPONENT_NAME, LOG_JUMP_ALREADY_TOOK_OFF);
     return this.result;
   }
 
@@ -22,6 +36,7 @@ JumpBehavior.prototype.compute = function(steerable){
   var equationResult = jumpDescriptor.getEquationResult(steerable);
 
   if (equationResult.time == 0){
+    logger.log(LOGGER_COMPONENT_NAME, LOG_EQUATION_RESULT_TIME_ZERO);
     return this.result;
   }
 
@@ -32,9 +47,12 @@ JumpBehavior.prototype.compute = function(steerable){
     var velocityDiff = vectorPool.get().copy(steerable.velocity).sub(targetVelocity).getLength();
     if (velocityDiff <= jumpDescriptor.takeoffVelocitySatisfactionRadius){
       steerable.onJumpTakeOff();
+      logger.log(LOGGER_COMPONENT_NAME, LOG_TAKING_OFF);
       return this.result;
     }
   }
+
+  logger.log(LOGGER_COMPONENT_NAME, LOG_MATCHING_VELOCITY);
 
   return this.matchVelocity(equationResult.time, targetVelocity, steerable);
 }
