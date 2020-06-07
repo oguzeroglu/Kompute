@@ -3,6 +3,24 @@ var Kompute = require("../../../build/Kompute");
 
 describe("RandomPathBehavior", function(){
 
+  var loggedMsg;
+
+  beforeEach(function(){
+    loggedMsg = null;
+    Kompute.logger.logMethod = function(msg){
+      if (loggedMsg != null){
+        return;
+      }
+      loggedMsg = msg;
+    }
+  });
+
+  afterEach(function(){
+    Kompute.logger.lastMessageMap = {};
+    Kompute.logger.logMethod = console.log;
+    Kompute.logger.disable();
+  });
+
   it("should initialize", function(){
     var graph = new Kompute.Graph();
     graph.addVertex(new Kompute.Vector3D(100, 200, 300));
@@ -107,9 +125,12 @@ describe("RandomPathBehavior", function(){
 
     expect(path.length > 0).to.eql(false);
 
+    Kompute.logger.enable();
+
     randomPathBehavior.compute(steerable);
 
     expect(path.length > 0).to.eql(true);
+    expect(loggedMsg).to.eql("[RandomPathBehavior]: Path constructed. (steerable1)");
   });
 
   it("should compute", function(){
@@ -133,6 +154,9 @@ describe("RandomPathBehavior", function(){
 
     var pathFollowingBehavior = new Kompute.PathFollowingBehavior({ path: randomPathBehavior.aStar.path, satisfactionRadius: 50 });
 
+    Kompute.logger.enable();
+
     expect(randomPathBehavior.compute(steerable)).to.eql(pathFollowingBehavior.compute(steerable2));
+    expect(loggedMsg).to.eql("[RandomPathBehavior]: Following path. (steerable1)");
   });
 });

@@ -2,9 +2,14 @@ import { SteeringBehavior } from "./SteeringBehavior";
 import { Box } from "../../core/Box";
 import { Vector3D } from "../../core/Vector3D";
 import { VectorPool } from "../../core/VectorPool";
+import { logger } from "../../debug/Logger";
 
 var box = new Box(new Vector3D(), new Vector3D());
 var vectorPool = new VectorPool(10);
+
+var LOGGER_COMPONENT_NAME = "AvoidBehavior";
+var NO_THREATENING_ENTITY_FOUND = "No threatening entity found.";
+var THREATENING_ENTITY_FOUND = "Threatening entity found.";
 
 var AvoidBehavior = function(options){
   SteeringBehavior.call(this);
@@ -51,8 +56,11 @@ AvoidBehavior.prototype.compute = function(steerable){
   var mostThreateningObstacle = this.findMostThreateningObstacle(steerable);
 
   if (!mostThreateningObstacle){
+    logger.log(LOGGER_COMPONENT_NAME, NO_THREATENING_ENTITY_FOUND, steerable.id);
     return this.result;
   }
+
+  logger.log(LOGGER_COMPONENT_NAME, THREATENING_ENTITY_FOUND, steerable.id);
 
   this.result.linear.copy(steerable.velocity).normalize().multiplyScalar(steerable.velocity.getLength() / steerable.maxSpeed).add(steerable.position).sub(mostThreateningObstacle.position).normalize().multiplyScalar(this.maxAvoidForce);;
   return this.result;

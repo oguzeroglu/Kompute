@@ -1,6 +1,16 @@
 import { Entity } from "../core/Entity";
 import { Vector3D } from "../core/Vector3D";
 import { VectorPool } from "../core/VectorPool";
+import { logger } from "../debug/Logger";
+
+var LOGGER_COMPONENT_NAME = "Steerable";
+var LOG_NOT_INSERTED_TO_WORLD = "Not inserted to a world.";
+var LOG_HAS_NO_BEHAVIOR = "Has no behavior.";
+var LOG_JUMP_COMPLETED = "Jump completed.";
+var LOG_JUMP_READY = "Jump ready.";
+var LOG_EQUATION_CANNOT_BE_SOLVED = "Equation cannot be solved.";
+var LOG_JUMP_INITIATED = "Jump initiated.";
+var LOG_NO_JUMP_BEHAVIOR_SET = "No jump behavior set.";
 
 var delta = 1/60;
 var vectorPool = new VectorPool(10);
@@ -30,7 +40,14 @@ var Steerable = function(id, center, size){
 Steerable.prototype = Object.create(Entity.prototype);
 
 Steerable.prototype.update = function(){
-  if (!this.world || !this.behavior){
+
+  if (!this.world){
+    logger.log(LOGGER_COMPONENT_NAME, LOG_NOT_INSERTED_TO_WORLD, this.id);
+    return;
+  }
+
+  if (!this.behavior){
+    logger.log(LOGGER_COMPONENT_NAME, LOG_HAS_NO_BEHAVIOR, this.id);
     return;
   }
 
@@ -47,6 +64,7 @@ Steerable.prototype.update = function(){
     this.linearAcceleration.y += this.world.gravity;
     this.jumpTime += delta;
     if (this.jumpTime >= this.jumpDescriptor.getEquationResult(this).time){
+      logger.log(LOGGER_COMPONENT_NAME, LOG_JUMP_COMPLETED, this.id);
       this.onJumpCompleted();
     }
   }
@@ -58,6 +76,7 @@ Steerable.prototype.update = function(){
   if (this.isJumpInitiated && !this.isJumpTakenOff && !this.isJumpReady){
     var distToTakeoffPosition = vectorPool.get().copy(this.position).sub(this.jumpDescriptor.takeoffPosition).getLength();
     if (distToTakeoffPosition < this.jumpDescriptor.runupSatisfactionRadius){
+      logger.log(LOGGER_COMPONENT_NAME, LOG_JUMP_READY, this.id);
       this.onJumpReady();
     }
   }
@@ -136,6 +155,7 @@ Steerable.prototype.jump = function(toRunupBehavior, jumpDescriptor){
 
   var result = jumpDescriptor.solveQuadraticEquation(this);
   if (!result){
+    logger.log(LOGGER_COMPONENT_NAME, LOG_EQUATION_CANNOT_BE_SOLVED, this.id);
     return false;
   }
 
@@ -155,6 +175,8 @@ Steerable.prototype.jump = function(toRunupBehavior, jumpDescriptor){
 
   this.jumpTime = 0;
 
+  logger.log(LOGGER_COMPONENT_NAME, LOG_JUMP_INITIATED, this.id);
+
   return true;
 }
 
@@ -163,6 +185,10 @@ Steerable.prototype.onJumpReady = function(){
   this.isJumpInitiated = false;
   this.setBehavior(this.jumpBehavior);
   this.isJumpInitiated = true;
+
+  if (!this.jumpBehavior){
+    logger.log(LOGGER_COMPONENT_NAME, LOG_NO_JUMP_BEHAVIOR_SET, this.id);
+  }
 }
 
 Steerable.prototype.onJumpTakeOff = function(){

@@ -3,6 +3,24 @@ var Kompute = require("../../../build/Kompute");
 
 describe("PathFollowingBehavior", function(){
 
+  var loggedMsg;
+
+  beforeEach(function(){
+    loggedMsg = null;
+    Kompute.logger.logMethod = function(msg){
+      if (!msg.startsWith("[PathFollowingBehavior]")){
+        return;
+      }
+      loggedMsg = msg;
+    }
+  });
+
+  afterEach(function(){
+    Kompute.logger.lastMessageMap = {};
+    Kompute.logger.logMethod = console.log;
+    Kompute.logger.disable();
+  });
+
   it("should initialize", function(){
     var path = new Kompute.Path();
 
@@ -19,7 +37,20 @@ describe("PathFollowingBehavior", function(){
 
     var pathFollowingBehavior = new Kompute.PathFollowingBehavior({ path: path, satisfactionRadius: 50 });
 
+    Kompute.logger.enable();
+
     expect(pathFollowingBehavior.compute(steerable).linear).to.eql(new Kompute.Vector3D());
+    expect(loggedMsg).to.eql("[PathFollowingBehavior]: No waypoint. (steerable1)");
+
+    path.addWaypoint(new Kompute.Vector3D(10, 10, 10));
+    pathFollowingBehavior = new Kompute.PathFollowingBehavior({ path: path, satisfactionRadius: 50 });
+
+    steerable.maxSpeed = 100;
+    steerable.maxAcceleration = 100;
+
+    pathFollowingBehavior.compute(steerable);
+
+    expect(loggedMsg).to.eql("[PathFollowingBehavior]: Path completed. (steerable1)");
   });
 
   it("should go to next target if within satisfaction radius", function(){
@@ -31,9 +62,12 @@ describe("PathFollowingBehavior", function(){
 
     var pathFollowingBehavior = new Kompute.PathFollowingBehavior({ path: path, satisfactionRadius: 50 });
 
+    Kompute.logger.enable();
+
     pathFollowingBehavior.compute(steerable);
 
     expect(steerable.targetPosition).to.eql(new Kompute.Vector3D(100, 200, 300));
+    expect(loggedMsg).to.eql("[PathFollowingBehavior]: Next waypoint. (steerable1)");
   });
 
   it("should delegate to seek behavior", function(){
@@ -56,6 +90,7 @@ describe("PathFollowingBehavior", function(){
     var seekBehavior = new Kompute.SeekBehavior();
 
     var pathResult = pathFollowingBehavior.compute(steerable);
+
     var seekResult = seekBehavior.compute(steerable2);
 
     expect(pathResult.linear).to.eql(seekResult.linear);
@@ -105,9 +140,12 @@ describe("PathFollowingBehavior", function(){
       called = true;
     }
 
+    Kompute.logger.enable();
+
     for (var i = 0; i < 1000; i++){
       steerable.update();
       if (called){
+        expect(loggedMsg).to.eql("[PathFollowingBehavior]: Jump initiated. (steerable1)");
         steerable.behavior = null;
         break;
       }
