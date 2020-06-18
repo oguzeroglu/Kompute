@@ -7,6 +7,18 @@ See the [documentation](https://github.com/oguzeroglu/Kompute/wiki).
 
 # Getting Started
 
+Include it in your project.
+
+For browser:
+```html
+<script src="PATH_TO_kompute.min.js"></script>
+```
+
+For `NodeJS`:
+```javascript
+var Kompute = require("kompute");
+```
+
 Create a [World](https://github.com/oguzeroglu/Kompute/wiki/World):
 ```javascript
 var worldWidth = 1000;
