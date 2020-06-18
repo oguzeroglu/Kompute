@@ -1,7 +1,7 @@
 # Kompute
 `Kompute` is a lightweight and efficient [steering](https://www.red3d.com/cwr/steer/gdc99/) library for AI movement. It's not a visual library and generates numbers (velocity & position data), that's why it may easily be plugged into any codebase.
 
-See the documentation.
+See the [documentation](https://github.com/oguzeroglu/Kompute/wiki).
 
 # Getting Started
 
