@@ -124,6 +124,9 @@ describe("DebugHelper", function(){
     expect(debugHelper.meshesByEntityID).to.eql({entity1: scene.children[0]});
     expect(scene.children).to.have.length(1);
     expect(scene.children[0].position).to.eql(new Kompute.Vector3D(500, 700, 1000));
+
+    entity.setSize(new Kompute.Vector3D(10, 40, 50));
+    expect(scene.children[0].scale).to.eql(new Kompute.Vector3D(1, 4, 5));
   });
 
   it("should update velocity mesh of steerable", function(){
@@ -383,6 +386,9 @@ class MockMeshBasicMaterial {
 class MockBoxBufferGeometry {
   constructor(width, height, depth){
     this.size = new Kompute.Vector3D(width, height, depth);
+    this.parameters = {
+      width: width, height: height, depth: depth
+    };
   }
 };
 

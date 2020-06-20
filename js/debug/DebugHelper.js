@@ -59,6 +59,9 @@ var DebugHelper = function(world, threeInstance, scene){
     var mesh = this.meshesByEntityID[entity.id];
     mesh.position.set(entity.position.x, entity.position.y, entity.position.z);
 
+    var params = mesh.geometry.parameters;
+    mesh.scale.set(entity.size.x / params.width, entity.size.y / params.height, entity.size.z / params.depth);
+
     if (entity instanceof Steerable){
       var velocityMesh = this.velocityMeshesByEntityID[entity.id];
       vect.copy(entity.position).add(entity.velocity);

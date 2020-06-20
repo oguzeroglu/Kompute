@@ -10,7 +10,7 @@ var vectorPool = new VectorPool(10);
 
 var Entity = function(id, center, size){
   this.id = id;
-  this.size = size;
+  this.size = size.clone();
   this.position = center.clone();
 
   this.world = null;
@@ -48,6 +48,14 @@ Entity.prototype.update = function(){
   }
 }
 
+Entity.prototype.setSize = function(size){
+  this.size.copy(size);
+  this.box.setFromCenterAndSize(this.position, size);
+  
+  if (this.world){
+    this.world.updateEntity(this, this.position, this.size);
+  }
+}
 
 Entity.prototype.setPosition = function(position){
   this.position.copy(position);
