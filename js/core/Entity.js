@@ -48,20 +48,25 @@ Entity.prototype.update = function(){
   }
 }
 
-Entity.prototype.setSize = function(size){
+Entity.prototype.setPositionAndSize = function(position, size){
+  this.setPosition(position, true);
+  this.setSize(size);
+}
+
+Entity.prototype.setSize = function(size, skipWorldUpdate){
   this.size.copy(size);
   this.box.setFromCenterAndSize(this.position, size);
-  
-  if (this.world){
+
+  if (this.world && !skipWorldUpdate){
     this.world.updateEntity(this, this.position, this.size);
   }
 }
 
-Entity.prototype.setPosition = function(position){
+Entity.prototype.setPosition = function(position, skipWorldUpdate){
   this.position.copy(position);
   this.box.setFromCenterAndSize(position, this.size);
 
-  if (this.world){
+  if (this.world && !skipWorldUpdate){
     this.world.updateEntity(this, this.position, this.size);
   }
 }

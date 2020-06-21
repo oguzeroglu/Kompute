@@ -89,6 +89,16 @@ describe("Entity", function(){
 
     expect(world.nearby.query(0, 0, 0).size).to.eql(0);
     expect(world.nearby.query(40, 40, 40).size).to.eql(1);
+
+    var count = 0;
+    world.updateEntity = function(){
+      count ++;
+    }
+
+    entity.setPosition(new Kompute.Vector3D(10, 20, 30));
+    entity.setPosition(new Kompute.Vector3D(30, 40, 50));
+    entity.setPosition(new Kompute.Vector3D(60, 40, 30), true);
+    expect(count).to.eql(2);
   });
 
 
@@ -114,8 +124,39 @@ describe("Entity", function(){
 
     expect(world.nearby.query(0, 0, 0).size).to.eql(1);
     expect(world.nearby.query(0, 190, 0).size).to.eql(1);
+
+    var count = 0;
+    world.updateEntity = function(){
+      count ++;
+    };
+
+    entity.setSize(new Kompute.Vector3D(10, 20, 30));
+    entity.setSize(new Kompute.Vector3D(30, 40, 50));
+    entity.setSize(new Kompute.Vector3D(60, 40, 30), true);
+    expect(count).to.eql(2);
   });
 
+  it("should set position and size", function(){
+
+    var center = new Kompute.Vector3D(10, 10, 10);
+    var entitySize = new Kompute.Vector3D(5, 5, 5);
+
+    var world = new Kompute.World(3000, 3000, 3000, 10);
+    var entity = new Kompute.Entity("entity1", center, entitySize);
+
+    world.insertEntity(entity);
+
+    var count = 0;
+    world.updateEntity = function(){
+      count ++;
+    };
+
+    entity.setPositionAndSize(new Kompute.Vector3D(10, 30, 40), new Kompute.Vector3D(60, 70, 80));
+
+    expect(entity.position).to.eql(new Kompute.Vector3D(10, 30, 40));
+    expect(entity.size).to.eql(new Kompute.Vector3D(60, 70, 80));
+    expect(count).to.eql(1);
+  });
 
   it("should set look direction", function(){
     var center = new Kompute.Vector3D(10, 10, 10);
