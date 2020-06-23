@@ -7,6 +7,9 @@ describe("World", function(){
 
     var world = new Kompute.World(100, 200, 300, 10);
 
+    expect(world.width).to.eql(100);
+    expect(world.height).to.eql(200);
+    expect(world.depth).to.eql(300);
     expect(world.entititesByID).to.eql({});
     expect(world.nearby).to.exist;
     expect(world.gravity).to.eql(0);

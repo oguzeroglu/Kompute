@@ -24,6 +24,7 @@ describe("DebugHelper", function(){
     expect(debugHelper.lookMeshesByEntityID).to.eql({});
     expect(debugHelper.pathMeshes).to.eql([]);
     expect(debugHelper.edgeMeshes).to.eql([]);
+    expect(debugHelper.worldMesh).to.eql(null);
     expect(world.onEntityInserted).to.exist;
     expect(world.onEntityRemoved).to.exist;
     expect(world.onEntityUpdated).to.exist;
@@ -84,10 +85,10 @@ describe("DebugHelper", function(){
     var entity = new Kompute.Entity("entity1", new Kompute.Vector3D(100, 300, 500), new Kompute.Vector3D(10, 20, 30));
     world.insertEntity(entity);
 
-    expect(debugHelper.meshesByEntityID).to.eql({entity1: scene.children[0]});
-    expect(scene.children).to.have.length(1);
-    expect(scene.children[0].position).to.eql(new Kompute.Vector3D(100, 300, 500));
-    expect(scene.children[0].geometry.size).to.eql(new Kompute.Vector3D(10, 20, 30));
+    expect(debugHelper.meshesByEntityID).to.eql({entity1: scene.children[1]});
+    expect(scene.children).to.have.length(2);
+    expect(scene.children[1].position).to.eql(new Kompute.Vector3D(100, 300, 500));
+    expect(scene.children[1].geometry.size).to.eql(new Kompute.Vector3D(10, 20, 30));
   });
 
   it("should add velocity mesh and look mesh for steerable", function(){
@@ -102,9 +103,9 @@ describe("DebugHelper", function(){
     var entity = new Kompute.Steerable("entity1", new Kompute.Vector3D(100, 300, 500), new Kompute.Vector3D(10, 20, 30));
     world.insertEntity(entity);
 
-    expect(scene.children).to.have.length(3);
-    expect(debugHelper.velocityMeshesByEntityID).to.eql({entity1: scene.children[1]});
-    expect(debugHelper.lookMeshesByEntityID).to.eql({entity1: scene.children[2]});
+    expect(scene.children).to.have.length(4);
+    expect(debugHelper.velocityMeshesByEntityID).to.eql({entity1: scene.children[2]});
+    expect(debugHelper.lookMeshesByEntityID).to.eql({entity1: scene.children[3]});
   });
 
   it("should update entity if active", function(){
@@ -121,12 +122,12 @@ describe("DebugHelper", function(){
 
     entity.setPosition(new Kompute.Vector3D(500, 700, 1000));
 
-    expect(debugHelper.meshesByEntityID).to.eql({entity1: scene.children[0]});
-    expect(scene.children).to.have.length(1);
-    expect(scene.children[0].position).to.eql(new Kompute.Vector3D(500, 700, 1000));
+    expect(debugHelper.meshesByEntityID).to.eql({entity1: scene.children[1]});
+    expect(scene.children).to.have.length(2);
+    expect(scene.children[1].position).to.eql(new Kompute.Vector3D(500, 700, 1000));
 
     entity.setSize(new Kompute.Vector3D(10, 40, 50));
-    expect(scene.children[0].scale).to.eql(new Kompute.Vector3D(1, 4, 5));
+    expect(scene.children[1].scale).to.eql(new Kompute.Vector3D(1, 4, 5));
   });
 
   it("should update velocity mesh of steerable", function(){
@@ -149,8 +150,8 @@ describe("DebugHelper", function(){
     var boxHeight = (box.max.y - box.min.y);
     var boxDepth = (box.max.z - box.min.z);
 
-    var velocityMesh = scene.children[1];
-    var lookMesh = scene.children[2];
+    var velocityMesh = scene.children[2];
+    var lookMesh = scene.children[3];
 
     expect(velocityMesh.scale).to.eql(new Kompute.Vector3D(boxWidth, boxHeight, boxDepth));
     expect(velocityMesh.position).to.eql(new Kompute.Vector3D(50, 100, 150));
@@ -171,7 +172,7 @@ describe("DebugHelper", function(){
 
     entity.setLookDirection(new Kompute.Vector3D(10, 30, 40));
 
-    var lookMesh = scene.children[2];
+    var lookMesh = scene.children[3];
     expect(lookMesh.position).to.eql(new Kompute.Vector3D(10, 30, 40).normalize().multiplyScalar(debugHelper.LOOK_DISTANCE).add(entity.position));
   });
 
@@ -189,7 +190,7 @@ describe("DebugHelper", function(){
     world.removeEntity(entity);
 
     expect(debugHelper.meshesByEntityID).to.eql({});
-    expect(scene.children).to.have.length(0);
+    expect(scene.children).to.have.length(1);
   });
 
   it("should delete velocityMesh and lookMesh if steerable", function(){
@@ -208,13 +209,13 @@ describe("DebugHelper", function(){
     expect(debugHelper.meshesByEntityID).to.eql({});
     expect(debugHelper.velocityMeshesByEntityID).to.eql({});
     expect(debugHelper.lookMeshesByEntityID).to.eql({});
-    expect(scene.children).to.have.length(0);
+    expect(scene.children).to.have.length(1);
   });
 
   it("should activate", function(){
     var threeInstance = mockThreeInstance();
     var scene = new MockScene();
-    var world = new Kompute.World(1000, 1000, 1000, 10);
+    var world = new Kompute.World(1000, 1100, 1200, 10);
 
     var debugHelper = new Kompute.DebugHelper(world, threeInstance, scene);
 
@@ -231,7 +232,13 @@ describe("DebugHelper", function(){
     expect(debugHelper.meshesByEntityID.entity2.position).to.eql(new Kompute.Vector3D(500, 300, 100));
     expect(debugHelper.meshesByEntityID.entity1.geometry.size).to.eql(new Kompute.Vector3D(10, 10, 10));
     expect(debugHelper.meshesByEntityID.entity2.geometry.size).to.eql(new Kompute.Vector3D(20, 20, 20));
-    expect(scene.children).to.have.length(2);
+    expect(scene.children).to.have.length(3);
+
+    var worldMesh = scene.children[0];
+
+    expect(debugHelper.worldMesh).to.equal(worldMesh);
+    expect(worldMesh.geometry).to.eql(new MockBoxBufferGeometry(1000, 1100, 1200));
+    expect(worldMesh.position).to.eql(new Kompute.Vector3D(0, 0, 0));
   });
 
   it("should deactivate", function(){
@@ -274,6 +281,7 @@ describe("DebugHelper", function(){
     expect(debugHelper.pathMeshes).to.have.length(0);
     expect(debugHelper.edgeMeshes).to.have.length(0);
     expect(scene.children).to.have.length(0);
+    expect(debugHelper.worldMesh).to.eql(null);
   });
 
   it("should visualise path", function(){

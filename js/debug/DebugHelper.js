@@ -18,6 +18,7 @@ var DebugHelper = function(world, threeInstance, scene){
   this.orangeMaterial = new threeInstance.MeshBasicMaterial({ color: "orange", wireframe: false });
   this.lineMaterial = new threeInstance.LineBasicMaterial({ color: "cyan" });
 
+  this.worldMesh = null;
   this.meshesByEntityID = {};
   this.velocityMeshesByEntityID = {};
   this.lookMeshesByEntityID = {};
@@ -138,6 +139,10 @@ DebugHelper.prototype.addEntity = function(entity){
 DebugHelper.prototype.activate = function(){
   this.isActive = true;
 
+  var worldGeometry = new this.threeInstance.BoxBufferGeometry(this.world.width, this.world.height, this.world.depth);
+  this.worldMesh = new this.threeInstance.Mesh(worldGeometry, this.limeMaterial);
+  this.scene.add(this.worldMesh);
+
   this.world.forEachEntity(function(entity){
     this.addEntity(entity);
   }.bind(this));
@@ -145,6 +150,9 @@ DebugHelper.prototype.activate = function(){
 
 DebugHelper.prototype.deactivate = function(){
   this.isActive = false;
+
+  this.scene.remove(this.worldMesh);
+  this.worldMesh = null;
 
   for (var entityID in this.meshesByEntityID){
     this.scene.remove(this.meshesByEntityID[entityID]);

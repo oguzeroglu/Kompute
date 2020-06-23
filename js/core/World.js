@@ -3,6 +3,11 @@ import { Vector3D } from "./Vector3D";
 import { Vertex } from "./Vertex";
 
 var World = function(width, height, depth, binSize){
+
+  this.width = width;
+  this.height = height;
+  this.depth = depth;
+
   this.nearby = new Nearby(width, height, depth, binSize);
 
   this.entititesByID = {};
