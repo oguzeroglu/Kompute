@@ -33,6 +33,9 @@ describe("World", function(){
     for (var key of res.keys()){
       expect(key).to.eql(entity.nearbyObject);
     }
+
+    expect(entity.lastWorldPosition).to.eql(center);
+    expect(entity.lastWorldSize).to.eql(entitySize);
   });
 
   it("should insert graph", function(){
@@ -113,7 +116,18 @@ describe("World", function(){
     var res1 = world.nearby.query(0, 0, 0);
     expect(res1.size).to.eql(1);
 
+    var called = false;
+
+    world.onEntityUpdated = function(){
+      called = true;
+    }
+
     world.updateEntity(entity, new Kompute.Vector3D(100, 100, 100), entitySize);
+
+    expect(called).to.eql(true);
+
+    expect(entity.lastWorldPosition).to.eql(new Kompute.Vector3D(100, 100, 100));
+    expect(entity.lastWorldSize).to.eql(entitySize);
 
     var res2 = world.nearby.query(0, 0, 0);
     expect(res2.size).to.eql(0);
@@ -123,6 +137,18 @@ describe("World", function(){
     for (var key of res3.keys()){
       expect(key).to.eql(entity.nearbyObject);
     }
+
+    called = false;
+    world.updateEntity(entity, new Kompute.Vector3D(100, 100, 100), entity.size);
+    expect(called).to.eql(false);
+
+    called = false;
+    world.updateEntity(entity, new Kompute.Vector3D(), entity.size);
+    expect(called).to.eql(true);
+
+    called = false;
+    world.updateEntity(entity, new Kompute.Vector3D(), new Kompute.Vector3D(10, 40, 60));
+    expect(called).to.eql(true);
   });
 
   it("should get entity by ID", function(){
@@ -156,6 +182,9 @@ describe("World", function(){
     world.removeEntity(entity);
     expect(world.getEntityByID("entity")).to.eql(null);
     expect(world.nearby.bin.size).to.eql(0);
+
+    expect(entity.lastWorldPosition).not.to.exist;
+    expect(entity.lastWorldSize).not.to.exist;
   });
 
   it("should get nearby objects", function(){

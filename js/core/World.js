@@ -68,17 +68,28 @@ World.prototype.insertEntity = function(entity){
   entity.world = this;
   entity.nearbyObject = nearbyObj;
 
+  entity.lastWorldPosition = center.clone();
+  entity.lastWorldSize = size.clone();
+
   if (this.onEntityInserted){
     this.onEntityInserted(entity);
   }
 }
 
 World.prototype.updateEntity = function(entity, position, size){
+
+  if (entity.lastWorldPosition.eql(position) && entity.lastWorldSize.eql(size)){
+    return;
+  }
+
   this.nearby.update(entity.nearbyObject, position.x, position.y, position.z, size.x, size.y, size.z);
 
   if (this.onEntityUpdated){
     this.onEntityUpdated(entity);
   }
+
+  entity.lastWorldPosition.copy(position);
+  entity.lastWorldSize.copy(size);
 }
 
 World.prototype.onLookDirectionUpdated = function(entity){
@@ -94,6 +105,9 @@ World.prototype.removeEntity = function(entity){
   if (this.onEntityRemoved){
     this.onEntityRemoved(entity);
   }
+
+  delete entity.lastWorldPosition;
+  delete entity.lastWorldSize;
 }
 
 World.prototype.getNearbyObjects = function(position){
