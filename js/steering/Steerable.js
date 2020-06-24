@@ -11,6 +11,7 @@ var LOG_JUMP_READY = "Jump ready.";
 var LOG_EQUATION_CANNOT_BE_SOLVED = "Equation cannot be solved.";
 var LOG_JUMP_INITIATED = "Jump initiated.";
 var LOG_NO_JUMP_BEHAVIOR_SET = "No jump behavior set.";
+var LOG_IS_HIDDEN = "Steerable is hidden.";
 
 var delta = 1/60;
 var vectorPool = new VectorPool(10);
@@ -40,6 +41,11 @@ var Steerable = function(id, center, size){
 Steerable.prototype = Object.create(Entity.prototype);
 
 Steerable.prototype.update = function(){
+
+  if (this.isHidden){
+    logger.log(LOGGER_COMPONENT_NAME, LOG_IS_HIDDEN, this.id);
+    return;
+  }
 
   if (!this.world){
     logger.log(LOGGER_COMPONENT_NAME, LOG_NOT_INSERTED_TO_WORLD, this.id);

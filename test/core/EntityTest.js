@@ -23,6 +23,7 @@ describe("Entity", function(){
     expect(entity.hasLookTarget).to.eql(false);
     expect(entity.lookTarget).to.eql(new Kompute.Vector3D());
     expect(entity.lookSpeed).to.eql(0.1);
+    expect(entity.isHidden).to.eql(false);
   });
 
   it("should have a nearbyObject after being inserted to world", function(){
@@ -83,9 +84,10 @@ describe("Entity", function(){
     expect(world.nearby.query(40, 40, 40).size).to.eql(0);
 
     var newPos = new Kompute.Vector3D(50, 50, 50);
-    entity.setPosition(newPos);
+    var result = entity.setPosition(newPos);
     expect(entity.position).to.eql(newPos);
     expect(entity.box).to.eql(new Kompute.Box(newPos, entitySize));
+    expect(result).to.eql(true);
 
     expect(world.nearby.query(0, 0, 0).size).to.eql(0);
     expect(world.nearby.query(40, 40, 40).size).to.eql(1);
@@ -101,6 +103,20 @@ describe("Entity", function(){
     expect(count).to.eql(2);
   });
 
+  it("should not set position if hidden", function(){
+    var center = new Kompute.Vector3D(10, 10, 10);
+    var entitySize = new Kompute.Vector3D(5, 5, 5);
+
+    var world = new Kompute.World(300, 300, 300, 10);
+    var entity = new Kompute.Entity("entity1", center, entitySize);
+
+    world.insertEntity(entity);
+    world.hideEntity(entity);
+
+    expect(entity.setPosition(new Kompute.Vector3D(10000, 10000, 1000))).to.eql(false);
+
+    expect(entity.position).to.eql(center);
+  });
 
   it("should set size", function(){
 
@@ -117,10 +133,11 @@ describe("Entity", function(){
     expect(world.nearby.query(0, 190, 0).size).to.eql(0);
 
     var newSize = new Kompute.Vector3D(5, 400, 5);
-    entity.setSize(newSize);
+    var result = entity.setSize(newSize);
 
     expect(entity.size).to.eql(newSize);
     expect(entity.box).to.eql(new Kompute.Box(center, newSize));
+    expect(result).to.eql(true);
 
     expect(world.nearby.query(0, 0, 0).size).to.eql(1);
     expect(world.nearby.query(0, 190, 0).size).to.eql(1);
@@ -134,6 +151,21 @@ describe("Entity", function(){
     entity.setSize(new Kompute.Vector3D(30, 40, 50));
     entity.setSize(new Kompute.Vector3D(60, 40, 30), true);
     expect(count).to.eql(2);
+  });
+
+  it("should not set size if hidden", function(){
+
+    var center = new Kompute.Vector3D(10, 10, 10);
+    var entitySize = new Kompute.Vector3D(5, 5, 5);
+
+    var world = new Kompute.World(3000, 3000, 3000, 10);
+    var entity = new Kompute.Entity("entity1", center, entitySize);
+
+    world.insertEntity(entity);
+    world.hideEntity(entity);
+
+    expect(entity.setSize(1000, 1000, 1000)).to.eql(false);
+    expect(entity.size).to.eql(new Kompute.Vector3D(5, 5, 5));
   });
 
   it("should set position and size", function(){
@@ -151,11 +183,28 @@ describe("Entity", function(){
       count ++;
     };
 
-    entity.setPositionAndSize(new Kompute.Vector3D(10, 30, 40), new Kompute.Vector3D(60, 70, 80));
+    var result = entity.setPositionAndSize(new Kompute.Vector3D(10, 30, 40), new Kompute.Vector3D(60, 70, 80));
 
     expect(entity.position).to.eql(new Kompute.Vector3D(10, 30, 40));
     expect(entity.size).to.eql(new Kompute.Vector3D(60, 70, 80));
     expect(count).to.eql(1);
+    expect(result).to.eql(true);
+  });
+
+  it("should not set position and size if hidden", function(){
+    var center = new Kompute.Vector3D(10, 10, 10);
+    var entitySize = new Kompute.Vector3D(5, 5, 5);
+
+    var world = new Kompute.World(3000, 3000, 3000, 10);
+    var entity = new Kompute.Entity("entity1", center, entitySize);
+
+    world.insertEntity(entity);
+    world.hideEntity(entity);
+
+    var result = entity.setPositionAndSize(new Kompute.Vector3D(10, 30, 40), new Kompute.Vector3D(60, 70, 80));
+    expect(result).to.eql(false);
+    expect(entity.position).to.eql(center);
+    expect(entity.size).to.eql(entitySize);
   });
 
   it("should set look direction", function(){
@@ -300,6 +349,34 @@ describe("Entity", function(){
     entity.velocity.set(0, -60, 0);
     entity.update();
     expect(entity.position).to.eql(new Kompute.Vector3D(3, -1, 2));
+  });
+
+  it("should not update if hidden", function(){
+
+    var entitySize = new Kompute.Vector3D(5, 5, 5);
+    var center = new Kompute.Vector3D();
+
+    var world = new Kompute.World(100, 100, 100, 10);
+
+    var entity = new Kompute.Entity("entity1", center, entitySize);
+
+    world.insertEntity(entity);
+    world.hideEntity(entity);
+
+    entity.update();
+    expect(entity.position).to.eql(new Kompute.Vector3D());
+
+    entity.velocity.set(60, 0, 0);
+    entity.update();
+    expect(entity.position).to.eql(new Kompute.Vector3D());
+    entity.update();
+    expect(entity.position).to.eql(new Kompute.Vector3D());
+    entity.velocity.set(60, 0, 120);
+    entity.update();
+    expect(entity.position).to.eql(new Kompute.Vector3D());
+    entity.velocity.set(0, -60, 0);
+    entity.update();
+    expect(entity.position).to.eql(new Kompute.Vector3D());
   });
 
   it("should clamp velocity based on maxSpeed", function(){

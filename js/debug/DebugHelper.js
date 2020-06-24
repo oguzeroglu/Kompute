@@ -79,6 +79,24 @@ var DebugHelper = function(world, threeInstance, scene){
     }
   }.bind(this);
 
+  this.world.onEntityHidden = function(entity){
+    if (!this.isActive){
+      return;
+    }
+    var mesh = this.meshesByEntityID[entity.id];
+
+    mesh.visible = false;
+  }.bind(this);
+
+  this.world.onEntityShown = function(entity){
+    if (!this.isActive){
+      return;
+    }
+    var mesh = this.meshesByEntityID[entity.id];
+
+    mesh.visible = true;
+  }.bind(this);
+
   this.world.onEntityLookDirectionUpdated = function(entity){
     if (!this.isActive){
       return;
@@ -121,6 +139,10 @@ DebugHelper.prototype.addEntity = function(entity){
   var mesh = this.createMeshFromEntity(entity);
   this.meshesByEntityID[entity.id] = mesh;
   this.scene.add(mesh);
+
+  if (entity.isHidden){
+    mesh.visible = false;
+  }
 
   if (entity instanceof Steerable){
     var velocityMesh = new this.threeInstance.Mesh(new this.threeInstance.BoxBufferGeometry(1, 1, 1), this.magentaMaterial);

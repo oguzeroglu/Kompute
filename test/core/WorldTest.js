@@ -38,6 +38,78 @@ describe("World", function(){
     expect(entity.lastWorldSize).to.eql(entitySize);
   });
 
+  it("should hide entity", function(){
+
+    var center = new Kompute.Vector3D(10, 10, 10);
+    var entitySize = new Kompute.Vector3D(5, 5, 5);
+
+    var world = new Kompute.World(100, 200, 300, 10);
+    var entity = new Kompute.Entity("entity1", center, entitySize);
+
+    var called = false;
+    world.onEntityHidden = function(){
+      called = true;
+    };
+
+    expect(world.hideEntity(entity)).to.eql(false);
+    expect(called).to.eql(false);
+
+    world.insertEntity(entity);
+
+    var res = world.nearby.query(0, 0, 0);
+    expect(res.size).to.eql(1);
+
+    expect(world.hideEntity(entity)).to.eql(true);
+
+    expect(called).to.eql(true);
+
+    called = false;
+
+    res = world.nearby.query(0, 0, 0);
+    expect(res.size).to.eql(0);
+
+    expect(entity.isHidden).to.eql(true);
+
+    expect(world.hideEntity(entity)).to.eql(false);
+    expect(called).to.eql(false);
+  });
+
+  it("should show entity", function(){
+    var center = new Kompute.Vector3D(10, 10, 10);
+    var entitySize = new Kompute.Vector3D(5, 5, 5);
+
+    var world = new Kompute.World(100, 200, 300, 10);
+    var entity = new Kompute.Entity("entity1", center, entitySize);
+
+    var called = false;
+    world.onEntityShown = function(){
+      called = true;
+    };
+
+    expect(world.showEntity(entity)).to.eql(false);
+    expect(called).to.eql(false);
+
+    world.insertEntity(entity);
+
+    expect(world.showEntity(entity)).to.eql(false);
+    expect(called).to.eql(false);
+
+    world.hideEntity(entity);
+
+    expect(entity.isHidden).to.eql(true);
+
+    var res = world.nearby.query(0, 0, 0);
+    expect(res.size).to.eql(0);
+
+    expect(world.showEntity(entity)).to.eql(true);
+    expect(called).to.eql(true);
+
+    expect(entity.isHidden).to.eql(false);
+
+    res = world.nearby.query(0, 0, 0);
+    expect(res.size).to.eql(1);
+  });
+
   it("should insert graph", function(){
 
     var graph = new Kompute.Graph();
@@ -149,6 +221,29 @@ describe("World", function(){
     called = false;
     world.updateEntity(entity, new Kompute.Vector3D(), new Kompute.Vector3D(10, 40, 60));
     expect(called).to.eql(true);
+  });
+
+  it("should not update entity if entity is hidden", function(){
+    var center = new Kompute.Vector3D(10, 10, 10);
+    var entitySize = new Kompute.Vector3D(5, 5, 5);
+
+    var world = new Kompute.World(400, 400, 400, 20);
+    var entity = new Kompute.Entity("entity1", center, entitySize);
+
+    world.insertEntity(entity);
+
+    var called = false;
+
+    world.onEntityUpdated = function(){
+      called = true;
+    }
+
+    world.hideEntity(entity);
+
+    world.updateEntity(entity, new Kompute.Vector3D(100, 200, 300), new Kompute.Vector3D(50, 60, 70));
+    expect(called).to.eql(false);
+    expect(entity.position).to.eql(center);
+    expect(entity.size).to.eql(entitySize);
   });
 
   it("should get entity by ID", function(){

@@ -54,6 +54,38 @@ World.prototype.removeGraph = function(graph){
   graph.vertexIDs = [];
 }
 
+World.prototype.hideEntity = function(entity){
+
+  if (!this.entititesByID[entity.id] || entity.isHidden){
+    return false;
+  }
+
+  this.nearby.delete(entity.nearbyObject);
+  entity.isHidden = true;
+
+  if (this.onEntityHidden){
+    this.onEntityHidden(entity);
+  }
+
+  return true;
+}
+
+World.prototype.showEntity = function(entity){
+
+  if (!this.entititesByID[entity.id] || !entity.isHidden){
+    return false;
+  }
+
+  this.nearby.insert(entity.nearbyObject);
+  entity.isHidden = false;
+
+  if (this.onEntityShown){
+    this.onEntityShown(entity);
+  }
+
+  return true;
+}
+
 World.prototype.insertEntity = function(entity){
 
   this.entititesByID[entity.id] = entity;
@@ -77,6 +109,10 @@ World.prototype.insertEntity = function(entity){
 }
 
 World.prototype.updateEntity = function(entity, position, size){
+
+  if (entity.isHidden){
+    return;
+  }
 
   if (entity.lastWorldPosition.eql(position) && entity.lastWorldSize.eql(size)){
     return;

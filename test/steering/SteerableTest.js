@@ -44,6 +44,7 @@ describe("Steerable", function(){
     expect(entity.isJumpReady).to.eql(false);
     expect(entity.jumpSpeed).to.eql(Infinity);
     expect(entity.jumpTime).to.eql(0);
+    expect(entity.isHidden).to.eql(false);
   });
 
   it("should update", function(){
@@ -161,6 +162,33 @@ describe("Steerable", function(){
     expect(entity.position).to.eql(new Kompute.Vector3D(0, 0, 0));
     entity.update();
     expect(entity.position).to.eql(new Kompute.Vector3D(0, 0, 0));
+  });
+
+  it("should not update if hidden", function(){
+
+    var center = new Kompute.Vector3D(0, 0, 0);
+    var size = new Kompute.Vector3D(50, 60, 70);
+
+    var entity = new Kompute.Steerable("steerable1", center, size);
+
+    var world = new Kompute.World(1000, 1000, 1000, 10);
+    world.insertEntity(entity);
+
+    entity.linearAcceleration.set(100, 0, 0);
+
+    entity.setBehavior(new MockSteeringBehavior());
+
+    world.hideEntity(entity);
+
+    entity.update();
+    expect(entity.position).to.eql(center);
+    entity.linearAcceleration.set(10, 0, 0);
+    entity.update();
+    expect(entity.position).to.eql(center);
+    entity.update();
+    expect(entity.position).to.eql(center);
+    entity.update();
+    expect(entity.position).to.eql(center);
   });
 
   it("should set target position", function(){

@@ -28,9 +28,16 @@ var Entity = function(id, center, size){
   this.lookSpeed = 0.1;
 
   this.lookDirection = new Vector3D(0, 0, -1);
+
+  this.isHidden = false;
 }
 
 Entity.prototype.update = function(){
+
+  if (this.isHidden){
+    return;
+  }
+
   var speed = this.velocity.getLength();
   if (speed > this.maxSpeed){
     this.velocity.copy(this.velocity.normalize().multiplyScalar(this.maxSpeed));
@@ -49,26 +56,47 @@ Entity.prototype.update = function(){
 }
 
 Entity.prototype.setPositionAndSize = function(position, size){
+
+  if (this.isHidden){
+    return false;;
+  }
+
   this.setPosition(position, true);
   this.setSize(size);
+
+  return true;
 }
 
 Entity.prototype.setSize = function(size, skipWorldUpdate){
+
+  if (this.isHidden){
+    return false;
+  }
+
   this.size.copy(size);
   this.box.setFromCenterAndSize(this.position, size);
 
   if (this.world && !skipWorldUpdate){
     this.world.updateEntity(this, this.position, this.size);
   }
+
+  return true;
 }
 
 Entity.prototype.setPosition = function(position, skipWorldUpdate){
+
+  if (this.isHidden){
+    return false;
+  }
+
   this.position.copy(position);
   this.box.setFromCenterAndSize(position, this.size);
 
   if (this.world && !skipWorldUpdate){
     this.world.updateEntity(this, this.position, this.size);
   }
+
+  return true;
 }
 
 Entity.prototype.setLookDirection = function(direction){

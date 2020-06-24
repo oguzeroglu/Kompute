@@ -130,6 +130,44 @@ describe("DebugHelper", function(){
     expect(scene.children[1].scale).to.eql(new Kompute.Vector3D(1, 4, 5));
   });
 
+  it("should hide entity", function(){
+    var threeInstance = mockThreeInstance();
+    var scene = new MockScene();
+    var world = new Kompute.World(1000, 1000, 1000, 10);
+
+    var debugHelper = new Kompute.DebugHelper(world, threeInstance, scene);
+
+    debugHelper.activate();
+
+    var entity = new Kompute.Entity("entity1", new Kompute.Vector3D(100, 300, 500), new Kompute.Vector3D(10, 10, 10));
+    world.insertEntity(entity);
+
+    world.hideEntity(entity);
+
+    expect(debugHelper.meshesByEntityID.entity1.visible).to.eql(false);
+  });
+
+  it("should show entity", function(){
+    var threeInstance = mockThreeInstance();
+    var scene = new MockScene();
+    var world = new Kompute.World(1000, 1000, 1000, 10);
+
+    var debugHelper = new Kompute.DebugHelper(world, threeInstance, scene);
+
+    debugHelper.activate();
+
+    var entity = new Kompute.Entity("entity1", new Kompute.Vector3D(100, 300, 500), new Kompute.Vector3D(10, 10, 10));
+    world.insertEntity(entity);
+
+    world.hideEntity(entity);
+
+    expect(debugHelper.meshesByEntityID.entity1.visible).to.eql(false);
+
+    world.showEntity(entity);
+
+    expect(debugHelper.meshesByEntityID.entity1.visible).to.eql(true);
+  });
+
   it("should update velocity mesh of steerable", function(){
     var threeInstance = mockThreeInstance();
     var scene = new MockScene();
@@ -225,6 +263,8 @@ describe("DebugHelper", function(){
     world.insertEntity(entity1);
     world.insertEntity(entity2);
 
+    world.hideEntity(entity2);
+
     debugHelper.activate();
 
     expect(Object.keys(debugHelper.meshesByEntityID)).to.have.length(2);
@@ -233,6 +273,8 @@ describe("DebugHelper", function(){
     expect(debugHelper.meshesByEntityID.entity1.geometry.size).to.eql(new Kompute.Vector3D(10, 10, 10));
     expect(debugHelper.meshesByEntityID.entity2.geometry.size).to.eql(new Kompute.Vector3D(20, 20, 20));
     expect(scene.children).to.have.length(3);
+
+    expect(debugHelper.meshesByEntityID.entity2.visible).to.eql(false);
 
     var worldMesh = scene.children[0];
 
