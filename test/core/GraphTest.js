@@ -341,7 +341,7 @@ describe("Graph", function(){
     expect(edges[2]).to.eql(new Kompute.Edge(v3, v1));
   });
 
-  it("should clone", function(){
+  it.only("should clone", function(){
 
     var graph = new Kompute.Graph();
 
@@ -361,6 +361,29 @@ describe("Graph", function(){
 
     expect(graph).to.eql(cloned);
     expect(graph).not.to.equal(cloned);
+
+    var jd = new Kompute.JumpDescriptor({
+      takeoffPosition: vec1,
+      landingPosition: vec3,
+      runupSatisfactionRadius: 50,
+      takeoffPositionSatisfactionRadius: 50,
+      takeoffVelocitySatisfactionRadius: 50
+    });
+
+    graph.addJumpDescriptor(jd);
+
+    cloned = graph.clone();
+
+    var foundJDCount = 0;
+    cloned.forEachEdge(function(edge){
+      if (edge.jumpDescriptor){
+        foundJDCount ++;
+      }
+    });
+
+    expect(graph).to.eql(cloned);
+    expect(graph).not.to.equal(cloned);
+    expect(foundJDCount).to.eql(1);
   });
 });
 

@@ -24,6 +24,12 @@ Graph.prototype.clone = function(){
     cloned.addEdge(edge.fromVertex, edge.toVertex);
   });
 
+  this.forEachEdge(function(edge){
+    if (edge.jumpDescriptor){
+      cloned.addJumpDescriptor(edge.jumpDescriptor);
+    }
+  });
+
   return cloned;
 }
 
