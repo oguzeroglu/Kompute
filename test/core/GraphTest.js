@@ -341,7 +341,7 @@ describe("Graph", function(){
     expect(edges[2]).to.eql(new Kompute.Edge(v3, v1));
   });
 
-  it.only("should clone", function(){
+  it("should clone", function(){
 
     var graph = new Kompute.Graph();
 
