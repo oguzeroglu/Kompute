@@ -375,15 +375,18 @@ describe("Graph", function(){
     cloned = graph.clone();
 
     var foundJDCount = 0;
+    var foundJD = null;
     cloned.forEachEdge(function(edge){
       if (edge.jumpDescriptor){
         foundJDCount ++;
+        foundJD = edge.jumpDescriptor;
       }
     });
 
     expect(graph).to.eql(cloned);
     expect(graph).not.to.equal(cloned);
     expect(foundJDCount).to.eql(1);
+    expect(foundJD).to.equal(jd);
   });
 });
 
