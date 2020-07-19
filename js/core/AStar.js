@@ -22,7 +22,7 @@ var AStar = function(graph){
     }
 
     if (!heapNodes[x][y][z]){
-      heapNodes[x][y][z] = { priority: 0, parent: null, x: parseFloat(x), y: parseFloat(y), z: parseFloat(z), closedTag: null, parentTag: null, jumpDescriptor: null };
+      heapNodes[x][y][z] = { priority: 0, parent: null, x: parseFloat(x), y: parseFloat(y), z: parseFloat(z), closedTag: null, parentTag: null, priorityTag: null, jumpDescriptor: null };
     }
   });
 
@@ -134,6 +134,7 @@ AStar.prototype.findShortestPath = function(fromVector, toVector){
 
       if (!isNodeClosed(neighborHeapNode, searchID)){
         neighborHeapNode.priority = cost + heuristicCost;
+        neighborHeapNode.priorityTag = searchID;
         neighborHeapNode.parent = heapNode;
         neighborHeapNode.parentTag = searchID;
         neighborHeapNode.jumpDescriptor = jumpDescriptor;
@@ -144,7 +145,7 @@ AStar.prototype.findShortestPath = function(fromVector, toVector){
       if (heap.hasNode(neighborHeapNode)){
         var currentPriority = heuristicCost + cost;
 
-        if (currentPriority < neighborHeapNode.priority){
+        if (currentPriority < neighborHeapNode.priority && neighborHeapNode.priorityTag == searchID){
           neighborHeapNode.priority = currentPriority;
           neighborHeapNode.parent = heapNode;
           neighborHeapNode.parentTag = searchID;
