@@ -352,6 +352,15 @@ describe("DebugHelper", function(){
     debugHelper.deactivate();
     expect(debugHelper.pathMeshes).to.have.length(0);
     expect(scene.children).to.have.length(0);
+
+    debugHelper.visualisePath(path, 100);
+    expect(debugHelper.pathMeshes).to.have.length(100);
+    expect(scene.children).to.have.length(100);
+    for (var i = 0; i < 100; i ++){
+      var child = scene.children[i];
+      expect(child.position).to.eql(path.waypoints[i]);
+      expect(child.geometry).to.eql(new MockBoxBufferGeometry(100, 100, 100));
+    }
   });
 
   it("should visualise graph", function(){
