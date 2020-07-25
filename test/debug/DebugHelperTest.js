@@ -339,28 +339,39 @@ describe("DebugHelper", function(){
       path.addWaypoint(new Kompute.Vector3D(100 * Math.random(), 100 * Math.random(), 100 * Math.random()));
     }
 
-    debugHelper.visualisePath(path);
+    var returnValue = debugHelper.visualisePath(path);
+
+    var meshes = [];
 
     expect(debugHelper.pathMeshes).to.have.length(100);
     expect(scene.children).to.have.length(100);
     for (var i = 0; i < 100; i ++){
       var child = scene.children[i];
+      meshes.push(child);
       expect(child.position).to.eql(path.waypoints[i]);
       expect(child.geometry).to.eql(new MockBoxBufferGeometry(5, 5, 5));
     }
+
+    expect(returnValue).to.eql(meshes);
 
     debugHelper.deactivate();
     expect(debugHelper.pathMeshes).to.have.length(0);
     expect(scene.children).to.have.length(0);
 
-    debugHelper.visualisePath(path, 100);
+    returnValue = debugHelper.visualisePath(path, 100);
     expect(debugHelper.pathMeshes).to.have.length(100);
     expect(scene.children).to.have.length(100);
+
+    meshes = [];
+
     for (var i = 0; i < 100; i ++){
       var child = scene.children[i];
+      meshes.push(child);
       expect(child.position).to.eql(path.waypoints[i]);
       expect(child.geometry).to.eql(new MockBoxBufferGeometry(100, 100, 100));
     }
+
+    expect(returnValue).to.eql(meshes);
   });
 
   it("should visualise graph", function(){
