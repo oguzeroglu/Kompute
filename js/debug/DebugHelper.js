@@ -22,6 +22,7 @@ var DebugHelper = function(world, threeInstance, scene){
   this.meshesByEntityID = {};
   this.velocityMeshesByEntityID = {};
   this.lookMeshesByEntityID = {};
+  this.meshesByAStarIDs = {};
   this.pathMeshes = [];
   this.edgeMeshes = [];
 
@@ -114,7 +115,7 @@ DebugHelper.prototype.visualisePath = function(path, overrideSize){
 
   var meshes = [];
 
-  for (var i = 0; i < path.waypoints.length; i ++){
+  for (var i = 0; i < path.length; i ++){
     var wp = path.waypoints[i];
     var waypointMesh = new this.threeInstance.Mesh(new this.threeInstance.BoxBufferGeometry(boxSize, boxSize, boxSize), this.orangeMaterial);
     waypointMesh.position.set(wp.x, wp.y, wp.z);
@@ -124,6 +125,31 @@ DebugHelper.prototype.visualisePath = function(path, overrideSize){
   }
 
   return meshes;
+}
+
+DebugHelper.prototype.visualiseAStar = function(aStar){
+  var id = aStar._internalID;
+  var aStarPathVisualSize = 30;
+
+  if (this.meshesByAStarIDs[id]){
+    return;
+  }
+
+  if (aStar.searchID > 0){
+    this.meshesByAStarIDs[id] = this.visualisePath(aStar.path, aStarPathVisualSize);
+  }
+
+  aStar.onPathConstructed = function(){
+    var meshes = this.meshesByAStarIDs[id] || [];
+
+    for (var i = 0; i < meshes.length; i ++){
+      var mesh = meshes[i];
+      this.scene.remove(mesh);
+      this.pathMeshes.splice(this.pathMeshes.indexOf(mesh), 1);
+    }
+
+    this.meshesByAStarIDs[id] = this.visualisePath(aStar.path, aStarPathVisualSize);
+  }.bind(this);
 }
 
 DebugHelper.prototype.visualiseGraph = function(graph){
@@ -206,6 +232,7 @@ DebugHelper.prototype.deactivate = function(){
   this.meshesByEntityID = {};
   this.velocityMeshesByEntityID = {};
   this.lookMeshesByEntityID = {};
+  this.meshesByAStarIDs = {};
   this.pathMeshes = [];
   this.edgeMeshes = [];
 }
