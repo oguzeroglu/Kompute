@@ -35,6 +35,8 @@ describe("AStar", function(){
     expect(aStar.heap).to.eql(new Kompute.MinHeap(3));
 
     expect(aStar.searchID).to.eql(0);
+
+    expect(aStar._internalID).to.exist;
   });
 
   it("should get heap node", function(){
