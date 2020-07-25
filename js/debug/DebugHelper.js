@@ -22,6 +22,7 @@ var DebugHelper = function(world, threeInstance, scene){
   this.meshesByEntityID = {};
   this.velocityMeshesByEntityID = {};
   this.lookMeshesByEntityID = {};
+  this.meshesByAStarIDs = {};
   this.pathMeshes = [];
   this.edgeMeshes = [];
 
@@ -109,14 +110,46 @@ var DebugHelper = function(world, threeInstance, scene){
   }.bind(this);
 }
 
-DebugHelper.prototype.visualisePath = function(path){
-  for (var i = 0; i < path.waypoints.length; i ++){
+DebugHelper.prototype.visualisePath = function(path, overrideSize){
+  var boxSize = overrideSize || 5;
+
+  var meshes = [];
+
+  for (var i = 0; i < path.length; i ++){
     var wp = path.waypoints[i];
-    var waypointMesh = new this.threeInstance.Mesh(new this.threeInstance.BoxBufferGeometry(5, 5, 5), this.orangeMaterial);
+    var waypointMesh = new this.threeInstance.Mesh(new this.threeInstance.BoxBufferGeometry(boxSize, boxSize, boxSize), this.orangeMaterial);
     waypointMesh.position.set(wp.x, wp.y, wp.z);
     this.scene.add(waypointMesh);
     this.pathMeshes.push(waypointMesh);
+    meshes.push(waypointMesh);
   }
+
+  return meshes;
+}
+
+DebugHelper.prototype.visualiseAStar = function(aStar){
+  var id = aStar._internalID;
+  var aStarPathVisualSize = 15;
+
+  if (this.meshesByAStarIDs[id]){
+    return;
+  }
+
+  if (aStar.searchID > 0){
+    this.meshesByAStarIDs[id] = this.visualisePath(aStar.path, aStarPathVisualSize);
+  }
+
+  aStar.onPathConstructed = function(){
+    var meshes = this.meshesByAStarIDs[id] || [];
+
+    for (var i = 0; i < meshes.length; i ++){
+      var mesh = meshes[i];
+      this.scene.remove(mesh);
+      this.pathMeshes.splice(this.pathMeshes.indexOf(mesh), 1);
+    }
+
+    this.meshesByAStarIDs[id] = this.visualisePath(aStar.path, aStarPathVisualSize);
+  }.bind(this);
 }
 
 DebugHelper.prototype.visualiseGraph = function(graph){
@@ -199,6 +232,7 @@ DebugHelper.prototype.deactivate = function(){
   this.meshesByEntityID = {};
   this.velocityMeshesByEntityID = {};
   this.lookMeshesByEntityID = {};
+  this.meshesByAStarIDs = {};
   this.pathMeshes = [];
   this.edgeMeshes = [];
 }

@@ -22,6 +22,7 @@ describe("DebugHelper", function(){
     expect(debugHelper.meshesByEntityID).to.eql({});
     expect(debugHelper.velocityMeshesByEntityID).to.eql({});
     expect(debugHelper.lookMeshesByEntityID).to.eql({});
+    expect(debugHelper.meshesByAStarIDs).to.eql({});
     expect(debugHelper.pathMeshes).to.eql([]);
     expect(debugHelper.edgeMeshes).to.eql([]);
     expect(debugHelper.worldMesh).to.eql(null);
@@ -339,19 +340,39 @@ describe("DebugHelper", function(){
       path.addWaypoint(new Kompute.Vector3D(100 * Math.random(), 100 * Math.random(), 100 * Math.random()));
     }
 
-    debugHelper.visualisePath(path);
+    var returnValue = debugHelper.visualisePath(path);
+
+    var meshes = [];
 
     expect(debugHelper.pathMeshes).to.have.length(100);
     expect(scene.children).to.have.length(100);
     for (var i = 0; i < 100; i ++){
       var child = scene.children[i];
+      meshes.push(child);
       expect(child.position).to.eql(path.waypoints[i]);
       expect(child.geometry).to.eql(new MockBoxBufferGeometry(5, 5, 5));
     }
 
+    expect(returnValue).to.eql(meshes);
+
     debugHelper.deactivate();
     expect(debugHelper.pathMeshes).to.have.length(0);
     expect(scene.children).to.have.length(0);
+
+    returnValue = debugHelper.visualisePath(path, 100);
+    expect(debugHelper.pathMeshes).to.have.length(100);
+    expect(scene.children).to.have.length(100);
+
+    meshes = [];
+
+    for (var i = 0; i < 100; i ++){
+      var child = scene.children[i];
+      meshes.push(child);
+      expect(child.position).to.eql(path.waypoints[i]);
+      expect(child.geometry).to.eql(new MockBoxBufferGeometry(100, 100, 100));
+    }
+
+    expect(returnValue).to.eql(meshes);
   });
 
   it("should visualise graph", function(){
@@ -405,6 +426,71 @@ describe("DebugHelper", function(){
 
     expect(scene.children.length).to.eql(0);
     expect(debugHelper.edgeMeshes).to.eql([]);
+  });
+
+  it("should visualise AStar", function(){
+
+    var vertex1 = new Kompute.Vector3D(0, 0, 0);
+    var vertex2 = new Kompute.Vector3D(100, 0, 0);
+    var vertex3 = new Kompute.Vector3D(200, 0, 0);
+
+    // vertex1 --> vertex2 --> vertex3
+    var graph = new Kompute.Graph();
+
+    graph.addVertex(vertex1);
+    graph.addVertex(vertex2);
+    graph.addVertex(vertex3);
+
+    graph.addEdge(vertex1, vertex2);
+    graph.addEdge(vertex2, vertex3);
+
+    var aStar = new Kompute.AStar(graph);
+
+    var threeInstance = mockThreeInstance();
+    var scene = new MockScene();
+    var world = new Kompute.World(1000, 1000, 1000, 10);
+
+    var debugHelper = new Kompute.DebugHelper(world, threeInstance, scene);
+
+    debugHelper.visualiseAStar(aStar);
+
+    expect(scene.children).to.eql([]);
+
+    aStar.findShortestPath(vertex1, vertex3);
+
+    expect(scene.children.length).to.eql(3);
+    expect(debugHelper.meshesByAStarIDs[aStar._internalID]).to.eql(scene.children);
+    expect(scene.children[0].position).to.eql(vertex3);
+    expect(scene.children[1].position).to.eql(vertex2);
+    expect(scene.children[2].position).to.eql(vertex1);
+    expect(scene.children[0].geometry.size).to.eql(new Kompute.Vector3D(15, 15, 15));
+    expect(scene.children[1].geometry.size).to.eql(new Kompute.Vector3D(15, 15, 15));
+    expect(scene.children[2].geometry.size).to.eql(new Kompute.Vector3D(15, 15, 15));
+
+    aStar.findShortestPath(vertex2, vertex3);
+
+    expect(scene.children.length).to.eql(2);
+    expect(debugHelper.meshesByAStarIDs[aStar._internalID]).to.eql(scene.children);
+    expect(scene.children[0].position).to.eql(vertex3);
+    expect(scene.children[1].position).to.eql(vertex2);
+
+    aStar.findShortestPath(vertex3, vertex3);
+    expect(scene.children.length).to.eql(1);
+    expect(debugHelper.meshesByAStarIDs[aStar._internalID]).to.eql(scene.children);
+    expect(scene.children[0].position).to.eql(vertex3);
+
+    debugHelper.deactivate();
+
+    expect(scene.children.length).to.eql(0);
+    expect(debugHelper.meshesByAStarIDs).to.eql({});
+
+    aStar.findShortestPath(vertex1, vertex3);
+    debugHelper.visualiseAStar(aStar);
+    expect(scene.children.length).to.eql(3);
+    expect(debugHelper.meshesByAStarIDs[aStar._internalID]).to.eql(scene.children);
+    expect(scene.children[0].position).to.eql(vertex3);
+    expect(scene.children[1].position).to.eql(vertex2);
+    expect(scene.children[2].position).to.eql(vertex1);
   });
 });
 

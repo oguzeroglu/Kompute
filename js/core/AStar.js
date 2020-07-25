@@ -2,9 +2,12 @@ import { Vector3D } from "./Vector3D";
 import { VectorPool } from "./VectorPool";
 import { Path } from "./Path";
 import { MinHeap } from "./MinHeap";
+import { MathUtils } from "./MathUtils";
 
 var ZERO_VECTOR = new Vector3D();
 var vectorPool = new VectorPool(10);
+
+var mathUtils = new MathUtils();
 
 var AStar = function(graph){
 
@@ -30,6 +33,8 @@ var AStar = function(graph){
   this.path = path;
   this.graph = graph;
   this.heap = new MinHeap(graph.totalVertexCount);
+
+  this._internalID = mathUtils.uuidv4();
 
   this.searchID = 0;
 }
@@ -80,6 +85,10 @@ AStar.prototype.generatePath = function(endVector){
   path.isRewinding = true;
   path.index = path.length - 1;
   path.isFinished = false;
+
+  if (this.onPathConstructed){
+    this.onPathConstructed();
+  }
 
   return path;
 }
