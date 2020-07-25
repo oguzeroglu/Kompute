@@ -129,7 +129,7 @@ DebugHelper.prototype.visualisePath = function(path, overrideSize){
 
 DebugHelper.prototype.visualiseAStar = function(aStar){
   var id = aStar._internalID;
-  var aStarPathVisualSize = 30;
+  var aStarPathVisualSize = 15;
 
   if (this.meshesByAStarIDs[id]){
     return;

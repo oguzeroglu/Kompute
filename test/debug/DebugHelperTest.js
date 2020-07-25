@@ -463,9 +463,9 @@ describe("DebugHelper", function(){
     expect(scene.children[0].position).to.eql(vertex3);
     expect(scene.children[1].position).to.eql(vertex2);
     expect(scene.children[2].position).to.eql(vertex1);
-    expect(scene.children[0].geometry.size).to.eql(new Kompute.Vector3D(30, 30, 30));
-    expect(scene.children[1].geometry.size).to.eql(new Kompute.Vector3D(30, 30, 30));
-    expect(scene.children[2].geometry.size).to.eql(new Kompute.Vector3D(30, 30, 30));
+    expect(scene.children[0].geometry.size).to.eql(new Kompute.Vector3D(15, 15, 15));
+    expect(scene.children[1].geometry.size).to.eql(new Kompute.Vector3D(15, 15, 15));
+    expect(scene.children[2].geometry.size).to.eql(new Kompute.Vector3D(15, 15, 15));
 
     aStar.findShortestPath(vertex2, vertex3);
 
