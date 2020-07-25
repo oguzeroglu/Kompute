@@ -81,6 +81,10 @@ AStar.prototype.generatePath = function(endVector){
   path.index = path.length - 1;
   path.isFinished = false;
 
+  if (this.onPathConstructed){
+    this.onPathConstructed();
+  }
+
   return path;
 }
 

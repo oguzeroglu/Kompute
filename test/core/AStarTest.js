@@ -285,6 +285,45 @@ describe("AStar", function(){
     expect(path.jumpDescriptorLength).to.eql(1);
     expect(path.jumpDescriptors).to.eql([jumpDescriptor, null, null]);
   });
+
+  it("should execute onPathConstructed", function(){
+
+    var graph = new Kompute.Graph();
+
+    var vertex1 = new Kompute.Vector3D(0, 0, 0);
+    var vertex2 = new Kompute.Vector3D(0, 100, 0);
+    var vertex3 = new Kompute.Vector3D(100, 0, 0);
+
+    graph.addVertex(vertex1);
+    graph.addVertex(vertex2);
+    graph.addVertex(vertex3);
+
+    graph.addEdge(vertex1, vertex2);
+    graph.addEdge(vertex2, vertex3);
+
+    var aStar = new Kompute.AStar(graph);
+
+    var called = false;
+    aStar.onPathConstructed = function(){
+      called = true;
+    };
+
+    expect(called).to.eql(false);
+    aStar.findShortestPath(vertex1, vertex2);
+    expect(called).to.eql(true);
+
+    called = false;
+    aStar.findShortestPath(vertex1, vertex2);
+    expect(called).to.eql(true);
+
+    called = false;
+    aStar.findShortestPath(vertex2, vertex3);
+    expect(called).to.eql(true);
+
+    called = false;
+    aStar.findShortestPath(vertex3, vertex1);
+    expect(called).to.eql(false);
+  });
 });
 
 describe("AStar - Integration", function(){
