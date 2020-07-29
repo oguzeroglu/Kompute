@@ -1,3 +1,7 @@
+import { MathUtils } from "../core/MathUtils";
+
+var mathUtils = new MathUtils();
+
 var JumpDescriptor = function(parameters){
   this.takeoffPosition = parameters.takeoffPosition.clone();
   this.landingPosition = parameters.landingPosition.clone();
@@ -10,6 +14,8 @@ var JumpDescriptor = function(parameters){
   this.checkTimeResult = { vx: 0, vz: 0, isAchievable: false };
 
   this.cache = {};
+
+  this._internalID = mathUtils.uuidv4();
 }
 
 JumpDescriptor.prototype.getEquationResult = function(steerable){

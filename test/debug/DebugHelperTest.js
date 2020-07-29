@@ -23,6 +23,7 @@ describe("DebugHelper", function(){
     expect(debugHelper.velocityMeshesByEntityID).to.eql({});
     expect(debugHelper.lookMeshesByEntityID).to.eql({});
     expect(debugHelper.meshesByAStarIDs).to.eql({});
+    expect(debugHelper.meshesByJumpDescriptorIDs).to.eql({});
     expect(debugHelper.pathMeshes).to.eql([]);
     expect(debugHelper.edgeMeshes).to.eql([]);
     expect(debugHelper.worldMesh).to.eql(null);
@@ -492,6 +493,54 @@ describe("DebugHelper", function(){
     expect(scene.children[1].position).to.eql(vertex2);
     expect(scene.children[2].position).to.eql(vertex1);
   });
+
+  it("should visualise JumpDescriptor", function(){
+
+    var takeoffPosition = new Kompute.Vector3D(0, 0, 0);
+    var landingPosition = new Kompute.Vector3D(1000, 0, 0);
+
+    var jd = new Kompute.JumpDescriptor({
+      takeoffPosition: takeoffPosition,
+      landingPosition: landingPosition,
+      runupSatisfactionRadius: 100,
+      takeoffPositionSatisfactionRadius: 100,
+      takeoffVelocitySatisfactionRadius: 100
+    });
+
+    var threeInstance = mockThreeInstance();
+    var scene = new MockScene();
+    var world = new Kompute.World(1000, 1000, 1000, 10);
+
+    var debugHelper = new Kompute.DebugHelper(world, threeInstance, scene);
+
+    expect(debugHelper.scene.children.length).to.eql(0);
+    expect(debugHelper.meshesByJumpDescriptorIDs).to.eql({});
+
+    debugHelper.visualiseJumpDescriptor(jd);
+
+    expect(debugHelper.scene.children.length).to.eql(1);
+
+    var mesh = scene.children[0];
+
+    var expectedObj = {};
+    expectedObj[jd._internalID] = mesh;
+
+    expect(debugHelper.meshesByJumpDescriptorIDs).to.eql(expectedObj);
+
+    expect(mesh).to.be.an(MockLine);
+    var geom = mesh.geometry;
+
+    expect(geom.vertices.length).to.eql(100);
+
+    debugHelper.visualiseJumpDescriptor(jd);
+    expect(debugHelper.scene.children.length).to.eql(1);
+    expect(debugHelper.meshesByJumpDescriptorIDs).to.eql(expectedObj);
+
+    debugHelper.deactivate();
+
+    expect(debugHelper.scene.children.length).to.eql(0);
+    expect(debugHelper.meshesByJumpDescriptorIDs).to.eql({});
+  });
 });
 
 function mockThreeInstance(){
@@ -501,8 +550,39 @@ function mockThreeInstance(){
     BoxBufferGeometry: MockBoxBufferGeometry,
     Mesh: MockMesh,
     Line: MockLine,
-    Geometry: MockGeometry
+    Geometry: MockGeometry,
+    CubicBezierCurve3: CubicBezierCurve3,
+    BufferGeometry: BufferGeometry
   };
+}
+
+class BufferGeometry{
+  constructor(){
+
+  }
+
+  setFromPoints(points){
+    this.vertices = points;
+    return this;
+  }
+}
+
+class CubicBezierCurve3{
+  constructor(v0, v1, v2, v3){
+    this.v0 = v0;
+    this.v1 = v1;
+    this.v2 = v2;
+    this.v3 = v3;
+  }
+
+  getPoints(n){
+    var points = [];
+    for (var i = 0; i < n; i ++){
+      points.push(new Kompute.Vector3D());
+    }
+
+    return points;
+  }
 }
 
 class MockGeometry{

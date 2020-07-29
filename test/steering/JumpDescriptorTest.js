@@ -20,6 +20,7 @@ describe("JumpDescriptor", function(){
     expect(jumpDescriptor.checkTimeResult).to.eql({ vx: 0, vz: 0, isAchievable: false });
     expect(jumpDescriptor.takeoffPositionSatisfactionRadius).to.eql(35);
     expect(jumpDescriptor.takeoffVelocitySatisfactionRadius).to.eql(20);
+    expect(jumpDescriptor._internalID).to.exist;
   });
 
   it("should check time", function(){

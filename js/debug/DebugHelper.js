@@ -23,6 +23,7 @@ var DebugHelper = function(world, threeInstance, scene){
   this.velocityMeshesByEntityID = {};
   this.lookMeshesByEntityID = {};
   this.meshesByAStarIDs = {};
+  this.meshesByJumpDescriptorIDs = {};
   this.pathMeshes = [];
   this.edgeMeshes = [];
 
@@ -108,6 +109,29 @@ var DebugHelper = function(world, threeInstance, scene){
       lookMesh.position.set(vect.x, vect.y, vect.z);
     }
   }.bind(this);
+}
+
+DebugHelper.prototype.visualiseJumpDescriptor = function(jumpDescriptor){
+  var id = jumpDescriptor._internalID;
+
+  if (this.meshesByJumpDescriptorIDs[id]){
+    return;
+  }
+
+  var p0 = jumpDescriptor.takeoffPosition.clone();
+  var p3 = jumpDescriptor.landingPosition.clone();
+
+  var p1 = new Vector3D(p0.x, p0.y + 100, p0.z);
+  var p2 = new Vector3D(p3.x, p3.y + 100, p3.z);
+
+  var curve = new this.threeInstance.CubicBezierCurve3(p0, p1, p2, p3);
+  var points = curve.getPoints(100);
+  var geometry = new this.threeInstance.BufferGeometry().setFromPoints(points);
+  var jdMesh = new this.threeInstance.Line(geometry, this.lineMaterial);
+
+  this.meshesByJumpDescriptorIDs[id] = jdMesh;
+
+  this.scene.add(jdMesh);
 }
 
 DebugHelper.prototype.visualisePath = function(path, overrideSize){
@@ -221,6 +245,10 @@ DebugHelper.prototype.deactivate = function(){
     this.scene.remove(this.lookMeshesByEntityID[entityID]);
   }
 
+  for (var jdID in this.meshesByJumpDescriptorIDs){
+    this.scene.remove(this.meshesByJumpDescriptorIDs[jdID]);
+  }
+
   for (var i = 0; i < this.pathMeshes.length; i ++){
     this.scene.remove(this.pathMeshes[i]);
   }
@@ -233,6 +261,7 @@ DebugHelper.prototype.deactivate = function(){
   this.velocityMeshesByEntityID = {};
   this.lookMeshesByEntityID = {};
   this.meshesByAStarIDs = {};
+  this.meshesByJumpDescriptorIDs = {};
   this.pathMeshes = [];
   this.edgeMeshes = [];
 }
