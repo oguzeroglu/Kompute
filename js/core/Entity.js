@@ -30,6 +30,8 @@ var Entity = function(id, center, size){
   this.lookDirection = new Vector3D(0, 0, -1);
 
   this.isHidden = false;
+
+  this.limitVelocity = true;
 }
 
 Entity.prototype.update = function(){
@@ -39,7 +41,7 @@ Entity.prototype.update = function(){
   }
 
   var speed = this.velocity.getLength();
-  if (speed > this.maxSpeed){
+  if (this.limitVelocity && speed > this.maxSpeed){
     this.velocity.copy(this.velocity.normalize().multiplyScalar(this.maxSpeed));
   }
 
@@ -53,6 +55,10 @@ Entity.prototype.update = function(){
     var v = vectorPool.get().copy(this.lookDirection).applyQuaternion(quaternion2.rotateTowards(quaternion, this.lookSpeed));
     this.setLookDirection(v);
   }
+}
+
+Entity.prototype.setLimitVelocity = function(val){
+  this.limitVelocity = val;
 }
 
 Entity.prototype.setPositionAndSize = function(position, size){

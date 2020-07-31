@@ -24,6 +24,7 @@ describe("Entity", function(){
     expect(entity.lookTarget).to.eql(new Kompute.Vector3D());
     expect(entity.lookSpeed).to.eql(0.1);
     expect(entity.isHidden).to.eql(false);
+    expect(entity.limitVelocity).to.eql(true);
   });
 
   it("should have a nearbyObject after being inserted to world", function(){
@@ -379,6 +380,23 @@ describe("Entity", function(){
     expect(entity.position).to.eql(new Kompute.Vector3D());
   });
 
+  it("should set limitVelocity property", function(){
+    var entitySize = new Kompute.Vector3D(5, 5, 5);
+    var center = new Kompute.Vector3D();
+
+    var entity = new Kompute.Entity("entity1", center, entitySize);
+
+    expect(entity.limitVelocity).to.eql(true);
+
+    entity.setLimitVelocity(false);
+
+    expect(entity.limitVelocity).to.eql(false);
+
+    entity.setLimitVelocity(true);
+
+    expect(entity.limitVelocity).to.eql(true);
+  });
+
   it("should clamp velocity based on maxSpeed", function(){
 
     var entitySize = new Kompute.Vector3D(5, 5, 5);
@@ -392,6 +410,24 @@ describe("Entity", function(){
     entity.update();
 
     expect(entity.velocity.getLength()).to.eql(entity.maxSpeed);
+  });
+
+  it("should not clamp velocity based on maxSpeed if limitVelocity is false", function(){
+    var entitySize = new Kompute.Vector3D(5, 5, 5);
+    var center = new Kompute.Vector3D();
+
+    var entity = new Kompute.Entity("entity1", center, entitySize);
+
+    var velocityVector = new Kompute.Vector3D(100, 200, 300);
+
+    entity.velocity.copy(velocityVector);
+    entity.maxSpeed = 10;
+
+    entity.setLimitVelocity(false);
+
+    entity.update();
+
+    expect(entity.velocity.getLength()).to.eql(velocityVector.getLength());
   });
 
   it("should set look target", function(){
