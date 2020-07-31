@@ -850,6 +850,44 @@ describe("Steerable", function(){
     expect(entity.limitVelocity).to.eql(true);
     expect(called).to.eql(false);
   });
+
+  it("should cancel jump", function(){
+    var center = new Kompute.Vector3D(0, 0, 0);
+    var size = new Kompute.Vector3D(50, 60, 70);
+    var entity = new Kompute.Steerable("steerable1", center, size);
+
+    expect(entity.cancelJump()).to.eql(false);
+
+    entity.jumpTime = 100;
+    entity.isJumpInitiated = true;
+    entity.isJumpReady = true;
+    entity.isJumpTakenOff = true;
+
+    entity.position.y = 1000;
+
+    entity.jumpDescriptor = {landingPosition: new Kompute.Vector3D(0, 5, 0)};
+    entity.velocity.set(999, 999, 999);
+    entity.linearAcceleration.set(1000, 1000, 1000);
+
+    entity.setLimitVelocity(false);
+
+    var called = false;
+    entity.jumpCompletionCallback = function(){
+      called = true;
+    };
+
+    expect(entity.cancelJump()).to.eql(true);
+
+    expect(entity.jumpTime).to.eql(0);
+    expect(entity.isJumpInitiated).to.eql(0);
+    expect(entity.isJumpReady).to.eql(0);
+    expect(entity.isJumpTakenOff).to.eql(0);
+    expect(entity.position.y).to.eql(1000);
+    expect(entity.velocity).to.eql(new Kompute.Vector3D());
+    expect(entity.linearAcceleration).to.eql(new Kompute.Vector3D());
+    expect(entity.limitVelocity).to.eql(true);
+    expect(called).to.eql(false);
+  });
 });
 
 class MockSteeringBehavior extends Kompute.SteeringBehavior{

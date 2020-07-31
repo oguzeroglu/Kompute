@@ -186,6 +186,16 @@ Steerable.prototype.jump = function(toRunupBehavior, jumpDescriptor){
   return true;
 }
 
+Steerable.prototype.cancelJump = function(){
+  if (!(this.isJumpInitiated || this.isJumpReady || this.isJumpTakenOff)){
+    return false;
+  }
+
+  this.onJumpCompleted(true);
+
+  return true;
+}
+
 Steerable.prototype.onJumpReady = function(){
   this.isJumpReady = true;
   this.isJumpInitiated = false;
