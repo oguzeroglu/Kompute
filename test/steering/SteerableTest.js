@@ -720,6 +720,7 @@ describe("Steerable", function(){
     expect(entity.linearAcceleration).to.eql(new Kompute.Vector3D());
     expect(entity.velocity).to.eql(new Kompute.Vector3D());
     expect(entity.jumpTime).to.eql(0);
+    expect(entity.limitVelocity).to.eql(true);
   });
 
   it("should set jump completion listener", function(){
@@ -757,6 +758,34 @@ describe("Steerable", function(){
     entity.removeJumpCompletionListener();
     entity.onJumpCompleted();
     expect(called).to.eql(false);
+  });
+
+  it("should perform onJumpTakeOff", function(){
+    var center = new Kompute.Vector3D(0, 0, 0);
+    var size = new Kompute.Vector3D(50, 60, 70);
+    var entity = new Kompute.Steerable("steerable1", center, size);
+
+    entity.jumpSpeed = 1500;
+    var vx = 100;
+    var vz = 200;
+
+    entity.velocity.set(999, 999, 999);
+
+    entity.jumpDescriptor = {
+      getEquationResult: function(){
+        return {vx: vx, vz: vz};
+      }
+    };
+
+    expect(entity.isJumpTakenOff).to.eql(false);
+    expect(entity.limitVelocity).to.eql(true);
+    expect(entity.velocity).to.eql(new Kompute.Vector3D(999, 999, 999));
+
+    entity.onJumpTakeOff();
+
+    expect(entity.isJumpTakenOff).to.eql(true);
+    expect(entity.limitVelocity).to.eql(false);
+    expect(entity.velocity).to.eql(new Kompute.Vector3D(vx, 1500, vz));
   });
 });
 

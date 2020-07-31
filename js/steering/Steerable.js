@@ -203,6 +203,8 @@ Steerable.prototype.onJumpTakeOff = function(){
   var jumpDescriptor = this.jumpDescriptor;
   var equationResult = jumpDescriptor.getEquationResult(this);
 
+  this.setLimitVelocity(false);
+
   this.velocity.set(equationResult.vx, this.jumpSpeed, equationResult.vz);
 }
 
@@ -215,6 +217,8 @@ Steerable.prototype.onJumpCompleted = function(){
   this.position.y = this.jumpDescriptor.landingPosition.y;
   this.velocity.set(0, 0, 0);
   this.linearAcceleration.set(0, 0, 0);
+
+  this.setLimitVelocity(true);
 
   if (this.jumpCompletionCallback){
     this.jumpCompletionCallback(this);
