@@ -208,19 +208,22 @@ Steerable.prototype.onJumpTakeOff = function(){
   this.velocity.set(equationResult.vx, this.jumpSpeed, equationResult.vz);
 }
 
-Steerable.prototype.onJumpCompleted = function(){
+Steerable.prototype.onJumpCompleted = function(isCancel){
   this.jumpTime = 0;
   this.isJumpInitiated = false;
   this.isJumpReady = false;
   this.isJumpTakenOff = false;
 
-  this.position.y = this.jumpDescriptor.landingPosition.y;
+  if (!isCancel){
+    this.position.y = this.jumpDescriptor.landingPosition.y;
+  }
+
   this.velocity.set(0, 0, 0);
   this.linearAcceleration.set(0, 0, 0);
 
   this.setLimitVelocity(true);
 
-  if (this.jumpCompletionCallback){
+  if (!isCancel && this.jumpCompletionCallback){
     this.jumpCompletionCallback(this);
   }
 }
