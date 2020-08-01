@@ -77,8 +77,7 @@ describe("JumpBehavior", function(){
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(10, 0, 10),
       landingPosition: new Kompute.Vector3D(150, 100, 0),
-      takeoffPositionSatisfactionRadius: 35,
-      takeoffVelocitySatisfactionRadius: 10
+      takeoffPositionSatisfactionRadius: 35
     });
 
     var world = new Kompute.World(1000, 1000, 1000, 10);
@@ -111,7 +110,6 @@ describe("JumpBehavior", function(){
 
     steerable.jumpDescriptor = {
       takeoffPosition: new Kompute.Vector3D(0, 0, 0),
-      takeoffVelocitySatisfactionRadius: 0,
       takeoffPositionSatisfactionRadius: 10000,
       getEquationResult: function(){
         return { time: 2, vx: 30, vz: 60 };

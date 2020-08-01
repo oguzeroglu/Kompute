@@ -6,7 +6,6 @@ var JumpDescriptor = function(parameters){
   this.takeoffPosition = parameters.takeoffPosition.clone();
   this.landingPosition = parameters.landingPosition.clone();
   this.takeoffPositionSatisfactionRadius = parameters.takeoffPositionSatisfactionRadius;
-  this.takeoffVelocitySatisfactionRadius = parameters.takeoffVelocitySatisfactionRadius;
 
   this.delta = this.landingPosition.clone().sub(this.takeoffPosition);
 
