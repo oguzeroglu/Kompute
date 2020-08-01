@@ -1,4 +1,7 @@
 import { Vector3D } from "./Vector3D";
+import { MathUtils } from "./MathUtils";
+
+var mathUtils = new MathUtils();
 
 var Path = function(options){
 
@@ -17,6 +20,8 @@ var Path = function(options){
 
   this.waypoints = [];
   this.jumpDescriptors = [];
+
+  this.finishCallbacksByID = {};
 
   if (options.fixedLength){
     for (var i = 0; i < options.fixedLength; i ++){
@@ -114,9 +119,27 @@ Path.prototype.getCurrentWaypoint = function(){
   return this.isFinished ? false : (this.waypoints[this.index] || false);
 }
 
+Path.prototype.addFinishCallback = function(fn){
+  var id = mathUtils.uuidv4();
+
+  this.finishCallbacksByID[id] = fn;
+
+  return id;
+}
+
+Path.prototype.removeFinishCallback = function(callbackID){
+  if (this.finishCallbacksByID[callbackID]){
+    delete this.finishCallbacksByID[callbackID];
+    return true;
+  }
+
+  return false;
+}
+
 Path.prototype.onFinished = function(){
-  if (this.finishCallback) {
-    this.finishCallback();
+  var allCallbacks = this.finishCallbacksByID;
+  for (var id in allCallbacks){
+    allCallbacks[id]();
   }
 }
 

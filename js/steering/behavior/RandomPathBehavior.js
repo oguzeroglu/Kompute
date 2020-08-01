@@ -26,9 +26,9 @@ var RandomPathBehavior = function(options){
   this.allVertices = allVertices;
   this.isPathConstructed = false;
 
-  aStar.path.finishCallback = function(){
+  aStar.path.addFinishCallback(function(){
     this.isPathConstructed = false;
-  }.bind(this);
+  }.bind(this));
 }
 
 RandomPathBehavior.prototype = Object.create(PathFollowingBehavior.prototype);

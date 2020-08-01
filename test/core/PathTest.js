@@ -19,6 +19,7 @@ describe("Path", function(){
     expect(path1.jumpDescriptors).to.eql([]);
     expect(path1.length).to.eql(0);
     expect(path1.options).to.eql({ loop: true });
+    expect(path1.finishCallbacksByID).to.eql({});
 
     expect(path2.index).to.eql(0);
     expect(path2.loop).to.eql(false);
@@ -29,6 +30,7 @@ describe("Path", function(){
     expect(path2.jumpDescriptors).to.eql([]);
     expect(path2.length).to.eql(0);
     expect(path2.options).to.eql({ rewind: true });
+    expect(path2.finishCallbacksByID).to.eql({});
 
     expect(path3.index).to.eql(0);
     expect(path3.loop).to.eql(false);
@@ -39,6 +41,7 @@ describe("Path", function(){
     expect(path3.jumpDescriptors).to.eql([]);
     expect(path3.length).to.eql(0);
     expect(path3.options).to.eql({});
+    expect(path3.finishCallbacksByID).to.eql({});
 
     expect(path4.index).to.eql(0);
     expect(path4.loop).to.eql(false);
@@ -49,6 +52,7 @@ describe("Path", function(){
     expect(path4.jumpDescriptors).to.eql([null, null, null]);
     expect(path4.length).to.eql(0);
     expect(path4.options).to.eql({ fixedLength: 3 });
+    expect(path4.finishCallbacksByID).to.eql({});
   });
 
   it("should add waypoint", function(){
@@ -263,7 +267,67 @@ describe("Path", function(){
     expect(path.getRandomWaypoint()).to.eql(null);
   });
 
-  it("should execute finishCallback when finished", function(){
+  it("should add finish callback", function(){
+    var path = new Kompute.Path({});
+
+    var fn1 = function(){
+      console.log("fn1");
+    };
+
+    var fn2 = function(){
+      console.log("fn2");
+    };
+
+    var callbackID1 = path.addFinishCallback(fn1);
+
+    expect(callbackID1).to.exist;
+    var expected = {};
+    expected[callbackID1] = fn1;
+    expect(path.finishCallbacksByID).to.eql(expected);
+
+    var callbackID2 = path.addFinishCallback(fn2);
+
+    expect(callbackID2).to.exist;
+    expected[callbackID2] = fn2;
+
+    expect(path.finishCallbacksByID).to.eql(expected);
+  });
+
+  it("should remove finish callback", function(){
+    var path = new Kompute.Path({});
+
+    var fn1 = function(){
+      console.log("fn1");
+    };
+
+    var fn2 = function(){
+      console.log("fn2");
+    };
+
+    var callbackID1 = path.addFinishCallback(fn1);
+    var callbackID2 = path.addFinishCallback(fn2);
+
+    var expected = {};
+    expected[callbackID1] = fn1;
+    expected[callbackID2] = fn2;
+
+    expect(path.finishCallbacksByID).to.eql(expected);
+
+    path.removeFinishCallback(callbackID1);
+    delete expected[callbackID1];
+
+    expect(path.finishCallbacksByID).to.eql(expected);
+
+    path.removeFinishCallback(callbackID2);
+    
+    expect(path.finishCallbacksByID).to.eql({});
+  });
+
+  it("should remove finish callback", function(){
+
+  });
+
+  it("should execute registered finish callbacks when finished", function(){
     var path = new Kompute.Path({});
 
     path.addWaypoint(new Kompute.Vector3D(Math.random(), Math.random(), Math.random()));
@@ -271,9 +335,9 @@ describe("Path", function(){
     path.addWaypoint(new Kompute.Vector3D(Math.random(), Math.random(), Math.random()));
 
     var called = false;
-    path.finishCallback = function(){
+    path.addFinishCallback(function(){
       called = true;
-    };
+    });
 
     path.next();
     expect(called).to.eql(false);
