@@ -8,18 +8,14 @@ describe("JumpDescriptor", function(){
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(100, 0, 0),
       landingPosition: new Kompute.Vector3D(150, 100, 0),
-      runupSatisfactionRadius: 50,
-      takeoffPositionSatisfactionRadius: 35,
-      takeoffVelocitySatisfactionRadius: 20
+      takeoffPositionSatisfactionRadius: 35
     });
 
     expect(jumpDescriptor.takeoffPosition).to.eql(new Kompute.Vector3D(100, 0, 0));
     expect(jumpDescriptor.landingPosition).to.eql(new Kompute.Vector3D(150, 100, 0));
-    expect(jumpDescriptor.runupSatisfactionRadius).to.eql(50);
     expect(jumpDescriptor.delta).to.eql(new Kompute.Vector3D(50, 100, 0));
     expect(jumpDescriptor.checkTimeResult).to.eql({ vx: 0, vz: 0, isAchievable: false });
     expect(jumpDescriptor.takeoffPositionSatisfactionRadius).to.eql(35);
-    expect(jumpDescriptor.takeoffVelocitySatisfactionRadius).to.eql(20);
     expect(jumpDescriptor._internalID).to.exist;
   });
 
@@ -28,9 +24,7 @@ describe("JumpDescriptor", function(){
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(),
       landingPosition: new Kompute.Vector3D(),
-      runupSatisfactionRadius: 0,
-      takeoffPositionSatisfactionRadius: 0,
-      takeoffVelocitySatisfactionRadius: 0
+      takeoffPositionSatisfactionRadius: 0
     });
 
     jumpDescriptor.delta = new Kompute.Vector3D(10, 20, 30);
@@ -62,9 +56,7 @@ describe("JumpDescriptor", function(){
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(),
       landingPosition: new Kompute.Vector3D(10, 20, 30),
-      runupSatisfactionRadius: 0,
-      takeoffPositionSatisfactionRadius: 0,
-      takeoffVelocitySatisfactionRadius: 0
+      takeoffPositionSatisfactionRadius: 0
     });
 
     var result = jumpDescriptor.solveQuadraticEquation(steerable);
@@ -102,9 +94,7 @@ describe("JumpDescriptor", function(){
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(),
       landingPosition: new Kompute.Vector3D(10, 20, 30),
-      runupSatisfactionRadius: 0,
-      takeoffPositionSatisfactionRadius: 0,
-      takeoffVelocitySatisfactionRadius: 0
+      takeoffPositionSatisfactionRadius: 0
     });
 
     var cached = jumpDescriptor.getEquationResult(steerable);

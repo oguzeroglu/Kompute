@@ -76,7 +76,7 @@ PathFollowingBehavior.prototype.isJumpNeeded = function(steerable){
   for (var i = 0; i < path.jumpDescriptorLength; i ++){
     var jumpDescriptor = jumpDescriptors[i];
     var distToTakeoffPosition = vectorPool.get().copy(steerable.position).sub(jumpDescriptor.takeoffPosition).getLength();
-    if (distToTakeoffPosition < jumpDescriptor.runupSatisfactionRadius){
+    if (distToTakeoffPosition < jumpDescriptor.takeoffPositionSatisfactionRadius){
       var quadraticEquationResult = jumpDescriptor.solveQuadraticEquation(steerable);
       if (quadraticEquationResult){
         return jumpDescriptor;

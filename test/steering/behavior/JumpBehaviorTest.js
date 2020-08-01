@@ -77,9 +77,7 @@ describe("JumpBehavior", function(){
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(10, 0, 10),
       landingPosition: new Kompute.Vector3D(150, 100, 0),
-      runupSatisfactionRadius: 50,
-      takeoffPositionSatisfactionRadius: 35,
-      takeoffVelocitySatisfactionRadius: 10
+      takeoffPositionSatisfactionRadius: 35
     });
 
     var world = new Kompute.World(1000, 1000, 1000, 10);
@@ -95,6 +93,8 @@ describe("JumpBehavior", function(){
     Kompute.logger.enable();
 
     expect(steerable.isJumpTakenOff).to.eql(false);
+
+    steerable.velocity.set(jumpDescriptor.getEquationResult(steerable).vx, 0, jumpDescriptor.getEquationResult(steerable).vz);
     var result = jumpBehavior.compute(steerable);
     expect(result.linear).to.eql(new Kompute.Vector3D());
     expect(steerable.isJumpTakenOff).to.eql(true);
@@ -110,7 +110,6 @@ describe("JumpBehavior", function(){
 
     steerable.jumpDescriptor = {
       takeoffPosition: new Kompute.Vector3D(0, 0, 0),
-      takeoffVelocitySatisfactionRadius: 0,
       takeoffPositionSatisfactionRadius: 10000,
       getEquationResult: function(){
         return { time: 2, vx: 30, vz: 60 };
@@ -123,7 +122,8 @@ describe("JumpBehavior", function(){
 
     var result = jumpBehavior.compute(steerable);
 
-    expect(result.linear).to.eql(new Kompute.Vector3D(15, 0, 30));
+    expect(result.linear).to.eql(new Kompute.Vector3D(0, 0, 0));
+    expect(steerable.velocity).to.eql(new Kompute.Vector3D(30, 0, 60));
     expect(loggedMsg).to.eql("[JumpBehavior]: Matching velocity. (steerable1)");
   });
 });

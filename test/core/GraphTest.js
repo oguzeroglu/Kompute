@@ -140,8 +140,7 @@ describe("Graph", function(){
 
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: vertex, landingPosition: vertex2,
-      runupSatisfactionRadius: 100, takeoffPositionSatisfactionRadius: 100,
-      takeoffVelocitySatisfactionRadius: 100
+      takeoffPositionSatisfactionRadius: 100
     });
 
     expect(graph.addJumpDescriptor(jumpDescriptor)).to.eql(false);
@@ -249,9 +248,7 @@ describe("Graph", function(){
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: vertex,
       landingPosition: vertex2,
-      runupSatisfactionRadius: 100,
-      takeoffPositionSatisfactionRadius: 100,
-      takeoffVelocitySatisfactionRadius: 100
+      takeoffPositionSatisfactionRadius: 100
     });
 
     graph.addJumpDescriptor(jumpDescriptor);
@@ -365,9 +362,7 @@ describe("Graph", function(){
     var jd = new Kompute.JumpDescriptor({
       takeoffPosition: vec1,
       landingPosition: vec3,
-      runupSatisfactionRadius: 50,
-      takeoffPositionSatisfactionRadius: 50,
-      takeoffVelocitySatisfactionRadius: 50
+      takeoffPositionSatisfactionRadius: 50
     });
 
     graph.addJumpDescriptor(jd);
