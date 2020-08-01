@@ -157,7 +157,7 @@ Steerable.prototype.unsetHideTargetEntity = function(){
   this.hideTargetEntity = null;
 }
 
-Steerable.prototype.jump = function(toRunupBehavior, jumpDescriptor){
+Steerable.prototype.jump = function(toTakeoffBehavior, jumpDescriptor){
 
   var result = jumpDescriptor.solveQuadraticEquation(this);
   if (!result){
@@ -173,7 +173,7 @@ Steerable.prototype.jump = function(toRunupBehavior, jumpDescriptor){
   this.unsetHideTargetEntity();
 
   this.setTargetPosition(jumpDescriptor.takeoffPosition);
-  this.setBehavior(toRunupBehavior);
+  this.setBehavior(toTakeoffBehavior);
 
   this.jumpDescriptor = jumpDescriptor;
 

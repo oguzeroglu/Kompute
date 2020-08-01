@@ -418,7 +418,7 @@ describe("Steerable", function(){
     var world = new Kompute.World(1000, 1000, 1000, 10);
     world.insertEntity(entity);
 
-    var toRunupBehavior = new MockSteeringBehavior();
+    var toTakeoffBehavior = new MockSteeringBehavior();
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(100, 200, 300),
       landingPosition: new Kompute.Vector3D(400, 500, 600),
@@ -427,9 +427,9 @@ describe("Steerable", function(){
 
     entity.jumpTime = 999;
 
-    var result = entity.jump(toRunupBehavior, jumpDescriptor);
+    var result = entity.jump(toTakeoffBehavior, jumpDescriptor);
 
-    expect(entity.behavior).to.equal(toRunupBehavior);
+    expect(entity.behavior).to.equal(toTakeoffBehavior);
     expect(entity.hasTargetEntity).to.eql(false);
     expect(entity.hasHideTargetEntity).to.eql(false);
     expect(entity.hasTargetPosition).to.eql(true);
@@ -452,7 +452,7 @@ describe("Steerable", function(){
 
     world.setGravity(-900);
 
-    var toRunupBehavior = new MockSteeringBehavior();
+    var toTakeoffBehavior = new MockSteeringBehavior();
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(100, 200, 300),
       landingPosition: new Kompute.Vector3D(400, 500, 600),
@@ -461,7 +461,7 @@ describe("Steerable", function(){
 
     jumpDescriptor.setCache(entity, { vx: 100, vz: -100, time: (1/60) * 5 });
 
-    entity.jump(toRunupBehavior, jumpDescriptor);
+    entity.jump(toTakeoffBehavior, jumpDescriptor);
 
     entity.isJumpTakenOff = true;
 
@@ -488,7 +488,7 @@ describe("Steerable", function(){
 
     world.setGravity(-1000);
 
-    var toRunupBehavior = new MockSteeringBehavior();
+    var toTakeoffBehavior = new MockSteeringBehavior();
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(100, 200, 300),
       landingPosition: new Kompute.Vector3D(400, 500, 600),
@@ -497,7 +497,7 @@ describe("Steerable", function(){
 
     Kompute.logger.enable();
 
-    var result = entity.jump(toRunupBehavior, jumpDescriptor);
+    var result = entity.jump(toTakeoffBehavior, jumpDescriptor);
 
     expect(result).to.eql(false);
     expect(entity.isJumpInitiated).to.eql(false);
@@ -512,7 +512,7 @@ describe("Steerable", function(){
     var world = new Kompute.World(1000, 1000, 1000, 10);
     world.insertEntity(entity);
 
-    var toRunupBehavior = new MockSteeringBehavior();
+    var toTakeoffBehavior = new MockSteeringBehavior();
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(10, 10, 10),
       landingPosition: new Kompute.Vector3D(400, 500, 600),
@@ -527,7 +527,7 @@ describe("Steerable", function(){
     Kompute.logger.enable();
 
     entity.linearAcceleration.set(0, 0, 0);
-    entity.jump(toRunupBehavior, jumpDescriptor);
+    entity.jump(toTakeoffBehavior, jumpDescriptor);
     entity.update();
 
     expect(called).to.eql(true);
@@ -543,7 +543,7 @@ describe("Steerable", function(){
     var world = new Kompute.World(1000, 1000, 1000, 10);
     world.insertEntity(entity);
 
-    var toRunupBehavior = new MockSteeringBehavior();
+    var toTakeoffBehavior = new MockSteeringBehavior();
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(500, 500, 500),
       landingPosition: new Kompute.Vector3D(400, 500, 600),
@@ -556,7 +556,7 @@ describe("Steerable", function(){
     };
 
     entity.linearAcceleration.set(0, 0, 0);
-    entity.jump(toRunupBehavior, jumpDescriptor);
+    entity.jump(toTakeoffBehavior, jumpDescriptor);
     entity.update();
 
     expect(called).to.eql(false);
@@ -570,7 +570,7 @@ describe("Steerable", function(){
     var world = new Kompute.World(1000, 1000, 1000, 10);
     world.insertEntity(entity);
 
-    var toRunupBehavior = new MockSteeringBehavior();
+    var toTakeoffBehavior = new MockSteeringBehavior();
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(10, 10, 10),
       landingPosition: new Kompute.Vector3D(400, 500, 600),
@@ -583,7 +583,7 @@ describe("Steerable", function(){
     };
 
     entity.linearAcceleration.set(0, 0, 0);
-    entity.jump(toRunupBehavior, jumpDescriptor);
+    entity.jump(toTakeoffBehavior, jumpDescriptor);
     entity.isJumpReady = true;
     entity.update();
 
@@ -598,7 +598,7 @@ describe("Steerable", function(){
     var world = new Kompute.World(1000, 1000, 1000, 10);
     world.insertEntity(entity);
 
-    var toRunupBehavior = new MockSteeringBehavior();
+    var toTakeoffBehavior = new MockSteeringBehavior();
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(10, 10, 10),
       landingPosition: new Kompute.Vector3D(400, 500, 600),
@@ -611,7 +611,7 @@ describe("Steerable", function(){
     };
 
     entity.linearAcceleration.set(0, 0, 0);
-    entity.jump(toRunupBehavior, jumpDescriptor);
+    entity.jump(toTakeoffBehavior, jumpDescriptor);
     entity.isJumpTakenOff = true;
     entity.update();
 
