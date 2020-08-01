@@ -313,14 +313,16 @@ describe("Path", function(){
 
     expect(path.finishCallbacksByID).to.eql(expected);
 
-    path.removeFinishCallback(callbackID1);
+    expect(path.removeFinishCallback(callbackID1)).to.eql(true);
     delete expected[callbackID1];
 
     expect(path.finishCallbacksByID).to.eql(expected);
 
-    path.removeFinishCallback(callbackID2);
-    
+    expect(path.removeFinishCallback(callbackID2)).to.eql(true);
+
     expect(path.finishCallbacksByID).to.eql({});
+
+    expect(path.removeFinishCallback("some_random_id")).to.eql(false);
   });
 
   it("should remove finish callback", function(){
