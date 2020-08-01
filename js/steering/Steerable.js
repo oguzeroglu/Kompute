@@ -81,7 +81,7 @@ Steerable.prototype.update = function(){
 
   if (this.isJumpInitiated && !this.isJumpTakenOff && !this.isJumpReady){
     var distToTakeoffPosition = vectorPool.get().copy(this.position).sub(this.jumpDescriptor.takeoffPosition).getLength();
-    if (distToTakeoffPosition < this.jumpDescriptor.runupSatisfactionRadius){
+    if (distToTakeoffPosition < this.jumpDescriptor.takeoffPositionSatisfactionRadius){
       logger.log(LOGGER_COMPONENT_NAME, LOG_JUMP_READY, this.id);
       this.onJumpReady();
     }

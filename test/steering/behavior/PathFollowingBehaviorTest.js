@@ -124,8 +124,7 @@ describe("PathFollowingBehavior", function(){
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: wp2,
       landingPosition: wp3,
-      runupSatisfactionRadius: 50,
-      takeoffPositionSatisfactionRadius: 5,
+      takeoffPositionSatisfactionRadius: 50,
       takeoffVelocitySatisfactionRadius: 200
     });
 

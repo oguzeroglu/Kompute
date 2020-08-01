@@ -101,13 +101,13 @@ describe("Path", function(){
 
     var jd1 = new Kompute.JumpDescriptor({
       takeoffPosition: vp1, landingPosition: vp2,
-      runupSatisfactionRadius: 100, takeoffPositionSatisfactionRadius: 100,
+      takeoffPositionSatisfactionRadius: 100,
       takeoffVelocitySatisfactionRadius: 100
     });
 
     var jd2 = new Kompute.JumpDescriptor({
       takeoffPosition: vp2, landingPosition: vp3,
-      runupSatisfactionRadius: 100, takeoffPositionSatisfactionRadius: 100,
+      takeoffPositionSatisfactionRadius: 100,
       takeoffVelocitySatisfactionRadius: 100
     });
 
@@ -342,25 +342,25 @@ describe("Path", function(){
 
     var jumpDescriptor1 = new Kompute.JumpDescriptor({
       takeoffPosition: wp1, landingPosition: wp2,
-      runupSatisfactionRadius: 100, takeoffPositionSatisfactionRadius: 100,
+      takeoffPositionSatisfactionRadius: 100,
       takeoffVelocitySatisfactionRadius: 100
     });
 
     var jumpDescriptor2 = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(500, 500, 500), landingPosition: wp2,
-      runupSatisfactionRadius: 100, takeoffPositionSatisfactionRadius: 100,
+      takeoffPositionSatisfactionRadius: 100,
       takeoffVelocitySatisfactionRadius: 100
     });
 
     var jumpDescriptor3 = new Kompute.JumpDescriptor({
       takeoffPosition: wp1, landingPosition: new Kompute.Vector3D(500, 500, 500),
-      runupSatisfactionRadius: 100, takeoffPositionSatisfactionRadius: 100,
+      takeoffPositionSatisfactionRadius: 100,
       takeoffVelocitySatisfactionRadius: 100
     });
 
     var jumpDescriptor4 = new Kompute.JumpDescriptor({
       takeoffPosition: wp2, landingPosition: wp1,
-      runupSatisfactionRadius: 100, takeoffPositionSatisfactionRadius: 100,
+      takeoffPositionSatisfactionRadius: 100,
       takeoffVelocitySatisfactionRadius: 100
     });
 
@@ -428,7 +428,7 @@ describe("Path", function(){
 
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(0, 10, 20), landingPosition: new Kompute.Vector3D(20, 40, 50),
-      runupSatisfactionRadius: 100, takeoffPositionSatisfactionRadius: 100,
+      takeoffPositionSatisfactionRadius: 100,
       takeoffVelocitySatisfactionRadius: 100
     });
 
@@ -445,7 +445,7 @@ describe("Path", function(){
 
     jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(0, 10, 20), landingPosition: new Kompute.Vector3D(20, 40, 50),
-      runupSatisfactionRadius: 100, takeoffPositionSatisfactionRadius: 100,
+      takeoffPositionSatisfactionRadius: 100,
       takeoffVelocitySatisfactionRadius: 100
     });
 

@@ -5,7 +5,6 @@ var mathUtils = new MathUtils();
 var JumpDescriptor = function(parameters){
   this.takeoffPosition = parameters.takeoffPosition.clone();
   this.landingPosition = parameters.landingPosition.clone();
-  this.runupSatisfactionRadius = parameters.runupSatisfactionRadius;
   this.takeoffPositionSatisfactionRadius = parameters.takeoffPositionSatisfactionRadius;
   this.takeoffVelocitySatisfactionRadius = parameters.takeoffVelocitySatisfactionRadius;
 

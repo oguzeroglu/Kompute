@@ -502,7 +502,6 @@ describe("DebugHelper", function(){
     var jd = new Kompute.JumpDescriptor({
       takeoffPosition: takeoffPosition,
       landingPosition: landingPosition,
-      runupSatisfactionRadius: 100,
       takeoffPositionSatisfactionRadius: 100,
       takeoffVelocitySatisfactionRadius: 100
     });

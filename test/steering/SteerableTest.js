@@ -422,7 +422,6 @@ describe("Steerable", function(){
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(100, 200, 300),
       landingPosition: new Kompute.Vector3D(400, 500, 600),
-      runupSatisfactionRadius: 100,
       takeoffPositionSatisfactionRadius: 35,
       takeoffVelocitySatisfactionRadius: 20
     });
@@ -458,7 +457,6 @@ describe("Steerable", function(){
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(100, 200, 300),
       landingPosition: new Kompute.Vector3D(400, 500, 600),
-      runupSatisfactionRadius: 100,
       takeoffPositionSatisfactionRadius: 35,
       takeoffVelocitySatisfactionRadius: 20
     });
@@ -496,7 +494,6 @@ describe("Steerable", function(){
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(100, 200, 300),
       landingPosition: new Kompute.Vector3D(400, 500, 600),
-      runupSatisfactionRadius: 100,
       takeoffPositionSatisfactionRadius: 35,
       takeoffVelocitySatisfactionRadius: 20
     });
@@ -510,7 +507,7 @@ describe("Steerable", function(){
     expect(loggedMsgs).to.eql(['[Steerable]: Equation cannot be solved. (steerable1)']);
   });
 
-  it("should trigger onJumpReady if position within run-up radius", function(){
+  it("should trigger onJumpReady if position within takeoff position satisfaction radius", function(){
     var center = new Kompute.Vector3D(0, 0, 0);
     var size = new Kompute.Vector3D(50, 60, 70);
     var entity = new Kompute.Steerable("steerable1", center, size);
@@ -522,7 +519,6 @@ describe("Steerable", function(){
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(10, 10, 10),
       landingPosition: new Kompute.Vector3D(400, 500, 600),
-      runupSatisfactionRadius: 100,
       takeoffPositionSatisfactionRadius: 35,
       takeoffVelocitySatisfactionRadius: 20
     });
@@ -555,7 +551,6 @@ describe("Steerable", function(){
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(500, 500, 500),
       landingPosition: new Kompute.Vector3D(400, 500, 600),
-      runupSatisfactionRadius: 100,
       takeoffPositionSatisfactionRadius: 35,
       takeoffVelocitySatisfactionRadius: 20
     });
@@ -584,7 +579,6 @@ describe("Steerable", function(){
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(10, 10, 10),
       landingPosition: new Kompute.Vector3D(400, 500, 600),
-      runupSatisfactionRadius: 100,
       takeoffPositionSatisfactionRadius: 35,
       takeoffVelocitySatisfactionRadius: 20
     });
@@ -614,7 +608,6 @@ describe("Steerable", function(){
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(10, 10, 10),
       landingPosition: new Kompute.Vector3D(400, 500, 600),
-      runupSatisfactionRadius: 100,
       takeoffPositionSatisfactionRadius: 35,
       takeoffVelocitySatisfactionRadius: 20
     });
@@ -695,7 +688,6 @@ describe("Steerable", function(){
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: new Kompute.Vector3D(10, 10, 10),
       landingPosition: new Kompute.Vector3D(400, 500, 600),
-      runupSatisfactionRadius: 100,
       takeoffPositionSatisfactionRadius: 35,
       takeoffVelocitySatisfactionRadius: 20
     });

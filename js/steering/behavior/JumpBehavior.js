@@ -41,26 +41,15 @@ JumpBehavior.prototype.compute = function(steerable){
   }
 
   var targetVelocity = vectorPool.get().set(equationResult.vx, 0, equationResult.vz);
-
-  var posDiff = vectorPool.get().copy(steerable.position).sub(jumpDescriptor.takeoffPosition).getLength();
-  if (posDiff <= jumpDescriptor.takeoffPositionSatisfactionRadius){
-    var velocityDiff = vectorPool.get().copy(steerable.velocity).sub(targetVelocity).getLength();
-    if (velocityDiff <= jumpDescriptor.takeoffVelocitySatisfactionRadius){
-      steerable.onJumpTakeOff();
-      logger.log(LOGGER_COMPONENT_NAME, LOG_TAKING_OFF, steerable.id);
-      return this.result;
-    }
+  if (steerable.velocity.eql(targetVelocity)){
+    steerable.onJumpTakeOff();
+    logger.log(LOGGER_COMPONENT_NAME, LOG_TAKING_OFF, steerable.id);
+    return this.result;
   }
 
   logger.log(LOGGER_COMPONENT_NAME, LOG_MATCHING_VELOCITY, steerable.id);
 
-  return this.matchVelocity(equationResult.time, targetVelocity, steerable);
-}
-
-JumpBehavior.prototype.matchVelocity = function(time, targetVelocity, steerable){
-  var linear = this.result.linear;
-  targetVelocity.sub(steerable.velocity).multiplyScalar(1 / time);
-  linear.copy(targetVelocity);
+  steerable.velocity.copy(targetVelocity);
   return this.result;
 }
 

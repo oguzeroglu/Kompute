@@ -267,7 +267,7 @@ describe("AStar", function(){
 
     var jumpDescriptor = new Kompute.JumpDescriptor({
       takeoffPosition: vertex2, landingPosition: vertex3,
-      runupSatisfactionRadius: 100, takeoffPositionSatisfactionRadius: 100,
+      takeoffPositionSatisfactionRadius: 100,
       takeoffVelocitySatisfactionRadius: 100
     });
 
