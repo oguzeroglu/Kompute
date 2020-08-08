@@ -1,6 +1,7 @@
 import { SteeringBehavior } from "./SteeringBehavior";
 import { Box } from "../../core/Box";
 import { Vector3D } from "../../core/Vector3D";
+import { Vertex } from "../../core/Vertex";
 import { VectorPool } from "../../core/VectorPool";
 import { logger } from "../../debug/Logger";
 
@@ -34,6 +35,11 @@ AvoidBehavior.prototype.findMostThreateningObstacle = function(steerable){
   box.expandByPoint(steerable.box.max);
 
   steerable.executeForEachCloseEntity(function(entity){
+
+    if (entity instanceof Vertex){
+      return;
+    }
+
     if (box.intersectsBox(entity.box)){
       if (!mostThreatening){
         mostThreatening = entity;

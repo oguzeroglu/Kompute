@@ -57,6 +57,13 @@ describe("AvoidBehavior", function(){
     var avoidBehavior = new Kompute.AvoidBehavior({ maxSeeAhead: 50000, maxAvoidForce: 100 });
 
     expect(avoidBehavior.findMostThreateningObstacle(steerable)).to.eql(null);
+
+    var graph = new Kompute.Graph();
+    graph.addVertex(new Kompute.Vector3D(0, 0, 0));
+
+    world.insertGraph(graph);
+
+    expect(avoidBehavior.findMostThreateningObstacle(steerable)).to.eql(null);
   });
 
   it("should find most mostThreatening if not going towards the obstacle [hits obstacle by size]", function(){
