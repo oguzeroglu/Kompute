@@ -64,7 +64,7 @@ HideBehavior.prototype.findHidingSpot = function(steerable){
   var self = this;
 
   steerable.executeForEachCloseEntity(function(entity){
-    if (entity instanceof Steerable || entity instanceof Vertex){
+    if (entity instanceof Steerable || entity instanceof Vertex || entity.excludeFromHide){
       return;
     }
 

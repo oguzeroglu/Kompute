@@ -260,4 +260,32 @@ describe("HideBehavior", function(){
 
     expect(hideBehavior.hidingSpotFound).to.eql(false);
   });
+
+  it("should not consider entities with excludeFromHide flag when finding hiding spots", function(){
+    var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
+    var steerable2 = new Kompute.Steerable("steerable2", new Kompute.Vector3D(100, 0, 0), new Kompute.Vector3D(10, 10, 10));
+
+    var world = new Kompute.World(1000, 1000, 1000, 50);
+    world.insertEntity(steerable);
+    world.insertEntity(steerable2);
+
+    steerable.setHideTargetEntity(steerable2);
+
+    var hideBehavior = new Kompute.HideBehavior({
+      arriveSatisfactionRadius: 50,
+      arriveSlowDownRadius: 100,
+      hideDistance: 150,
+      threatDistance: 2000
+    });
+
+    var entity = new Kompute.Entity("entity1", new Kompute.Vector3D(5, 0, 0), new Kompute.Vector3D(10, 10, 10));
+
+    world.insertEntity(entity);
+
+    entity.excludeFromHide = true;
+
+    hideBehavior.findHidingSpot(steerable);
+
+    expect(hideBehavior.hidingSpotFound).to.eql(false);
+  });
 });
