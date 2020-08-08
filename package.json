@@ -1,6 +1,6 @@
 {
   "name": "kompute",
-  "version": "1.10.3",
+  "version": "1.11.0",
   "description": "A pluggable steering library for game AI.",
   "main": "build/Kompute.js",
   "module": "build/Kompute.mjs",
