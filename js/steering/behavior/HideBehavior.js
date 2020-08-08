@@ -2,6 +2,7 @@ import { ArriveBehavior } from "./ArriveBehavior";
 import { VectorPool } from "../../core/VectorPool";
 import { Vector3D } from "../../core/Vector3D";
 import { Steerable } from "../Steerable";
+import { Vertex } from "../../core/Vertex";
 import { logger } from "../../debug/Logger";
 
 var vectorPool = new VectorPool(10);
@@ -63,7 +64,7 @@ HideBehavior.prototype.findHidingSpot = function(steerable){
   var self = this;
 
   steerable.executeForEachCloseEntity(function(entity){
-    if (entity instanceof Steerable){
+    if (entity instanceof Steerable || entity instanceof Vertex){
       return;
     }
 

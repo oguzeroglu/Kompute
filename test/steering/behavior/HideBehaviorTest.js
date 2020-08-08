@@ -233,4 +233,31 @@ describe("HideBehavior", function(){
     expect(result.linear).to.eql(new Kompute.Vector3D());
     expect(loggedMsg).to.eql("[HideBehavior]: Target entity is out of threat distance. (steerable1)");
   });
+
+  it("should not consider Vertex instances when finding hiding spots", function(){
+    var steerable = new Kompute.Steerable("steerable1", new Kompute.Vector3D(), new Kompute.Vector3D(10, 10, 10));
+    var steerable2 = new Kompute.Steerable("steerable2", new Kompute.Vector3D(100, 0, 0), new Kompute.Vector3D(10, 10, 10));
+
+    var world = new Kompute.World(1000, 1000, 1000, 50);
+    world.insertEntity(steerable);
+    world.insertEntity(steerable2);
+
+    steerable.setHideTargetEntity(steerable2);
+
+    var hideBehavior = new Kompute.HideBehavior({
+      arriveSatisfactionRadius: 50,
+      arriveSlowDownRadius: 100,
+      hideDistance: 150,
+      threatDistance: 2000
+    });
+
+    var graph = new Kompute.Graph();
+    graph.addVertex(new Kompute.Vector3D(5, 0, 0));
+
+    world.insertGraph(graph);
+
+    hideBehavior.findHidingSpot(steerable);
+
+    expect(hideBehavior.hidingSpotFound).to.eql(false);
+  });
 });
