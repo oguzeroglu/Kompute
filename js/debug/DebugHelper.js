@@ -24,6 +24,7 @@ var DebugHelper = function(world, threeInstance, scene){
   this.lookMeshesByEntityID = {};
   this.meshesByAStarIDs = {};
   this.meshesByJumpDescriptorIDs = {};
+  this.visualisedAStars = {};
   this.pathMeshes = [];
   this.edgeMeshes = [];
 
@@ -159,11 +160,18 @@ DebugHelper.prototype.visualiseAStar = function(aStar){
     return;
   }
 
+  this.visualisedAStars[id] = true;
+
   if (aStar.searchID > 0){
     this.meshesByAStarIDs[id] = this.visualisePath(aStar.path, aStarPathVisualSize);
   }
 
   aStar.onPathConstructed = function(){
+
+    if (!this.visualisedAStars[id]){
+      return;
+    }
+
     var meshes = this.meshesByAStarIDs[id] || [];
 
     for (var i = 0; i < meshes.length; i ++){
@@ -262,6 +270,7 @@ DebugHelper.prototype.deactivate = function(){
   this.lookMeshesByEntityID = {};
   this.meshesByAStarIDs = {};
   this.meshesByJumpDescriptorIDs = {};
+  this.visualisedAStars = {};
   this.pathMeshes = [];
   this.edgeMeshes = [];
 }

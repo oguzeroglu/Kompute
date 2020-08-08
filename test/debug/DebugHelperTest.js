@@ -24,6 +24,7 @@ describe("DebugHelper", function(){
     expect(debugHelper.lookMeshesByEntityID).to.eql({});
     expect(debugHelper.meshesByAStarIDs).to.eql({});
     expect(debugHelper.meshesByJumpDescriptorIDs).to.eql({});
+    expect(debugHelper.visualisedAStars).to.eql({});
     expect(debugHelper.pathMeshes).to.eql([]);
     expect(debugHelper.edgeMeshes).to.eql([]);
     expect(debugHelper.worldMesh).to.eql(null);
@@ -484,6 +485,7 @@ describe("DebugHelper", function(){
 
     expect(scene.children.length).to.eql(0);
     expect(debugHelper.meshesByAStarIDs).to.eql({});
+    expect(debugHelper.visualisedAStars).to.eql({});
 
     aStar.findShortestPath(vertex1, vertex3);
     debugHelper.visualiseAStar(aStar);
@@ -492,6 +494,10 @@ describe("DebugHelper", function(){
     expect(scene.children[0].position).to.eql(vertex3);
     expect(scene.children[1].position).to.eql(vertex2);
     expect(scene.children[2].position).to.eql(vertex1);
+
+    debugHelper.deactivate();
+    aStar.findShortestPath(vertex1, vertex3);
+    expect(scene.children.length).to.eql(0);
   });
 
   it("should visualise JumpDescriptor", function(){
