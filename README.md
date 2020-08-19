@@ -5,6 +5,12 @@
 
 See the [documentation](https://github.com/oguzeroglu/Kompute/wiki).
 
+# Demos
+
+* [Autonomous Battle](https://oguzeroglu.github.io/kompute-demos-with-roygbiv/autonomousBattle/application.html)    
+* [Hide Behavior](https://oguzeroglu.github.io/kompute-demos-with-roygbiv/hideBehavior/application.html)    
+* [Arrive Behavior](https://oguzeroglu.github.io/kompute-demos-with-roygbiv/arriveBehavior/application.html)        
+
 # Getting Started
 
 Include it in your project.
