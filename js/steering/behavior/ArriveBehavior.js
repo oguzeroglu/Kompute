@@ -35,6 +35,8 @@ ArriveBehavior.prototype.compute = function(steerable){
 
   if (distance <= this.satisfactionRadius){
     logger.log(LOGGER_COMPONENT_NAME, LOG_ARRIVED, steerable.id);
+    this.result.linear.copy(steerable.velocity);
+    this.result.linear.negate();
     return this.result;
   }
 
