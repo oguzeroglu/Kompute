@@ -55,6 +55,19 @@ AStar.prototype.isNodeBelongToVector = function(node, vector){
   return node === this.getHeapNode(vector.x, vector.y, vector.z);
 }
 
+AStar.prototype.getTotalCost = function(heapNode){
+  var cost = 0;
+  while(heapNode){
+    var parentTag = heapNode.parentTag;
+    cost += heapNode.priority;
+    heapNode = heapNode.parent;
+    if (heapNode && parentTag != this.searchID){
+      heapNode = null;
+    }
+  }
+  return cost;
+}
+
 AStar.prototype.generatePath = function(endVector){
 
   var path = this.path;
@@ -123,10 +136,15 @@ AStar.prototype.findShortestPath = function(fromVector, toVector){
   var markNodeAsClosed = this.markNodeAsClosed;
 
   var heapNode = this.getHeapNode(fromVector.x, fromVector.y, fromVector.z);
+  heapNode.priority = 0;
+  heapNode.priorityTag = searchID;
+  heapNode.parent = null;
+  heapNode.parentTag = null;
+  heapNode.jumpDescriptor = null;
+
   var vec = vectorPool.get();
 
   heap.insert(heapNode);
-
   while (heapNode){
     if (this.isNodeBelongToVector(heapNode, toVector)){
       return this.generatePath(toVector);
@@ -135,11 +153,12 @@ AStar.prototype.findShortestPath = function(fromVector, toVector){
     markNodeAsClosed(heapNode, searchID);
 
     vec.set(heapNode.x, heapNode.y, heapNode.z);
+    var totalCost = this.getTotalCost(heapNode);
     graph.forEachNeighbor(vec, function(neighborVec, cost, jumpDescriptor){
 
       var neighborHeapNode = getHeapNode(neighborVec.x, neighborVec.y, neighborVec.z, heapNodes);
 
-      var heuristicCost = neighborVec.getDistanceSq(toVector);
+      var heuristicCost = totalCost;
 
       if (!isNodeClosed(neighborHeapNode, searchID)){
         neighborHeapNode.priority = cost + heuristicCost;
