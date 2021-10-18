@@ -114,7 +114,7 @@ AStar.prototype.isNodeClosed = function(node, searchID){
   return node.closedTag === searchID;
 }
 
-AStar.prototype.findShortestPath = function(fromVector, toVector){
+AStar.prototype.findShortestPath = function(fromVector, toVector, costModifier){
 
   var heapNodes = this.heapNodes;
 
@@ -159,6 +159,9 @@ AStar.prototype.findShortestPath = function(fromVector, toVector){
       var neighborHeapNode = getHeapNode(neighborVec.x, neighborVec.y, neighborVec.z, heapNodes);
 
       var heuristicCost = totalCost;
+      if (costModifier){
+        heuristicCost += costModifier(vec.x, vec.y, vec.z, neighborVec.x, neighborVec.y, neighborVec.z);
+      }
 
       if (!isNodeClosed(neighborHeapNode, searchID)){
         neighborHeapNode.priority = cost + heuristicCost;

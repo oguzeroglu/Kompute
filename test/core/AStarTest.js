@@ -325,6 +325,34 @@ describe("AStar", function(){
     aStar.findShortestPath(vertex3, vertex1);
     expect(called).to.eql(false);
   });
+
+  it("should consider costModifier if passed", function(){
+    var v1 = new Kompute.Vector3D(0, 0, 0);
+    var v2 = new Kompute.Vector3D(10, 0, 0);
+    var v3 = new Kompute.Vector3D(0 -50, 0);
+    var graph = new Kompute.Graph();
+    graph.addVertex(v1);
+    graph.addVertex(v2);
+    graph.addVertex(v3);
+    graph.addEdge(v1, v2); // v1 --- v2
+    graph.addEdge(v1, v3); //  |      |
+    graph.addEdge(v3, v2); // v3 -----
+    var aStar = new Kompute.AStar(graph);
+    var path = aStar.findShortestPath(v1, v2, function(x1, y1, z1, x2, y2, z2){
+      if (new Kompute.Vector3D(x1, y1, z1).eql(v1) && new Kompute.Vector3D(x2, y2, z2).eql(v2)) {
+        return Infinity;
+      }
+
+      return 0;
+    });
+    expect(path.getCurrentWaypoint()).to.eql(v1);
+    path.next();
+    expect(path.getCurrentWaypoint()).to.eql(v3);
+    path.next();
+    expect(path.getCurrentWaypoint()).to.eql(v2);
+    path.next();
+    expect(path.getCurrentWaypoint()).to.eql(false);
+  });
 });
 
 describe("AStar - Integration", function(){
