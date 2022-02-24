@@ -25,7 +25,7 @@ var Steerable = function(id, center, size){
 
   this.targetPosition = new Vector3D();
   this.targetEntity = null;
-  this.hideTargetEntity = null;
+  this.hideTargetEntities = [];
 
   this.linearAcceleration = new Vector3D();
   this.maxAcceleration = Infinity;
@@ -144,7 +144,7 @@ Steerable.prototype.setHideTargetEntity = function(entity){
     return;
   }
 
-  this.hideTargetEntity = entity;
+  this.hideTargetEntities = [entity];
   this.hasHideTargetEntity = true;
 }
 
@@ -154,7 +154,32 @@ Steerable.prototype.unsetHideTargetEntity = function(){
   }
 
   this.hasHideTargetEntity = false;
-  this.hideTargetEntity = null;
+  this.hideTargetEntities = [];
+}
+
+Steerable.prototype.addHideTargetEntity = function(entity){
+  if (this.isJumpInitiated){
+    return;
+  }
+  if (!this.hasHideTargetEntity) {
+    this.setHideTargetEntity(entity);
+    return;
+  }
+
+  this.hideTargetEntities.push(entity);
+  this.hasHideTargetEntity = true;
+}
+
+Steerable.prototype.removeHideTargetEntity = function(entity){
+  if (this.isJumpInitiated){
+    return;
+  }
+  if (this.hideTargetEntities.length <= 1) {
+    this.unsetHideTargetEntity();
+    return;
+  }
+  this.hideTargetEntities = this.hideTargetEntities.filter(e => e.id !== entity.id);
+  this.hasHideTargetEntity = this.hideTargetEntities.length > 0;
 }
 
 Steerable.prototype.jump = function(toTakeoffBehavior, jumpDescriptor){

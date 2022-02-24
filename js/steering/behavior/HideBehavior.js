@@ -31,12 +31,15 @@ HideBehavior.prototype = Object.create(ArriveBehavior.prototype);
 HideBehavior.prototype.compute = function(steerable){
   this.result.linear.set(0, 0, 0);
 
-  if (!steerable.hideTargetEntity){
+  if (!steerable.hideTargetEntities.length){
     logger.log(LOGGER_COMPONENT_NAME, LOG_NO_HIDE_TARGET_ENTITY, steerable.id);
     return this.result;
   }
 
-  if (vectorPool.get().copy(steerable.position).sub(steerable.hideTargetEntity.position).getLength() > this.threatDistance){
+  var threatEntities = steerable.hideTargetEntities.filter((target) => {
+    return vectorPool.get().copy(steerable.position).sub(target.position).getLength() < this.threatDistance;
+  });
+  if (!threatEntities.length){
     logger.log(LOGGER_COMPONENT_NAME, LOG_TARGET_ENTITY_OUT_OF_THREAT_DISTANCE, steerable.id);
     return this.result;
   }
@@ -80,8 +83,18 @@ HideBehavior.prototype.findHidingSpot = function(steerable){
   });
 }
 
-HideBehavior.prototype.getHidingPosition = function(hideableEntity, steerable){
-  var targetPosition = steerable.hideTargetEntity.position;
+HideBehavior.prototype.getHidingPosition = function(hideableEntity, steerable){  
+  var centroid = {x: 0, y: 0, z: 0};
+  steerable.hideTargetEntities.forEach((entity) => {
+    centroid.x += entity.position.x;
+    centroid.y += entity.position.y;
+    centroid.z += entity.position.z;
+  });
+  centroid.x = centroid.x / steerable.hideTargetEntities.length;
+  centroid.y = centroid.y / steerable.hideTargetEntities.length;
+  centroid.z = centroid.z / steerable.hideTargetEntities.length;
+
+  var targetPosition = new Vector3D(centroid.x, centroid.y, centroid.z);
 
   var hideableRadius = hideableEntity.box.getBoundingRadius();
 

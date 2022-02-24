@@ -249,7 +249,21 @@ describe("Steerable", function(){
     entity.setHideTargetEntity(target);
 
     expect(entity.hasHideTargetEntity).to.eql(true);
-    expect(entity.hideTargetEntity).to.equal(target);
+    expect(entity.hideTargetEntities[0]).to.equal(target);
+  });
+
+  it("should add multiple hide target entities", function(){
+    var center = new Kompute.Vector3D(0, 0, 0);
+    var size = new Kompute.Vector3D(50, 60, 70);
+    var entity = new Kompute.Steerable("steerable1", center, size);
+    var target = new Kompute.Steerable("steerable2", center, size);
+    var target2 = new Kompute.Steerable("steerable3", center, size);
+
+    entity.addHideTargetEntity(target);
+    entity.addHideTargetEntity(target2);
+
+    expect(entity.hasHideTargetEntity).to.eql(true);
+    expect(entity.hideTargetEntities.length).to.equal(2);
   });
 
   it("should unset hide target entity", function(){
@@ -262,7 +276,23 @@ describe("Steerable", function(){
     entity.unsetHideTargetEntity();
 
     expect(entity.hasHideTargetEntity).to.eql(false);
-    expect(entity.hideTargetEntity).to.eql(null);
+    expect(entity.hideTargetEntities).to.eql([]);
+  });
+  
+  it("should remove multiple hide target entities", function(){
+    var center = new Kompute.Vector3D(0, 0, 0);
+    var size = new Kompute.Vector3D(50, 60, 70);
+    var entity = new Kompute.Steerable("steerable1", center, size);
+    var target = new Kompute.Steerable("steerable2", center, size);
+    var target2 = new Kompute.Steerable("steerable3", center, size);
+
+    entity.addHideTargetEntity(target);
+    entity.addHideTargetEntity(target2);
+    entity.removeHideTargetEntity(target);
+
+    expect(entity.hasHideTargetEntity).to.eql(true);
+    expect(entity.hideTargetEntities.length).to.equal(1);
+    expect(entity.hideTargetEntities[0].id).to.equal("steerable3");
   });
 
   it ("should set behavior", function(){
@@ -390,7 +420,7 @@ describe("Steerable", function(){
     entity.setHideTargetEntity(target);
 
     expect(entity.hasHideTargetEntity).to.eql(false);
-    expect(entity.hideTargetEntity).to.eql(null);
+    expect(entity.hideTargetEntities).to.eql([]);
   });
 
   it("should not unset hide target entity if a jump is initiated", function(){
@@ -406,7 +436,7 @@ describe("Steerable", function(){
     entity.unsetHideTargetEntity();
 
     expect(entity.hasHideTargetEntity).to.eql(true);
-    expect(entity.hideTargetEntity).to.equal(target);
+    expect(entity.hideTargetEntities[0]).to.equal(target);
   });
 
   it("should jump", function(){
